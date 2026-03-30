@@ -1,0 +1,423 @@
+@if(showPageDetails())
+{
+  <div class="bg-gray-50 p-6">
+  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <main class="lg:col-span-8 space-y-6">
+      
+        <!-- الجزء العلوي  -->
+   <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm shadow-slate-200/50 flex flex-col md:flex-row justify-between items-center gap-4 transition-all hover:shadow-md"> 
+  <div class="flex flex-col items-center md:items-start gap-2">
+    <div class="flex items-center gap-3">
+      <span class="w-2 h-6 bg-orange-400 rounded-full hidden md:block"></span>
+      <h2 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+        {{serviceDetails().serviceTitle}}
+      </h2>
+    </div>
+    <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-lg uppercase">
+      تفاصيل الخدمة
+    </span>
+  </div>
+
+  <div class="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100">
+    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+    </svg>
+    <p class="text-xs font-medium text-slate-500">
+      تم الإنشاء في: 
+      <span class="text-slate-800 font-bold mr-1">{{serviceDetails().requestDate | formDate}}</span>
+    </p>
+  </div>
+
+</div>
+
+     <div class="bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/30 transition-all hover:shadow-2xl">
+  
+  <div class="relative h-72 group">
+    <img [src]="serviceDetails().requestedImgUrl" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Service Image">
+    
+    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 shadow-sm">
+        <span class="text-[10px] font-black text-slate-800 tracking-wider">موقع العمل</span>
+    </div>
+
+    <div class="absolute bottom-4 left-4 bg-black/30 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-xl border border-white/10 flex items-center gap-2">
+      <span class="animate-pulse text-xs">📷</span>
+      صورة من أرض الواقع
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-8 border-b border-slate-50 bg-slate-50/30">
+    <div class="flex items-start gap-3">
+      <div class="p-2 bg-white rounded-lg shadow-sm text-sky-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <div>
+        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-0.5">الموقع</p>
+        <p class="text-sm font-bold text-slate-700">طهواي، أشمون، المنوفية</p>
+      </div>
+    </div>
+
+    <div class="md:text-left flex flex-col md:items-end">
+      <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-0.5">الميزانية التقديرية</p>
+      
+      @if(role() == Roles.Clien_Role) {
+        @if(serviceDetails().totalPrice > 0) {
+          <p class="text-xl font-black text-slate-800">
+            <span class="text-sky-500">{{serviceDetails().totalPrice | currency:'EGP':'symbol'}}</span>
+          </p>
+        } @else {
+          <p class="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">في انتظار التسعير</p>
+        }
+      } 
+      @else if(role() == Roles.Worker_Role) {
+        @if(serviceDetails().totalPrice > 0) {
+          <p class="text-xl font-black text-slate-800 text-sky-500">{{serviceDetails().totalPrice}} ج.م</p>
+        } @else {
+          <span class="text-xs font-black text-indigo-500 animate-pulse">يرجى إضافة عرض سعر</span>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="p-8 space-y-4">
+    <div class="flex items-center gap-2">
+       <span class="w-1 h-4 bg-sky-500 rounded-full"></span>
+       <h4 class="font-black text-slate-800 tracking-tight">الوصف والمتطلبات</h4>
+    </div>
+    <div class="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+        <p class="text-sm text-slate-600 leading-relaxed font-medium italic">
+          "{{serviceDetails().serviceDescription}}"
+        </p>
+    </div>
+  </div>
+
+</div>
+
+      <!-- ادارة الحاله للعامل -->
+  @if(role()==Roles.Worker_Role)
+  {
+
+    <!-- // adding price -->
+    @if(serviceDetails().state==statuses.PRICE_PROCESS)
+    {
+<app-worker-priceprocess [serviceId]="serviceDetails().serviceId" (priceSent)="getRecivedServiveDetails()"></app-worker-priceprocess>
+    }
+   
+    @else if (serviceDetails().state==statuses.PENDING) {
+<app-worker-pending></app-worker-pending>
+    }
+      @else if (serviceDetails().state==statuses.Submited) {
+<app-worker-submitted></app-worker-submitted>
+    }
+    @else if (serviceDetails().state==statuses.InProcess)
+{
+ <app-worker-inprocess [clientName]="serviceDetails().clientName" [serviceId]="serviceDetails().serviceId" (submitted)="getRecivedServiveDetails()"></app-worker-inprocess>
+} 
+  }
+
+
+      <!-- ادارة الحاله للعميل -->
+  @else if(role()==Roles.Clien_Role)
+  {
+ @if(serviceDetails().state==statuses.PRICE_PROCESS)
+ {
+<app-client-price-process></app-client-price-process>
+
+ }
+
+@else if(serviceDetails().state==statuses.PENDING)
+{
+<app-client-pending [price]="serviceDetails().totalPrice" [serviceId]="serviceDetails().serviceId" 
+(accepted)="getSendedServiveDetails()" (reject)="getSendedServiveDetails()"></app-client-pending>    
+}
+@else if (serviceDetails().state==statuses.InProcess)
+{
+ <app-client-inprocess [workerName]="serviceDetails().workerName" ></app-client-inprocess>
+}
+@else if (serviceDetails().state==statuses.Submited) 
+{
+  <app-client-submitted [serviceId]="serviceDetails().serviceId" (accepted)="getSendedServiveDetails()" (disputed)="getSendedServiveDetails()"></app-client-submitted>
+}
+
+  }
+
+@if (serviceDetails().state==statuses.Rejected) {
+<div class="mx-auto mt-10 bg-white rounded-[2.5rem] border border-rose-50 shadow-2xl shadow-rose-100/20 overflow-hidden transition-all hover:shadow-rose-100/40 animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl">
+  
+  <div class="h-1.5 w-full bg-linear-to-l from-rose-500 to-rose-300 opacity-80"></div>
+
+  <div class="p-8">
+    <div class="flex items-center gap-5">
+      <div class="shrink-0 w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center border-4 border-white shadow-sm group">
+        <svg class="w-8 h-8 text-rose-500 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      
+      <div>
+        <h3 class="text-2xl font-black text-slate-800 tracking-tight leading-tight">تم رفض الخدمة</h3>
+        <p class="text-[11px] font-bold text-rose-400 uppercase tracking-widest mt-1 italic">الحالة: ملغاة</p>
+      </div>
+    </div>
+
+    <div class="mt-8 bg-slate-50/80 backdrop-blur-sm rounded-2xl p-5 border border-slate-100 shadow-inner">
+      <div class="flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2 text-slate-400 font-black text-[11px] uppercase tracking-wider">
+          <i class="far fa-calendar-alt text-rose-300"></i>
+          <span>تاريخ الإلغاء</span>
+        </div>
+        <span class="font-black text-slate-700 text-xs tracking-tight" dir="ltr">
+          {{ serviceDetails().completeDate | date:'mediumDate' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-center gap-2">
+       <span class="w-1.5 h-1.5 bg-slate-200 rounded-full"></span>
+       <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+         يمكنك مراجعة الطلبات الأخرى في القائمة الرئيسية
+       </p>
+       <span class="w-1.5 h-1.5 bg-slate-200 rounded-full"></span>
+    </div>
+  </div>
+</div>
+    }
+  @else if (serviceDetails().state==statuses.CPMLETED)
+{
+<div class="mx-auto bg-white border border-slate-50 rounded-[2.5rem] shadow-2xl shadow-emerald-100/20 overflow-hidden dir-rtl animate-in fade-in zoom-in duration-500 ">
+  
+  <div class="bg-linear-to-b from-emerald-50/60 to-white p-10 flex flex-col items-center text-center">
+    <div class="relative w-24 h-24 mb-6">
+      <div class="absolute inset-0 bg-emerald-100 rounded-4xl animate-ping opacity-20"></div>
+      
+      <div class="relative w-24 h-24 bg-emerald-500 rounded-4xl flex items-center justify-center shadow-xl shadow-emerald-200 border-4 border-white transition-transform hover:rotate-6">
+        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+    </div>
+    
+    <h3 class="text-3xl font-black text-slate-800 tracking-tight">تم اكتمال الخدمة!</h3>
+    <p class="text-emerald-600 font-bold text-sm mt-2 flex items-center gap-2">
+       <i class="fas fa-check-circle"></i>
+       شكراً لاستخدامك منصة Fixit
+    </p>
+  </div>
+
+  <div class="px-8 pb-10">
+    <div class="bg-slate-50/80 rounded-4xl p-6 mb-8 flex items-center justify-between border border-slate-100 shadow-inner">
+      <div class="flex items-center gap-4">
+        <div class="relative">
+          <img src="/workers/manWorker.png" alt="worker" 
+               class="w-14 h-14 rounded-2xl object-cover shadow-sm ring-4 ring-white">
+          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
+        </div>
+        <div>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">الفني المنفذ</p>
+          <p class="text-sm font-black text-slate-800 leading-tight">{{serviceDetails().workerName}}</p>
+        </div>
+      </div>
+      
+      <div class="text-left border-r border-slate-200 pr-6">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-right">التكلفة الإجمالية</p>
+        <p class="text-xl font-black text-slate-900 tracking-tight">{{serviceDetails().totalPrice | currency:'EGP ':'symbol':'1.0-0'}}</p>
+      </div>
+    </div>
+
+    @if(role() == Roles.Clien_Role) {
+      <div class="space-y-6">
+        <div class="text-center">
+          <h4 class="text-lg font-black text-slate-800 mb-2">ما هو تقييمك للخدمة؟</h4>
+          <p class="text-xs text-slate-400 font-medium mb-4">رأيك يساعدنا في تحسين جودة الفنيين لدينا</p>
+          
+          <textarea  [(ngModel)]="comment"
+            placeholder="اكتب تجربتك مع الفني هنا... (اختياري)" 
+            class="w-full min-h-[120px] p-5 bg-slate-50 border-2 border-slate-100 rounded-3xl text-sm font-medium text-slate-700 focus:bg-white focus:border-emerald-400 focus:ring-8 focus:ring-emerald-50 outline-none transition-all placeholder:text-slate-300 resize-none">
+          </textarea>
+
+          <div>
+            @for(i of [1,2,3,4,5];track i)
+            {
+              <i (click)="setRating(i)"
+              [ngClass]="{'text-yellow-400':i<=rating()}"
+              class="fas fa-star mx-2 text-xl text-gray-400 cursor-pointer"></i>
+            }
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <button  (click)="getRateing()" class="w-full active:cursor-progress h-16 cursor-pointer bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-lg transition-all shadow-xl shadow-slate-200 active:scale-[0.98] flex items-center justify-center gap-3 group">
+            <i class="fas fa-star text-yellow-400 group-hover:rotate-12 transition-transform"></i>
+            إرسال التقييم الآن
+          </button>
+          
+          <button class="w-full h-12 text-slate-400 py-2 text-[11px] font-black uppercase tracking-[0.2em] hover:text-slate-600 transition-colors">
+            تخطي التقييم والعودة للرئيسية
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+}
+@else if(serviceDetails().state==statuses.Reviewed) 
+{
+<div class="relative flex flex-col p-6 bg-white border border-gray-100 rounded-2xl shadow-sm transition-all hover:shadow-md border-r-4 border-r-green-500">
+  
+  <div 
+       class="absolute -top-3 left-4 flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-200 shadow-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+    </svg>
+    تمت المراجعة
+  </div>
+
+  <div class="space-y-2 text-right">
+    <h3 class="text-lg font-bold text-gray-800">{{serviceDetails().serviceTitle}}</h3>
+    <p class="text-sm text-gray-500 leading-relaxed">
+{{serviceDetails().serviceDescription}}
+    </p>
+  </div>
+
+  <div class="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center text-xs">
+    <span class="text-gray-400">{{serviceDetails().serviceId}}</span>
+    <span  class="text-green-600 font-medium">{{serviceDetails().completeDate|date:'short'}}</span>
+  </div>
+</div>
+}
+
+    </main>
+
+
+
+    <aside class="lg:col-span-4 space-y-6">
+      
+     <div class="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/40 border border-slate-50 transition-all hover:shadow-2xl" dir="rtl">
+  <h3 class="flex items-center gap-3 text-xl font-black text-slate-800 mb-8">
+    <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500 shadow-sm">
+      <i class="fas fa-users"></i>
+    </div>
+    أطراف الخدمة
+  </h3>
+  
+  <div class="space-y-8">
+    <div class="group">
+      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 mr-1">صاحب الطلب (العميل)</p>
+      <div class="flex items-center justify-between bg-slate-50/50 p-4 rounded-[1.5rem] border border-slate-100 transition-all group-hover:bg-white group-hover:shadow-md group-hover:border-blue-100">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img src="/workers/client.png" alt="Client" 
+                 class="w-14 h-14 rounded-2xl object-cover shadow-sm ring-4 ring-white">
+            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
+          </div>
+          
+          <div>
+            <h4 class="font-black text-slate-700 text-sm leading-tight mb-1">{{serviceDetails().clientName}}</h4>
+            <span class="text-[10px] font-bold text-blue-400 bg-blue-50 px-2 py-0.5 rounded-md">عميل موثق</span>
+          </div>
+        </div>
+        
+        <button class="text-[11px] font-black px-4 py-2.5 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all active:scale-95 shadow-sm">
+          عرض الملف
+        </button>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 mr-1">مقدم الخدمة (الفني)</p>
+      <div class="flex items-center justify-between bg-slate-50/50 p-4 rounded-[1.5rem] border border-slate-100 transition-all group-hover:bg-white group-hover:shadow-md group-hover:border-emerald-100">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img src="/workers/womenWorker.png" alt="Worker" 
+                 class="w-14 h-14 rounded-2xl object-cover shadow-sm ring-4 ring-white">
+            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
+          </div>
+          
+          <div>
+            <h4 class="font-black text-slate-700 text-sm leading-tight mb-1">{{serviceDetails().workerName}}</h4>
+            <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-md">فني متخصص</span>
+          </div>
+        </div>
+        
+        <button class="text-[11px] font-black px-4 py-2.5 bg-white border border-slate-200 text-slate-500 rounded-xl hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all active:scale-95 shadow-sm">
+          عرض الملف
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- المسار الزمني  -->
+     <div class="bg-white rounded-4xl p-8 shadow-xl shadow-slate-200/40 border border-slate-50 transition-all hover:shadow-2xl" dir="rtl">
+  <h3 class="flex items-center gap-3 text-xl font-black text-slate-800 mb-10">
+    <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 shadow-sm">
+      <i class="fas fa-history"></i>
+    </div>
+    المسار الزمني للطلب
+  </h3>
+
+  <div class="relative mr-5 space-y-10">
+    <div class="absolute right-2 top-2 bottom-2 w-0.5 bg-linear-to-b from-emerald-500 via-emerald-300 to-slate-200 rounded-full"></div>
+
+    <div class="relative pr-10 group">
+      <div class="absolute right-0 top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-white shadow-sm ring-4 ring-emerald-50 transition-transform group-hover:scale-125"></div>
+      
+      <div>
+        <p class="font-black text-slate-800 text-sm tracking-tight">تم إرسال الطلب بنجاح</p>
+        <p class="text-[11px] font-bold text-slate-400 mt-1 flex items-center gap-1">
+          <i class="far fa-calendar-alt text-[10px]"></i>
+          {{serviceDetails().requestDate | formDate}}
+        </p>
+      </div>
+    </div>
+
+    @for(s of statusOfState(); track s) {
+      @if(s.status.includes(serviceDetails().state)) {
+        <div class="relative pr-10 group">
+          <div class="absolute right-0 top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-white shadow-sm ring-4 ring-emerald-100 transition-transform group-hover:scale-125">
+             <span class="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-25"></span>
+          </div>
+          
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm inline-block min-w-45">
+            <p class="font-black text-emerald-600 text-sm tracking-tight">{{s.title}}</p>
+            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">الحالة الحالية</span>
+          </div>
+        </div>
+      }
+    }
+
+    @if(serviceDetails().state == statuses.CPMLETED) {
+      <div class="relative pr-10">
+        <div class="absolute right-0 top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow-md ring-4 ring-blue-50"></div>
+        <div class="bg-blue-600 p-4 rounded-2xl shadow-lg shadow-blue-100">
+           <h4 class="text-white font-black text-sm flex items-center gap-2">
+             <i class="fas fa-check-double"></i>
+             تم اكتمال المهمة بنجاح
+           </h4>
+        </div>
+      </div>
+    }
+
+    <div class="flex flex-col items-center pt-6">
+      <div class="relative bg-slate-50 p-6 rounded-4xl border border-slate-100 shadow-inner group transition-all hover:bg-white hover:shadow-md">
+        <p-knob 
+          [(ngModel)]="value" 
+          [min]="0" [max]="100" 
+          valueColor="#10b981" 
+          rangeColor="#f1f5f9" 
+          [size]="120"
+          strokeWidth="8"
+        />
+        <p class="text-center text-[10px] font-black text-slate-400 mt-2 uppercase tracking-widest group-hover:text-emerald-500">نسبة الإنجاز</p>
+      </div>
+    </div>
+  </div>
+</div>
+    </aside>
+
+  
+  </div>
+</div>
+}@else {
+  <app-skeleton></app-skeleton>
+}

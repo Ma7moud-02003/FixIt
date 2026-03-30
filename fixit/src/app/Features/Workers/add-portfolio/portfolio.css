@@ -1,0 +1,9 @@
+input,textarea
+{
+    font-size: 0.9rem;
+    color:rgba(28, 28, 234, 0.645)
+}
+button
+{
+    cursor: pointer;
+}

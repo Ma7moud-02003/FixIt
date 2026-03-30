@@ -1,0 +1,52 @@
+<div class="mt-12 p-8 bg-white/90 backdrop-blur-xl border border-slate-50 rounded-[2.5rem] shadow-2xl shadow-slate-200/40 text-center animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl">
+  
+  <div class="flex items-center justify-between mb-8">
+    <h3 class="text-xl font-black text-slate-800 tracking-tight">عرض السعر المقدم</h3>
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-black text-blue-600 bg-blue-50/50 rounded-xl border border-blue-100/50 uppercase tracking-wider">
+      <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+      بانتظار ردك
+    </span>
+  </div>
+
+  <div class="relative py-10 px-6 bg-gradient-to-br from-slate-50 to-white rounded-[2rem] border border-slate-100 mb-8 shadow-inner group overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-50/50 rounded-full blur-3xl group-hover:bg-blue-100 transition-colors"></div>
+    
+    <span class="relative z-10 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block">التكلفة الإجمالية للخدمة</span>
+    
+    <div class="relative z-10 flex flex-col items-center justify-center">
+      <div class="flex items-baseline gap-2">
+        <span class="text-6xl font-black text-slate-900 tracking-tighter transition-transform group-hover:scale-105 duration-300">
+          {{price()}}
+        </span>
+        <div class="flex flex-col items-start leading-none">
+          <span class="text-sm font-black text-slate-400">EGP</span>
+          <span class="text-xs font-bold text-slate-800">جنيه</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-4">
+    <button  [disabled]="addresss.invalid"
+      (click)="acceptPrice()"
+      class="flex-2 h-16 cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl transition-all shadow-lg shadow-emerald-100 active:scale-95 flex items-center justify-center gap-2 group">
+      <i class="fas fa-check-circle transition-transform group-hover:rotate-12"></i>
+      قبول العرض وبدء العمل
+    </button>
+
+    <button 
+      class="flex-1 h-16 bg-white border-2 border-slate-100 text-slate-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50 font-bold rounded-2xl transition-all active:scale-95">
+      رفض السعر
+    </button>
+  </div>
+
+  <div class="py-3 px-5 ">
+    <label for="" class="block text-start my-3 text-sky-600">من فضلك ادخل العنوان بالتفصيل</label>
+    <input required minlength="5" #addresss="ngModel" type="text" name="" [(ngModel)]="address" class="border border-gray-200 w-full py-2 px-5 rounded-sm" placeholder="العنوان" id="">
+  </div>
+
+  <div class="mt-6 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
+    <i class="fas fa-info-circle text-blue-400"></i>
+    <span>يرجى مراجعة تفاصيل الخدمة والوصف قبل اتخاذ القرار النهائي.</span>
+  </div>
+</div>

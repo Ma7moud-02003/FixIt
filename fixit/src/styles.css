@@ -1,0 +1,61 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo+Play:wght@200..1000&family=El+Messiri:wght@400..700&display=swap');
+body
+{
+      font-family: "El Messiri", sans-serif ;
+}
+button
+{
+  cursor: pointer;
+}
+@import 'tailwindcss';
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+
+
+/* changing mode id profile component  */
+
+
+  .sidebar-item {
+    @apply flex items-center gap-4 px-5 py-3.5 rounded-2xl text-slate-500 transition-all duration-300 hover:bg-slate-50 hover:text-slate-900 font-bold text-[0.9rem] relative;
+  }
+  
+  
+  .active-link {
+    @apply bg-blue-50 text-blue-600 font-black ;
+  }
+  
+  .active-link::before {
+    content: '';
+    @apply absolute right-0 top-1/4 bottom-1/4 w-1 bg-blue-600 rounded-l-full;
+  }
+
+  .sidebar-item i {
+    @apply w-6 text-center text-slate-400 group-hover:text-blue-500 transition-colors;
+  }
+
+  .active-link i {
+    @apply text-blue-600;
+  }
+
+.view-mode input,.view-mode textarea,.view-mode select 
+{
+@apply bg-blue-50  border-0 outline-0 cursor-not-allowed    transition-all duration-300 ;
+}
+.edite-mode input,textarea,select 
+{
+@apply bg-gray-50  cursor-pointer   transition-all duration-300;
+}
+
+
+
+
+

@@ -1,0 +1,479 @@
+@if (!showProfilPage()) {
+<app-skeleton></app-skeleton>
+
+
+}
+@else
+{
+<div class="min-h-screen  bg-gray-50  p-4 lg:p-5">
+  <div class="mx-auto max-w-7xl">
+
+
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+      <!-- aside image and some data -->
+      <aside class="space-y-6 lg:col-span-1 w-full  mx-auto text-black ">
+        <div class="rounded-3xl  w-full p-6 shadow-sm border bg-white border-gray-100 text-center  overflow-y-auto">
+          <label for="profileFile" class="cursor-pointer">
+            <div class="relative mx-auto mb-4 h-32 w-32">
+              @if(profileForm.imgUrl().value()&&!imagePreview())
+              {
+              <img [src]="profileForm.imgUrl().value()" class=" w-24 h-24 rounded-full object-cover">
+              }
+              @else if(imagePreview()) {
+              <img [src]="imagePreview()" class="rounded-full w-24 h-24 object-cover">
+              }@else {
+              <img src="/workers/worker.jpg" class="rounded-full w-full object-cover">
+              }
+
+              
+              <div
+                class="absolute bottom-3 right-6 rounded-full w-10 h-10  flex justify-center items-center shadow-md  bg-sky-600">
+                <i class="fas fa-camera text-white hover:text-black text-xl"></i>
+
+              </div>
+            </div>
+
+          </label>
+          <input  (change)="onFileSelected($event)" type="file" class="hidden" id="profileFile" >
+
+          <h2 class="text-lg font-bold">{{profileForm.fullName().value()}}</h2>
+          @switch (role()) {
+            @case ('client') {
+  <p class="text-sm text-gray-400  flex justify-center items-center gap-1">
+            <i class="fas fa-map-marker-alt"></i>
+            {{profileForm.city().value()}}
+          </p>
+            }
+            @case ('worker') {
+   <p class="text-sm text-gray-400  flex justify-center items-center gap-1">
+            <i class="fas fa-map-marker-alt"></i>
+            {{profileForm.city().value()}} '' {{profileForm.area().value()||''}}
+          </p>
+            }
+          }
+         
+       
+          <div class="my-5">
+            @switch(role())
+            {
+            @case ('client') {
+            <span class="rounded-full bg-orange-100 px-4 py-1 text-xs font-medium text-orange-600 ">عميل مميز</span>
+            }
+            @case ('worker') {
+            <div class="rounded-full px-4 py-1  text-xs font-medium text-blue-600 ">
+              {{profileForm.jobTitle().value()}}
+            </div>
+            <div class=" rounded-full bg-orange-100 px-4 py-1  my-3 text-xs font-medium text-orange-600 ">صنايعي مميز
+            </div>
+
+            }
+            }
+
+          </div>
+
+
+          <div class="space-y-3 mb-6 ">
+
+            <div id="phone" class="rounded-xl bg-sky-50 px-4 py-3 border border-gray-100 text-sm font-medium w-full">
+              {{profileForm.phone().value()}}
+              <i class="fas fa-phone mx-2 text-gray-500"></i>
+            </div>
+            <div id="phone" class="rounded-xl bg-sky-50 px-4 py-3 border border-gray-100 text-sm font-medium w-full">
+              {{profileForm.email().value()}}
+              <i class="fas fa-envelope mx-2 text-gray-500"></i>
+            </div>
+
+          </div>
+
+          <div class="flex gap-2">
+            <button (click)="uploadProfileImage()" class="flex-1 rounded-xl active:scale-110 duration-200 transition bg-sky-500 py-2.5 text-sm font-medium text-white hover:bg-sky-600"> تحديث
+              الصوره</button>
+          </div>
+
+        
+        </div>
+     <div class="rounded-3xl  mt-20   bg-white p-4 shadow-sm space-y-3 border border-gray-100">
+          <nav class="space-y-1">
+            <a [routerLink]="[]" fragment="personalInfo"
+              class="flex items-center gap-3 rounded-xl bg-sky-50 px-4 py-3 text-sky-600">
+              <i class="fas fa-user text-sm"></i> <span class="text-sm font-medium">المعلومات الشخصية</span>
+            </a>
+            <a [routerLink]="[]" fragment="myRequests"
+              class="flex items-center gap-3 rounded-xl px-4 py-3 text-gray-500 hover:bg-gray-50">
+              <i class="fas fa-box text-sm"></i> <span class="text-sm font-medium">طلباتي</span>
+            </a>
+            <a [routerLink]="[]" fragment="mySettings"
+              class="flex items-center gap-3 rounded-xl px-4 py-3 text-gray-500 hover:bg-gray-50">
+              <i class="fas fa-gear text-sm"></i> <span class="text-sm font-medium">اعدادات الحساب</span>
+            </a>
+          </nav>
+        </div>
+       
+      </aside>
+
+      <main class="space-y-8 lg:col-span-3  ">
+          
+        <form [class.view-mode]="!isEditMode()">
+          <!-- profile information -->
+          <section id="personalInfo" class="rounded-3xl bg-white p-8 shadow-sm border border-gray-100">
+            <h2 [ngClass]="{'hidden':!isEditMode()}" class="w-1/2 rounded-3xl text-center mx-auto text-blue-600 bg-blue-50 py-3 my-4">قم بتعديل  ياناتك الان </h2>
+            <div class="flex justify-between">
+              <div class="mb-8 flex items-center gap-3">
+                <div class="p-2 bg-sky-50 rounded-lg text-sky-500"><i class="fas fa-info-circle"></i></div>
+                <div>
+                  <h3 class="font-bold text-gray-800">المعلومات الشخصية</h3>
+                  <p class="text-xs text-gray-400">قم بتحديث بياناتك الشخصية ومعلومات التواصل الخاصة بك</p>
+                </div>
+              </div>
+           <div (click)="isEditMode.set(true)" tabindex="-1" [ngClass]="{'hidden':isEditMode()}">
+               <i 
+                class="fas  fa-pen-to-square active:scale-105 text-gray-500 text-2xl cursor-pointer"></i>
+           </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 text-black">
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">الاسم بالكامل</label>
+                <input   [formField]="profileForm.fullName" type="text"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+                @if(profileForm.fullName().touched()&&profileForm.fullName().invalid())
+                {
+                <ul>
+                  @for(error of profileForm.fullName().errors();track error)
+                  {
+                  <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                    ●{{error.message}}
+                  </li>
+                  }
+                </ul>
+                }
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">البريد الالكتروني</label>
+                <div 
+                  class="w-full rounded-xl   bg-sky-50 px-4 py-3 text-sm ">
+                    {{profileForm.email().value()}}
+                </div>
+
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">رقم الهاتف</label>
+                <input   type="text" [formField]="profileForm.phone"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+                @if(profileForm.phone().touched()&&profileForm.phone().invalid())
+                {
+                <ul>
+                  @for(error of profileForm.phone().errors();track error)
+                  {
+                  <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                    ●{{error.message}}
+                  </li>
+                  }
+                </ul>
+                }
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">المدينه</label>
+                <input   type="text" [formField]="profileForm.city"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+                @if(profileForm.city().touched()&&profileForm.city().invalid())
+                {
+                <ul>
+                  @for(error of profileForm.city().errors();track error)
+                  {
+                  <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                    ●{{error.message}}
+                  </li>
+                  }
+                </ul>
+                }
+              </div>
+            </div>
+            @if(role() === 'worker') {
+            <div class="mt-10 flex items-center gap-3">
+              <div class="p-2 bg-sky-50 rounded-lg text-sky-500"><i class="fas fa-briefcase"></i></div>
+              <div>
+                <h3 class="font-bold text-gray-800">المعلومات المنهية</h3>
+                <p class="text-xs text-gray-400">قم بتحديث بياناتك المهنية ومعلومات التواصل الخاصة بك</p>
+              </div>
+            </div>
+            <div [ngClass]="{'animate-pulse':profileForm.jobTitle().value()==''}"
+              class="animate-pulse grid grid-cols-1 gap-6 md:grid-cols-2 text-black mt-5">
+
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">المهنة</label>
+                <input   type="text" [formField]="profileForm.jobTitle"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">التصنيف</label>
+              
+                  <select  [formField]="profileForm.categoryName"  class="w-full py-3 rounded-xl bg-gray-50">
+                    @for(catog of catogerys();track catog)
+                    {
+                    <option value="{{catog.name}}" class="">{{catog.name}}</option>
+                    }
+                  </select>
+         
+                <!-- <input   type="text" [formField]="profileForm.categoryName"
+        class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm"> -->
+
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-gray-700">المنطقة</label>
+                <input   type="text" [formField]="profileForm.area"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+              </div>
+
+              <div class="space-y-2  md:col-span-2">
+                <div class="w-full">
+                  <label class="text-sm font-medium text-gray-700">الوصف</label>
+                  <textarea [formField]="profileForm.description"
+                    class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm"></textarea>
+
+                </div>
+                <div class="flex gap-6">
+                  <p class="block text-sm text-gray-500">متاح للعمل</p>
+                  <p-toggleswitch [formField]="profileForm.availabilityStatus" />
+                </div>
+              </div>
+
+
+
+            </div>
+            }
+         <div class="flex justify-between">
+   <button [ngClass]="{'hidden':!isEditMode()}" [disabled]="profileForm().invalid()&&isLoading()" (click)="editclientProfileData()"
+              class="mt-8 rounded-xl bg-sky-500 px-8 py-3 text-sm font-medium text-white shadow-lg shadow-sky-100 active:scale-105 duration-150 transition ">
+              @if(!isLoading())
+              {
+              تعديل البيانات
+              }
+              @else {
+              ......جار التعدييل
+              }
+            </button>
+             <button [ngClass]="{'hidden':!isEditMode()}" (click)="isEditMode.set(false)"
+              class="mt-8 rounded-xl bg-red-500 px-8 py-3 text-sm font-medium text-white shadow-lg shadow-sky-100 active:scale-105 duration-150 transition ">
+             
+          الغاء التعديل
+              
+             
+            </button>
+         </div>
+
+          </section>
+
+        </form>
+
+        <!-- طلباتي  -->
+        <section id="myRequests">
+      
+
+          <div class="flex justify-between p-4 ">
+            <div class="mt-10 flex items-center gap-3">
+              <div class="p-2 bg-sky-50 rounded-lg text-blue-500"><i class="fas fa-briefcase text-2xl"></i></div>
+              <div>
+                <h3 class="font-bold text-gray-800 text-2xl">طلباتي</h3>
+                <p class="text-xs text-gray-400">يرجي مراعاة الرد السريع علي العملاء </p>
+              </div>
+            </div>
+            <button
+              class="text-blue-500  px-4  active:translate-1 transition duration-200 cursor-pointer rounded-3xl  ">عرض
+              الكل</button>
+          </div>
+          <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2  gap-6">
+            @switch(role())
+            {
+            @case ('client') {
+            @for (service of clientServices(); track service;let i= $index) {
+            <app-service-card [service]="service"></app-service-card>
+            }
+            }
+            @case ('worker') {
+            @for (service of workerServices(); track service;let i= $index) {
+            <app-recived-service-card [service]="service"></app-recived-service-card>
+            }
+            }
+            }
+
+
+          </div>
+        </section>
+
+        <!-- Reviews -->
+        <section id="myReviews">
+  <div class="flex justify-between p-4 ">
+            <div class="mt-10 flex items-center gap-3">
+              <div class="p-2 bg-green-50 rounded-lg text-green-500"><i class="fas fa-pen-clip text-2xl"></i></div>
+              <div>
+                <h3 class="font-bold text-gray-800 text-2xl">التقييمات </h3>
+                <p class="text-xs text-gray-400">المراجعات الجيده تجلب لك خدمات اكثر احرص عليها</p>
+              </div>
+            </div>
+            <button
+              class="text-blue-500  px-4  active:translate-1 transition duration-200 cursor-pointer rounded-3xl  ">عرض
+              الكل</button>
+          </div>
+     <div  class="bg-white rounded-3xl">
+        @for(rev of workerReviews(); track rev)
+       {
+        <app-review-card [review]="rev"></app-review-card>
+       }
+
+     </div>
+        </section>
+        <!-- الاعدادات  -->
+        <section id="mySettings">
+          <div class=" bg-white my-0 p-0 flex justify-center items-start w-full shadow-sm rounded-2xl">
+            <div class="w-full max-w-4xl overflow-hidden">
+
+              <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800">إعدادات الحساب</h2>
+                <button class="text-blue-400 hover:text-blue-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                  <button (click)="toggleChangePassword()"
+                    class="flex flex-col items-center justify-center p-8 border border-gray-100 rounded-2xl hover:shadow-md transition-shadow bg-white group">
+                    <div
+                      class="w-12 h-12 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <span class="font-bold text-gray-700">تغيير كلمة المرور</span>
+                  </button>
+
+                  <button
+                    class="flex flex-col items-center justify-center p-8 border border-gray-100 rounded-2xl hover:shadow-md transition-shadow bg-white group">
+                    <div
+                      class="w-12 h-12 bg-gray-50 text-gray-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gray-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <span class="font-bold text-gray-700">تعطيل الحساب</span>
+                  </button>
+
+                  <button (click)="confirmDeleting()"
+                    class="flex flex-col items-center justify-center p-8 border border-red-100 rounded-2xl hover:shadow-md transition-shadow bg-white group">
+                    <div
+                      class="w-12 h-12 bg-red-50 text-red-500 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </div>
+                    <span class="font-bold text-gray-700">حذف الحساب نهائياً</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- changing Password form  -->
+        @if(showChangePassForm())
+        {
+        <section id="changePassword" class=" bg-white shadow mt-0 rounded-2xl  mb-10 transition duration-700">
+          <div class="flex items-center justify-between gap-10 p-5 border border-gray-100">
+            <div class="flex items-center gap-10 ">
+              <h2 class="font-bold text-2xl">تغيير كلمة السر </h2>
+              <i class="fa-solid fa-unlock text-2xl text-sky-500"></i>
+            </div>
+            <i class="fa-regular fa-circle-xmark text-2xl cursor-pointer " (click)="showChangePassForm.set(false)"></i>
+
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-3 py-5   px-10">
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700">كلمة السر الحاليه</label>
+              <input   type="text" [formField]="changPasswordForm.currentPassword"
+                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+              @if(changPasswordForm.currentPassword().touched()&&changPasswordForm.currentPassword().invalid())
+              {
+              <ul>
+                @for(error of changPasswordForm.currentPassword().errors();track error)
+                {
+                <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                  ●{{error.message}}
+                </li>
+                }
+              </ul>
+              }
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700">كلمة السر الجديده</label>
+              <input   type="text" [formField]="changPasswordForm.newPassword"
+                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+              @if(changPasswordForm.newPassword().touched()&&changPasswordForm.newPassword().invalid())
+              {
+              <ul>
+                @for(error of changPasswordForm.newPassword().errors();track error)
+                {
+                <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                  ●{{error.message}}
+                </li>
+                }
+              </ul>
+              }
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700">تاكيد كلمة السر </label>
+              <input   type="text" [formField]="changPasswordForm.confarmPassword"
+                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-sky-500 focus:ring-0">
+              @if(changPasswordForm.confarmPassword().touched()&&changPasswordForm.confarmPassword().invalid())
+              {
+              <ul>
+                @for(error of changPasswordForm.confarmPassword().errors();track error)
+                {
+                <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                  ●{{error.message}}
+                </li>
+                }
+              </ul>
+              }
+              @if(changPasswordForm.confarmPassword().touched()&&changPasswordForm.confarmPassword().value()!=changPasswordForm.newPassword().value())
+              {
+              <ul>
+
+                <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                  ●غير متطابقه
+                </li>
+
+              </ul>
+              }
+            </div>
+
+            <button (click)="changeUserPassword()" [disabled]="changPasswordForm().invalid()"
+              class="rounded-xl w-full mx-auto  bg-sky-500 py-2.5 text-sm font-medium text-white hover:bg-sky-600">
+              تحديث كلمة السر </button>
+          </div>
+
+
+        </section>
+        }
+      </main>
+    </div>
+  </div>
+</div>
+}

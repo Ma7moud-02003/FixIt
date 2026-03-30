@@ -1,0 +1,48 @@
+
+  <div class="bg-white border border-neutral-100 rounded-3xl p-3 shadow-sm hover:shadow-lg transition-all duration-300">
+         <div class="col-span-2">
+         <span class="bg-emerald-50 text-emerald-700 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+            {{worker().availabilityStatus?'متاح الان':'غير متاح'}}
+         </span>
+      </div>
+
+    <div class="relative flex justify-center">
+        @if(worker().imgUrl)
+        {
+      <img [src]="worker().imgUrl" alt="Worker" class="w-24 h-24 rounded-full object-cover">
+        }
+        @else{
+      <img src="/workers/manWorker.png" alt="Worker" class="w-24 h-24 rounded-full object-cover" loading="lazy">
+
+        }
+      <span  class="absolute bottom-0 right-1/2 translate-x-12 translate-y-1 w-5 h-5 bg-emerald-500 border-4 border-white rounded-full"></span>
+    </div>
+
+    <div class="text-center space-y-1">
+      <h3 class="text-lg font-bold text-neutral-900">{{worker().fullName}}</h3>
+      <p class="text-sm font-medium text-sky-600">{{worker().jobTitle||'غير معلوم بعد'}}</p>
+    </div>
+
+    <div class="border-t border-neutral-100 my-3 justify-between pt-4 px-5 flex">
+      <div class="flex items-center gap-1.5">
+        <span class="text-sm text-neutral-600">{{worker().city||'القاهرة'}}</span>
+        <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      </div>
+      <div class="flex items-center gap-1 text-yellow-500">
+        <span class="text-sm font-semibold text-neutral-500 ">{{worker().ratingAverage||1}}</span>
+
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 pt-2">
+      <button [routerLink]="['/mainLayout/require',worker().workerId]" class="w-full bg-white text-sky-700 border border-neutral-200 font-semibold text-sm py-2.5 rounded-xl transition hover:bg-sky-50 hover:border-sky-100">
+        طلب خدمة
+      </button>
+      <button [routerLink]="['/mainLayout/workerProfile',worker().workerId]" class="w-full bg-white text-neutral-700 border border-neutral-200 font-semibold text-sm py-2.5 rounded-xl transition hover:bg-neutral-50 hover:border-neutral-300">
+        عرض الملف
+      </button>
+    </div>
+    
+  </div>
+ 

@@ -1,0 +1,38 @@
+<div class="mt-12 p-10 bg-white/90 backdrop-blur-xl border border-emerald-100 rounded-[2.5rem] shadow-2xl shadow-emerald-100/50 text-center animate-in fade-in zoom-in duration-500 mx-auto">
+  
+  <div class="mb-8 flex justify-center">
+    <div class="relative flex items-center justify-center w-24 h-24 bg-emerald-50 rounded-full border-4 border-white shadow-sm">
+      <div class="absolute w-full h-full bg-emerald-200/40 rounded-full animate-ping"></div>
+      <div class="absolute w-32 h-32 bg-emerald-100/20 rounded-full animate-pulse"></div>
+      
+      <svg class="w-12 h-12 text-emerald-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="text-3xl font-black text-slate-800 tracking-tight">تم إرسال الطلب بنجاح!</h2>
+    <div class="bg-emerald-50/50 py-3 px-6 rounded-2xl inline-block border border-emerald-100/50">
+       <p class="text-emerald-700 font-bold text-sm flex items-center gap-2">
+         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+         طلبك الآن قيد المراجعة لدى الفني
+       </p>
+    </div>
+    <p class="text-slate-500 leading-relaxed px-6 text-sm font-medium">
+      لقد استلمنا طلب الخدمة الخاص بك باهتمام. سيقوم المختص بمراجعة التفاصيل وتقديم عرض السعر المناسب في أقرب وقت.
+    </p>
+  </div>
+
+  <div class="mt-10 px-4">
+    <button routerLink="/mainLayout/sendedServices"
+      class="w-full py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-slate-800 transition-all active:scale-[0.98] shadow-xl shadow-slate-200 flex items-center justify-center gap-3 group">
+      <i class="fas fa-home text-slate-400 group-hover:text-white transition-colors"></i>
+      العودة للرئيسية
+    </button>
+    
+    <p class="mt-4 text-[11px] text-slate-400 font-bold uppercase tracking-widest">
+      شكراً لثقتك بنا
+    </p>
+  </div>
+</div>

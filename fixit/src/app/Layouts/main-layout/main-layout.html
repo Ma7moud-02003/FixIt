@@ -1,0 +1,13 @@
+
+@if(userToken())
+{
+    <app-top-nav></app-top-nav>
+}
+@else {
+    <app-navbefor></app-navbefor>
+}
+<div class="absolute top-[8.5%] w-full">
+<router-outlet></router-outlet>
+</div>
+
+<app-bottom-nav></app-bottom-nav>

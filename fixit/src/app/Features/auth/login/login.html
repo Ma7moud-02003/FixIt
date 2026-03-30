@@ -1,0 +1,112 @@
+<app-navbefor></app-navbefor>
+<!-- login form  -->
+
+  <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 ">
+  <div class="bg-white rounded-3xl shadow-sm border border-gray-100 w-full max-w-2xl p-5 md:p-12">
+      <div class="w-full max-w-2xl flex justify-end mb-6">
+     <div class="flex items-center justify-center w-full gap-2 text-cyan-500 font-bold text-xl text-center">
+       <span>FixIt</span>
+       <div class="bg-cyan-500 w-12 h-12 flex items-center justify-center  rounded-full text-white">
+        <i class="fa-solid fa-hammer"></i>
+       </div>
+     </div>
+  </div>
+
+    <div class="text-center mb-4">
+    <h1 class="text-3xl font-extrabold text-gray-800"> <span class="text-red-500">تسجيل دخول</span></h1>
+    <p class="text-gray-500 mt-2">ابدأ رحلتك معنا اليوم واحصل على أفضل الخدمات المنزلية</p>
+  </div>
+    <form  class="space-y-6">   
+     
+
+      <div class="grid grid-cols-1 ">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+          <div class="relative">
+            <input type="email" [formField]="loginForm.email"   placeholder="name@example.com"
+              class="w-full border-gray-200 rounded-xl p-3 pr-10 focus:ring-cyan-500 focus:border-cyan-500 border text-left" >
+               @if(loginForm.email().touched()&&loginForm.email().invalid())
+              {
+                <ul>
+                  @for(error of loginForm.email().errors();track error)
+                  {
+                    <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                      ●{{error.message}}
+                    </li>
+                  }
+                </ul>
+              }
+              <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
+               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            </span>
+          </div>
+        </div>
+        <div>
+          
+        
+        </div>
+      </div>
+
+
+      <div class="grid grid-cols-1">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+          <div class="relative">
+            <input #password [formField]="loginForm.password" type="password"  placeholder="........"
+              class="w-full border-gray-200 rounded-xl py-3 px-10 focus:ring-cyan-500 focus:border-cyan-500 border">
+              @if(loginForm.password().touched()&&loginForm.password().invalid())
+              {
+                <ul>
+                  @for(error of loginForm.password().errors();track error)
+                  {
+                    <li class="text-red-700 text-[0.7rem] font-bold list-inside">
+                      ●{{error.message}}
+                    </li>
+                  }
+                </ul>
+              }
+            <div class="absolute top-[30%] right-0 pr-3 flex items-center text-gray-400">
+               <svg  class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            </div>
+            <span  class="absolute top-[30%] left-0 pl-3 flex items-center text-gray-400 cursor-pointer">
+               <svg (click)="showAndHidePassword(password)"  class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            </span>
+          </div>
+        </div>
+        <div>
+      
+        </div>
+      </div>
+      <div class="pt-2 border-t border-gray-100">
+        <p class="text-gray-500"> 
+          <a href="#" class="text-cyan-500 font-bold">نسيت كلمة السر </a></p>
+      </div>
+
+
+      <div class="flex items-center gap-2">
+        <input #agreed type="checkbox" formControlName="agreeTerms" class="rounded text-cyan-500 focus:ring-cyan-500">
+        <p class="text-xs text-gray-500">
+          أنت توافق على <span class="text-cyan-500 underline">شروط الخدمة</span> و <span class="text-cyan-500 underline">سياسة الخصوصية</span> الخاصة بـ HandyHub.
+        </p>
+      </div>
+
+      <button #submitButton [disabled]="!loginForm().valid()" type="button" (click)="submitForm(agreed,submitButton)" 
+        class="w-full bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition duration-200">
+        <span> تسجيل دخول</span>
+        <svg class="h-5 w-5 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+      </button>
+
+      <div class="text-center pt-4 border-t border-gray-100">
+        <p class="text-gray-500">ليس لجيك حساب ؟ <a routerLink="/register" class="text-cyan-500 font-bold underline">تسجيل </a></p>
+      </div>
+
+      <div class="flex justify-between items-center text-[10px] text-gray-400 mt-6">
+        <div class="flex items-center gap-1"><span>دعم فني 24/7</span><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg></div>
+        <div class="flex items-center gap-1"><span>خصوصية البيانات</span><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg></div>
+        <div class="flex items-center gap-1"><span>100% دفع آمن</span><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg></div>
+      </div>
+    </form>
+  </div>
+  
+  <p class="text-[10px] text-gray-400 mt-8">جميع الحقوق محفوظة © 2026 HandyHub.</p>
+</div>
