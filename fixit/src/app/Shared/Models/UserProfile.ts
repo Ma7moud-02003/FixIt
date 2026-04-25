@@ -14,6 +14,7 @@ export interface UserModel {
 }
 
 export interface WorkerModel extends UserModel {
+ 
   jobTitle: string;
   ratingAverage?: number | null;
   availabilityStatus: boolean;
@@ -21,6 +22,7 @@ export interface WorkerModel extends UserModel {
   categoryName: string;
   description: string;
   categoryId:number;
+  rate:number
   
 }
 
@@ -36,7 +38,7 @@ export interface WorkersModel {
   imgUrl: string | null;
   jobTitle: string | null;
   ratingAverage: number | null;
-
+  rate:number;
   availabilityStatus: boolean;
 }
 

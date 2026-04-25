@@ -2,12 +2,17 @@
 @if(userToken())
 {
     <app-top-nav></app-top-nav>
+
 }
 @else {
     <app-navbefor></app-navbefor>
 }
-<div class="absolute top-[8.5%] w-full">
-<router-outlet></router-outlet>
+<div class="w-full ">
+<div class="my-15">
+    <router-outlet></router-outlet>
+</div>
+<div class="fixed bottom-0 w-full z-50">
+<app-bottom-nav></app-bottom-nav>
 </div>
 
-<app-bottom-nav></app-bottom-nav>
+</div>

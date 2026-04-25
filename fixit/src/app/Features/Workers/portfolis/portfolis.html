@@ -1,66 +1,77 @@
-<div class="min-h-screen bg-white px-6 py-3">
+<div class="min-h-screen bg-slate-50/50 px-4 py-8 sm:px-8 lg:px-12">
   <main class="max-w-7xl mx-auto">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-5 gap-6">
-
-   
-     @if(role() === Roles.Worker_Role) {
-   <div class="space-y-2">
-        <h1 class="text-4xl font-black text-slate-900 tracking-tight">معرض الأعمال</h1>
-        <p class="text-slate-500 font-medium">استعرض مشاريعك المنجزة وقم بإدارتها من مكان واحد.</p>
-      </div>
-     
-        <div  
-             class="group cursor-pointer flex justify-between items-center gap-4 bg-cyan-600 text-white px-6 py-4 rounded-2xl hover:bg-blue-600 transition-all duration-300 shadow-xl shadow-slate-200">
-          <div routerLink="/dashboared/addPortfolio" class="flex flex-col items-end">
-            <span class="text-[10px] font-bold opacity-70 uppercase">مشروع جديد</span>
-            <span class="text-sm font-bold">أضف إلى أعمالك</span>
-          </div>
-          <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:rotate-90 transition-transform">
-            <i class="fas fa-plus"></i>
-          </div>
-        </div>
-      }
-
-    </div>
-
-          @if (role()===Roles.Clien_Role&&workerData()) {
-    <div class="flex justify-center text-center">
-          <div>
- <div class="w-30 h-30 rounded-full border-4 border-white overflow-hidden">
-<img [src]="workerData().workerImgUrl" loading="lazy" class="w-full  h-full" alt="worker-image">
-  </div>
-    </div>
-        </div>
-
-        <h2 class="text-4xl text-center font-bold  py-3">اعمال الفني : {{workerData().workerName}}</h2>
- 
-
-}
     
+    <header class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
 
-    <div class="grid grid-cols-1 mt-5 lg:grid-cols-2 gap-x-12 gap-y-16">
-      
-      @for(work of filterdPortfolio(); track work) {
-        <div (click)="routForEditing(work)" 
-             class="cursor-pointer transform transition-transform duration-500 hover:-translate-y-2">
-          <app-protfolio-card [portfolio]="work" ></app-protfolio-card>
+      @if(role() === Roles.Worker_Role) {
+        <div class="space-y-2">
+          <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+            معرض الأعمال
+          </h1>
+          <p class="text-slate-500 font-medium max-w-md">
+            استعرض مشاريعك المنجزة وقم بإدارتها من مكان واحد لزيادة فرص توظيفك.
+          </p>
         </div>
-      }
-
-      @if(myPortfolio().length==0)
-      {
         
-        <div 
-             class="border-2 border-dashed border-slate-200 rounded-[2.5rem] flex flex-col items-center justify-center p-12 hover:border-blue-400 hover:bg-blue-50/30 transition-all group cursor-pointer">
-          <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <i class="fas fa-folder-plus text-slate-400 text-2xl group-hover:text-blue-500"></i>
+        <button 
+          routerLink="/dashboard/addPortfolio" 
+          class="group relative flex items-center gap-5 bg-cyan-600 text-white pl-4 pr-6 py-3.5 rounded-2xl hover:bg-cyan-700 transition-all duration-300 shadow-xl shadow-cyan-900/10 active:scale-[0.98]"
+        >
+          <div class="flex flex-col items-end border-r border-white/20 pr-5">
+            <span class="text-[10px] font-bold opacity-80 uppercase tracking-tighter">مشروع جديد</span>
+            <span class="text-sm font-bold whitespace-nowrap">أضف إلى أعمالك</span>
           </div>
-          <span class="text-slate-900 font-bold">ابدأ بإضافة أول عمل لك</span>
-          <p class="text-slate-400 text-xs mt-1">لم تقم بإضافة أي مشاريع بعد</p>
-        </div>
+          <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 group-hover:rotate-90 transition-all duration-500">
+            <i class="fas fa-plus text-lg"></i>
+          </div>
+        </button>
       }
-      
 
+    </header>
+
+    <div class="relative">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 lg:gap-10">
+        
+        @for(work of filterdPortfolio(); track work.createdAt) {
+          <div 
+            (click)="routForEditing(work)" 
+            class="group cursor-pointer relative bg-white rounded-[2rem] p-2 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-200/50"
+          >
+            <app-protfolio-card 
+              [portfolio]="work" 
+              class="block w-full h-full"
+            ></app-protfolio-card>
+            
+            <div class="absolute inset-0 border-2 border-transparent group-hover:border-cyan-500/10 rounded-[2rem] pointer-events-none transition-colors"></div>
+          </div>
+        }
+
+        @if(myPortfolio().length === 0) {
+          <div 
+            class="col-span-full border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center p-16 md:p-28 hover:border-cyan-400 hover:bg-cyan-50/20 transition-all group cursor-pointer"
+            routerLink="/dashboard/addPortfolio"
+          >
+            <div class="relative mb-6">
+              <div class="absolute inset-0 bg-cyan-100 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative w-24 h-24 bg-white shadow-inner border border-slate-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                <i class="fas fa-images text-slate-300 text-4xl group-hover:text-cyan-600 transition-colors"></i>
+              </div>
+            </div>
+            
+            <h3 class="text-slate-900 text-xl font-extrabold mb-2">ابدأ ببناء ملفك الشخصي</h3>
+            <p class="text-slate-400 text-sm text-center max-w-sm leading-relaxed">
+              لم تقم بإضافة أي مشاريع حتى الآن. قم برفع أفضل أعمالك لتظهر بشكل احترافي أمام العملاء.
+            </p>
+            
+            <span class="mt-8 text-cyan-600 font-bold text-sm flex items-center gap-2 group-hover:gap-4 transition-all">
+              اضغط هنا للبدء
+              <i class="fas fa-arrow-left text-xs"></i>
+            </span>
+          </div>
+        }
+
+      </div>
     </div>
   </main>
 </div>

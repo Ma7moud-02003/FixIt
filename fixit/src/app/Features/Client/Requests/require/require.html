@@ -1,123 +1,134 @@
-<div class="bg-gray-50 px-20o">
-
-  <main class="md:w-[80%] mx-auto py-5 px-4">
-  
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-10">
-        <header class="text-center mb-5">
-      <h1 class="text-3xl font-bold text-gray-800 mb-3">اطلب خدمتك الآن</h1>
-      <p class="text-gray-500">املأ البيانات التالية لنقوم بربطك بأفضل الفنيين الموثوقين في منطقتك. العملية تستغرق أقل من دقيقتين</p>
+<div class="bg-gray-50/50 min-h-screen">
+  <main class="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+    
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-extrabold text-neutral-900 tracking-tight mb-4">اطلب خدمتك الآن</h1>
+      <p class="text-lg text-neutral-500 max-w-2xl mx-auto leading-relaxed">
+        املأ البيانات التالية لنقوم بربطك بأفضل الفنيين الموثوقين في منطقتك. العملية تستغرق أقل من دقيقتين
+      </p>
     </header>
 
-      <div class="flex items-center gap-4 mb-8">
-        <div class="p-3 bg-sky-50 rounded-xl">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+    <div class="bg-white rounded-3xl shadow-xl shadow-neutral-200/50 border border-neutral-100 overflow-hidden">
+      <div class="bg-neutral-900 px-8 py-6 flex items-center gap-5">
+        <div class="p-3 bg-white/10 rounded-2xl backdrop-blur-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
         </div>
         <div>
-          <h2 class="text-lg font-bold text-gray-800">تفاصيل الخدمة المطلوبة</h2>
-          <p class="text-sm text-gray-400">أخبرنا المزيد عما تحتاجه بالضبط</p>
+          <h2 class="text-xl font-bold text-white">تفاصيل الخدمة المطلوبة</h2>
+          <p class="text-sm text-neutral-400">أخبرنا المزيد عما تحتاجه بالضبط لضمان أفضل نتيجة</p>
         </div>
       </div>
 
-      <form class="space-y-6 " >
-        <div class="w-full">
-          <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-2">عنوان الطلب</label>
-          <input type="text" [formField]="addServiceForm.serviceTitle" placeholder="مثال: تصليح تسريب في حوض المطبخ" 
-                 class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition bg-gray-50/50">
-          <p class="text-xs text-gray-400 mt-2">اجعل العنوان واضحاً</p>
-              @if(addServiceForm.serviceTitle().touched()&&addServiceForm.serviceTitle().invalid())
-              {
-                <ul>
-                  @for(error of addServiceForm.serviceTitle().errors();track error)
-                  {
-                    <li class="text-red-700 text-[0.7rem] font-bold list-inside">
-                      ●{{error.message}}
-                    </li>
-                  }
-                </ul>
+      <form class="p-8 md:p-12 space-y-8">
+        <div class="relative group">
+          <label class="block text-sm font-bold text-neutral-700 mb-2 mr-1">عنوان الطلب</label>
+          <input type="text" [formField]="addServiceForm.serviceTitle" 
+                 placeholder="مثال: تصليح تسريب في حوض المطبخ" 
+                 class="w-full px-5 py-4 rounded-2xl border-2 border-neutral-100 bg-neutral-50/50 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 outline-none transition-all duration-300 placeholder:text-neutral-300">
+          
+          @if(addServiceForm.serviceTitle().touched() && addServiceForm.serviceTitle().invalid()) {
+            <div class="mt-2 flex items-center gap-1 text-red-500 animate-in fade-in slide-in-from-top-1">
+              <i class="fas fa-exclamation-circle text-[10px]"></i>
+              @for(error of addServiceForm.serviceTitle().errors(); track error) {
+                <span class="text-xs font-bold">{{error.message}}</span>
               }
+            </div>
+          } @else {
+            <p class="text-xs text-neutral-400 mt-2 mr-1 italic">اجعل العنوان واضحاً ومختصراً</p>
+          }
         </div>
 
-        <div class="w-full mt-5">
-          <label class="block text-sm font-medium text-gray-700 mb-2">وصف المشكلة</label>
-          <textarea rows="4" [formField]="addServiceForm.serviceDescription" placeholder="اشرح المشكلة بالتفصيل، متى بدأت وما الذي تحتاجه بالضبط..." 
-                    class="w-full px-4 py-3 h-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition bg-gray-50/50"></textarea>
-           @if(addServiceForm.serviceDescription().touched()&&addServiceForm.serviceDescription().invalid())
-              {
-                <ul>
-                  @for(error of addServiceForm.serviceDescription().errors();track error)
-                  {
-                    <li class="text-red-700 text-[0.7rem] font-bold list-inside">
-                      ●{{error.message}}
-                    </li>
-                  }
-                </ul>
+        <div class="relative group">
+          <label class="block text-sm font-bold text-neutral-700 mb-2 mr-1">وصف المشكلة</label>
+          <textarea rows="5" [formField]="addServiceForm.serviceDescription" 
+                    placeholder="اشرح المشكلة بالتفصيل، متى بدأت وما الذي تحتاجه بالضبط..." 
+                    class="w-full px-5 py-4 rounded-2xl border-2 border-neutral-100 bg-neutral-50/50 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 outline-none transition-all duration-300 placeholder:text-neutral-300 resize-none"></textarea>
+          
+          @if(addServiceForm.serviceDescription().touched() && addServiceForm.serviceDescription().invalid()) {
+            <div class="mt-1 flex items-center gap-1 text-red-500">
+              <i class="fas fa-exclamation-circle text-[10px]"></i>
+              @for(error of addServiceForm.serviceDescription().errors(); track error) {
+                <span class="text-xs font-bold">{{error.message}}</span>
               }
-       
+            </div>
+          }
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-bold text-neutral-700 mr-1">صور توضيحية (اختياري)</label>
+          <label for="img" class="relative group block cursor-pointer">
+            <div class="border-2 border-dashed border-neutral-200 rounded-3xl p-10 flex flex-col items-center justify-center bg-neutral-50/30 group-hover:bg-sky-50/50 group-hover:border-sky-300 transition-all duration-500 overflow-hidden">
+              @if(imagePreview()) {
+                <div class="relative w-full max-h-64 rounded-xl overflow-hidden shadow-lg">
+                  <img [src]="imagePreview()" class="w-full h-full object-cover" alt="preview">
+                  <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-white font-bold bg-white/20 backdrop-blur-md px-4 py-2 rounded-full">تغيير الصورة</span>
                   </div>
-        </div>
-
-        <div class="lg:w-3/4 w-full mx-auto">
-          <label for="img" class="block text-sm font-medium text-gray-700 mb-2">صور توضيحية (اختياري)
-          
-          <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center text-gray-400 bg-gray-50/30 hover:bg-gray-50 transition cursor-pointer">
-     @if(imagePreview())
-     {
-      <img [src]="imagePreview()" class="w-full object-cover" alt="randome image">
-     }
-     @else {
-             <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-          
-     }
-            <p class="font-medium text-gray-600">اضغط لرفع الصور</p>
-          </div>
+                </div>
+              } @else {
+                <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-neutral-400 group-hover:text-sky-500 group-hover:scale-110 transition-all duration-500 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p class="font-bold text-neutral-600">اسحب الصور هنا أو اضغط للرفع</p>
+                <p class="text-xs text-neutral-400 mt-1 uppercase tracking-wider">PNG, JPG up to 10MB</p>
+              }
+            </div>
           </label>
-          <input (change)="onFileSelected($event)" class="hidden" type="file" name="" id="img">
+          <input (change)="onFileSelected($event)" class="hidden" type="file" id="img">
         </div>
 
-        <button (click)="requireService()"  [disabled]="addServiceForm().invalid()" type="button" class="w-full py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-lg shadow-sky-100 transition-all active:scale-[0.98]">
-          المتابعة
-        </button>
-
-        <p class="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          بياناتك الشخصية وموقعك الجغرافي محمي وفق سياسة الخصوصية الخاصة بنا
-        </p>
+        <div class="pt-4">
+          <button (click)="requireService()" [disabled]="addServiceForm().invalid()" type="button" 
+                  class="w-full py-5 bg-sky-600 hover:bg-sky-700 disabled:bg-neutral-200 disabled:cursor-not-allowed text-white text-lg font-black rounded-2xl shadow-xl shadow-sky-200 transition-all transform active:scale-[0.98]">
+            تأكيد وإرسال الطلب
+          </button>
+          
+          <div class="mt-6 flex items-center justify-center gap-2 text-xs text-neutral-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>بياناتك محمية ومشفرة بالكامل وفق معايير الخصوصية العالمية</span>
+          </div>
+        </div>
       </form>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+      <div class="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow text-center group">
+        <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
         </div>
-        <h3 class="font-bold text-gray-800">أسعار تنافسية</h3>
-        <p class="text-xs text-gray-400 mt-2">احصل على عروض متعددة واختر ما يناسب ميزانيتك</p>
+        <h3 class="font-black text-neutral-800 mb-2">أسعار تنافسية</h3>
+        <p class="text-sm text-neutral-400 leading-relaxed">احصل على عروض متعددة من فنيين مختلفين واختر ما يناسب ميزانيتك</p>
       </div>
 
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+      <div class="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow text-center group">
+        <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
         </div>
-        <h3 class="font-bold text-gray-800">تواصل مباشر</h3>
-        <p class="text-xs text-gray-400 mt-2">تحدث مع الفني واتفق على كافة التفاصيل بسهولة</p>
+        <h3 class="font-black text-neutral-800 mb-2">تواصل مباشر</h3>
+        <p class="text-sm text-neutral-400 leading-relaxed">تحدث مع الفني عبر الدردشة المباشرة واتفق على كافة التفاصيل بسهولة</p>
       </div>
 
-      <div class="flex flex-col items-center text-center">
-        <div class="w-12 h-12 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <div class="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow text-center group">
+        <div class="w-14 h-14 bg-sky-50 text-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
-        <h3 class="font-bold text-gray-800">فنيين معتمدين</h3>
-        <p class="text-xs text-gray-400 mt-2">جميع الفنيين يخضعون لفحص دقيق للبيانات والمهارات</p>
+        <h3 class="font-black text-neutral-800 mb-2">فنيين معتمدين</h3>
+        <p class="text-sm text-neutral-400 leading-relaxed">جميع شركائنا يخضعون لفحص دقيق للسجلات الجنائية والمهارات الفنية</p>
       </div>
     </div>
   </main>
 
-  <footer class="mt-12 py-6 border-t border-gray-100 px-6 flex justify-between text-xs text-gray-400">
-    <div class="flex gap-4">
-      <a href="#" class="hover:text-gray-600">الخصوصية</a>
-      <a href="#" class="hover:text-gray-600">الشروط</a>
-    </div>
-    <p>© 2026 HandyHub. جميع الحقوق محفوظة.</p>
-  </footer>
+
 </div>

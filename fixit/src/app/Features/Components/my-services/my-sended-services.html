@@ -6,7 +6,13 @@
   <div class="min-h-screen bg-gray-50 p-4 md:p-8" >
   <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start mb-8 gap-6">
     <div class="text-right">
+      @if(role()==Role.Clien_Role)
+      {
       <h1 class="text-3xl font-black text-gray-800">طلباتي المرسله</h1>
+      }@else if (role()==Role.Worker_Role){
+      <h1 class="text-3xl font-black text-gray-800">طلباتي المستلمه</h1>
+
+      }
       <p class="text-gray-500 mt-1 text-sm">تابع حالة خدماتك الحالية وتاريخ طلباتك السابقة مع هاندي هوب</p>
     </div>
     <div class="flex gap-6 shadow-sm bg-white rounded-2xl">
@@ -37,6 +43,7 @@
      @for (service of filterdServices(); track service;let i= $index) {
        <app-service-card [service]="service"></app-service-card>
      }
+
   
 }
 @else {
@@ -46,6 +53,36 @@
 }
   </div>
 
+  
+  <section class="flex justify-center mt-12">
+
+    <div class="bg-white border border-gray-100 rounded-full p-2 shadow-sm flex items-center gap-2">
+
+      <button (click)="getNext()" class="p-2 text-gray-400 hover:text-sky-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      @for(i of [1,2,3,4,5]; track i) {
+        <button
+          [ngClass]="{'bg-sky-500 text-white shadow-lg': pageNume() === i}"
+          (click)="getPage(i)"
+          class="w-10 h-10 flex items-center justify-center text-sm rounded-full transition-all"
+        >
+          {{i}}
+        </button>
+      }
+
+      <button (click)="getPrevious()" class="p-2 text-gray-400 hover:text-sky-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+
+    </div>
+
+  </section>
   <div class="max-w-6xl mx-auto mt-12 bg-blue-50/50 border border-blue-100 rounded-2xl p-6 flex items-center justify-between">
     <div class="flex items-center gap-4">
        <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-sky-500 text-2xl font-bold">!</div>
@@ -57,4 +94,7 @@
     <button class="text-gray-500 text-sm underline">تعرف على نظام التقييم</button>
   </div>
 </div>
+
 }
+
+     

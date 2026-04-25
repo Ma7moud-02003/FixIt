@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { RequiredServiceModel } from '../../Shared/Models/requireService';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { ServiceStatus } from '../../Shared/enums/status';
@@ -24,20 +23,21 @@ export class Service {
   };
 
   // getting service for client
-  getSendedServices(): Observable<any> {
-    return this._http.get(`${environment.apiUrl}/${this.endPoint}/SentsServiceRequests`);
+  getSendedServices(pageNum:number=1,pageSize:number=3): Observable<any> {
+    return this._http.get(`${environment.apiUrl}/${this.endPoint}/SentsServiceRequests?pageNum=${pageNum}&pageSize=${pageSize}`);
   }
 
 // getting service details for client
   getSendedServiceDetails(serviceId: string): Observable<any> {
-    return this._http.get(`${environment.apiUrl}/${this.endPoint}/SentsDetails/${serviceId}`);
+    return this._http.get(`${environment.apiUrl}/${this.endPoint}/Details/${serviceId}`);
   }
 
   // accepting the price reprecented of worker from client
   acceptPrice(serviceId: string,address:string) {
     console.log(address);
-    
-    return this._http.put(`${environment.apiUrl}/${this.endPoint}/recivedJobs/${serviceId}/inprocess`, {serviceAddress:address,serviceId});
+    console.log(serviceId);
+    return this._http.put(`${environment.apiUrl}/${this.endPoint}/sendsJobs/${serviceId}/inprocess`, 
+      {serviceAddress:address,serviceId});
   }
 
 
@@ -58,27 +58,29 @@ export class Service {
 
   // accepting task 
  acceptTask(serviceId: string) {
-    return this._http.put(`${environment.apiUrl}/${this.endPoint}/recivedJobs/${serviceId}/completed`, {});
+    return this._http.put(`${environment.apiUrl}/${this.endPoint}/sendsJobs/${serviceId}/completed`, {});
   }
 
   // getting recived tasks for worker
-  getResivedServices(): Observable<any> {
-    return this._http.get(`${environment.apiUrl}/${this.endPoint}/RecivedsServiceRequests`);
+  getResivedServices(pageNum:number=1,pageSize:number=10): Observable<any> {
+    return this._http.get(`${environment.apiUrl}/${this.endPoint}/Worker/RecivedsServiceRequests?pageNum=${pageNum}&pageSize=${pageSize}`);
   }
 
   // getting service details for worker
   getRecivedServiceDetails(serviceId: string): Observable<any> {
-    return this._http.get(`${environment.apiUrl}/${this.endPoint}/RecivedDetails/${serviceId}`);
+    return this._http.get(`${environment.apiUrl}/${this.endPoint}/Details/${serviceId}`);
   }
 
   // worker add price for service
-  addPriceForService(totalPrice: Object , serviceId: string) {
-    return this._http.put(`${environment.apiUrl}/${this.endPoint}/recivedJobs/${serviceId}/${this.statuses.PENDING}`, totalPrice);
+  addPriceForService(totalPrice: number , serviceId: string) {
+    return this._http.put(`${environment.apiUrl}/${this.endPoint}/Worker/recivedJobs/${serviceId}/${this.statuses.PENDING}`, 
+      {totalPrice}
+    );
   }
 
 // submitting delevering the task to the client
   submitTheTask(serviceId: string,file:FormData) {
-    return this._http.put(`${environment.apiUrl}/${this.endPoint}/recivedJobs/${serviceId}/submitted`,file);
+    return this._http.put(`${environment.apiUrl}/${this.endPoint}/Worker/recivedJobs/${serviceId}/submitted`,file);
   }
 
   // rejecting the service from client 

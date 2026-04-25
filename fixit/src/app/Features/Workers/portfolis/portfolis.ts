@@ -56,7 +56,7 @@ workerData=signal<WorkerData>({} as WorkerData);
     this.subs.add(
 this._portfolio.getAllPortfolios().subscribe({
   next:(res)=>{
- this.myPortfolio.set(res.data.portfoliosList);
+ this.myPortfolio.set(res.data);
  console.log(this.myPortfolio());
  
   }
@@ -70,7 +70,9 @@ this._portfolio.getAllPortfolios().subscribe({
 this._portfolio.getPortfoliosForUser(this.workerId()).subscribe({
   next:(res)=>{
  const data=res.data;
- this.myPortfolio.set(data.portfoliosList);
+ console.log(res);
+ 
+ this.myPortfolio.set(data);
  const workerData={workerImgUrl:data.workerImgUrl,workerName:data.workerName}
  this.workerData.set({...workerData}); 
   }
@@ -84,6 +86,7 @@ if(this.role()==UserRole.Worker_Role)
   else 
     return;
   }
+  
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }

@@ -23,7 +23,7 @@ export class WorkerPriceprocess implements OnDestroy{
   sendPrice(event: any) {
     console.log('sending');
 
-   this.subs.add(this.service.addPriceForService({ totalPrice: this.totalPrice() }, this.serviceId()).subscribe({
+   this.subs.add(this.service.addPriceForService( this.totalPrice() , this.serviceId()).subscribe({
       next: () => {
         event.innerText = 'إرسال عرض السعر';
         this.alert.sucsess('تم ارسال السعر بنجاح');

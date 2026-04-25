@@ -5,6 +5,7 @@ export interface ServiceDetailsModel {
   completeDate: string | null;
   createdAt: string;
   depositAmount: number;
+  serviceAddress?:string;
   rate: number;
   requestDate: string;
   reviewId: number;

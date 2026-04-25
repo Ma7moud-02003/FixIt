@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -26,6 +26,7 @@ export class Protfolio {
 
     getPortfoliosForUser(workerId:string):Observable<any>
   {
+     
    return  this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllPortfoliosByWorkerId/${workerId}`);
   }
 

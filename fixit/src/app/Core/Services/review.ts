@@ -16,13 +16,13 @@ export class Review {
 return this.http.post(`${environment.apiUrl}/${this.endPoint()}/AddReview/${serviceId}`,review);
   }
 
-  getAllRevies()
+  getAllRevies(pageNum:number=1,pageSize:number=5)
   {
-return this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllReviews`);
+return this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllReviews?PageNum=${pageNum}&PageSize=${pageSize}`);
   }
-   getAllReviewsForUser(workerId:string)
+   getAllReviewsForUser(workerId:string,pageNum:number=1,pageSize:number=5)
   {
-return this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllReviewsByWorkerId/${workerId}`);
+return this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllReviewsByWorkerId/${workerId}?PageNum=${pageNum}&PageSize=${pageSize}`);
   }
 
   deleteReview(reviewId:string)

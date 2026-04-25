@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Protfolio } from '../../../Core/Services/protfolio';
 import { Alerts } from '../../../Shared/Alerts/alerts';
@@ -15,7 +15,7 @@ interface Portfolio {
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
 })
-export class AddPortfolio implements OnInit {
+export class AddPortfolio implements OnInit ,OnDestroy{
   private subs = new Subscription();
   private _portfolio = inject(Protfolio);
   private alerts = inject(Alerts);
@@ -100,6 +100,10 @@ export class AddPortfolio implements OnInit {
   }
 
   editePortFolio() {
+    if (!this.selectedFile) {
+      this.alerts.error('اختار صورة الأول');
+      return;
+    }
     this.subs.add(
       this._portfolio.editePortfolio(this.implementFormData(),this.portfolioId()).subscribe({
         next: () => {
@@ -111,14 +115,22 @@ export class AddPortfolio implements OnInit {
   }
 
   deletePortfolio() {
+ this.alerts.confirmDelete('هل انت متأكد من حذف هذا العمل ؟').then((res)=>{
+  if(res.isConfirmed)
+  {
     this.subs.add(
       this._portfolio.deletePortfolio(this.portfolioId()).subscribe({
         next: () => {
-          this.alerts.sucsess('تم حذف العمل بنجاح 👍');
+          this.alerts.sucsess('تم حذف العمل بنجاح');
           this.rout.navigate(['/dashboared/myPortfolio']);
         }
       })
     )
+  }
+ }) 
+}
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
 

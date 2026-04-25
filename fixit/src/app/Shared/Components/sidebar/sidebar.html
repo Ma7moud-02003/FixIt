@@ -10,7 +10,7 @@
   <div class="flex-1 px-4 space-y-8 overflow-y-auto custom-scrollbar">
     
     <div class="px-2">
-      <a routerLink="" 
+      <a routerLink="/dashboared" 
          routerLinkActive="bg-blue-600 text-white shadow-xl shadow-blue-100 scale-[1.02]" 
      
          class="flex items-center text-slate-500 gap-4 px-5 py-2 rounded-2xl transition-all duration-300 group hover:bg-slate-50">
@@ -26,17 +26,14 @@
     <nav class="space-y-1 px-2">
       <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black px-5 mb-4 opacity-70">القائمة الرئيسية</p>
       
-      <a routerLink="/dashboared/search" routerLinkActive="active-link" class="sidebar-item group">
-        <i class="fas fa-search text-lg"></i>
-        <span>تصفح الخدمات</span>
-      </a>
+  
 
-      <a routerLink="/dashboared/recivedService" routerLinkActive="active-link" class="sidebar-item group">
+      <a routerLink="/dashboared/myServices" routerLinkActive="active-link" class="sidebar-item group">
         <i class="fas fa-clipboard-list text-lg"></i>
         <span>الطلبات</span>
       </a>
 
-      <a routerLink="/dashboared/messages" routerLinkActive="active-link" class="sidebar-item group flex justify-between">
+      <a [routerLink]="['/chat','']" routerLinkActive="active-link" class="sidebar-item group flex justify-between">
         <div class="flex items-center gap-4">
           <i class="fas fa-comment-dots text-lg"></i>
           <span>الرسائل</span>

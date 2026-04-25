@@ -1,3 +1,4 @@
+import { MyServiceModel } from '../../Models/services';
 import { Review } from './../../../Core/Services/review';
 import { Component, computed, inject, input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges } from '@angular/core';
 import { User } from '../../../Core/Services/user';
@@ -12,82 +13,79 @@ import Swal from 'sweetalert2';
 import { Router, RouterLink } from '@angular/router';
 import { Service } from '../../../Core/Services/service';
 import { ServiceDetailsModel } from '../../../Shared/Models/serviceDetails';
-import { ServiceCard } from "../../../Shared/Components/sendend-service-card/service-card";
-import { SendedServiceRequestModel } from '../../../Shared/Models/sendedSrciveModel';
+import { ServiceCard } from "../my-service-card/service-card";
+// import { SendedServiceRequestModel } from '../../../Shared/Models/sendedSrciveModel';
 import { Auth } from '../../../Core/Services/auth';
 import { UserRole } from '../../../Shared/enums/role';
-import { RecivedServiceRequestModel } from '../../../Shared/Models/RecivedServiceModel';
-import { RecivedServiceCard } from "../../../Shared/Components/resived-service-card copy/service-card";
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CommonModule } from '@angular/common';
 import { categories } from '../../Models/categorys';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { ReviewCard } from "../cards/review-card/review-card";
-interface Catog{
-  name:string
-  selected:boolean
+interface Catog {
+  name: string
+  selected: boolean
 }
-interface ReviewModel{
-  rate:number,
-  comment:string
+interface ReviewModel {
+  rate: number,
+  comment: string
 }
 
 @Component({
   selector: 'app-profile',
   imports: [FormField, Skeleton, SkeletonModule,
-    RouterLink, ServiceCard, RecivedServiceCard,
+    RouterLink, ServiceCard,
     ToggleSwitchModule, CommonModule, SelectModule, FormsModule, ReviewCard],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
 export class Profile implements OnInit, OnDestroy {
 
-  clientServices = signal<SendedServiceRequestModel[]>([]);
-  workerServices = signal<RecivedServiceRequestModel[]>([]);
+  clientServices = signal<MyServiceModel[]>([]);
+  workerServices = signal<MyServiceModel[]>([]);
   workerReviews = signal<ReviewModel[]>([]);
 
 
-  isEditMode=signal<boolean>(false);
+  isEditMode = signal<boolean>(false);
   constructor() {
   }
 
 
-// uploading image 
+  // uploading image 
 
-selectedFile!: File;
-imagePreview=signal<string>('');
+  selectedFile!: File;
+  imagePreview = signal<string>('');
 
-onFileSelected(event: Event) {
-  const input = event.target as HTMLInputElement;
-  if (!input.files || input.files.length === 0) return;
-  const file = input.files[0];
-  if (!file.type.startsWith('image/')) {
-    console.log('اختار صورة بس');
-    return;
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      console.log('اختار صورة بس');
+      return;
+    }
+
+    this.selectedFile = file;
+    // ✅ عمل preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview.set(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   }
 
-  this.selectedFile = file;
-  // ✅ عمل preview
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.imagePreview.set( reader.result as string);
-  };
-  reader.readAsDataURL(file);
-}
+  uploadProfileImage() {
 
-uploadProfileImage()
-{
+    const formData = new FormData();
+    formData.append('imgUrl', this.selectedFile);
 
-  const formData = new FormData();
-  formData.append('imgUrl', this.selectedFile);
-
-this.subs.add(this._user.editeUserImageProfile(formData,this.role())?.subscribe({
-  next:()=>{
-    this.alerts.sucsess('تم تحديث الصوره بنجاح 👍')
+    this.subs.add(this._user.editeUserImageProfile(formData, this.role())?.subscribe({
+      next: () => {
+        this.alerts.sucsess('تم تحديث الصوره بنجاح 👍')
+      }
+    }))
   }
-}))
-}
 
 
 
@@ -109,10 +107,10 @@ this.subs.add(this._user.editeUserImageProfile(formData,this.role())?.subscribe(
   showChangePassForm = signal<boolean>(false);
   profileData = signal<WorkerModel>({} as WorkerModel);
 
-selectedCatogery=computed(()=>{
-  return this.profileForm.categoryName().value();
-})
-catogerys=signal<Catog[]>(categories);
+  selectedCatogery = computed(() => {
+    return this.profileForm.categoryName().value();
+  })
+  catogerys = signal<Catog[]>(categories);
   changingPasswordModel = signal<NewPasswordModel>({
     currentPassword: '',
     newPassword: '',
@@ -124,7 +122,7 @@ catogerys=signal<Catog[]>(categories);
   private alerts = inject(Alerts);
   private router = inject(Router);
   private _services = inject(Service);
-  private _review=inject(Review);
+  private _review = inject(Review);
   role = signal<string>('');
   isLoading = signal<boolean>(false);
 
@@ -223,7 +221,7 @@ catogerys=signal<Catog[]>(categories);
   }
   editWorkerProfile() {
     const { fullName, city, phone,
-      jobTitle, description, availabilityStatus, area,imgUrl ,categoryName
+      jobTitle, description, availabilityStatus, area, imgUrl, categoryName
     } = this.profileForm().value();
     const newProfileData = {
 
@@ -236,7 +234,7 @@ catogerys=signal<Catog[]>(categories);
       description,
       availabilityStatus,
       area,
-    
+
     }
     console.log(newProfileData);
     this.subs.add(
@@ -253,6 +251,10 @@ catogerys=signal<Catog[]>(categories);
   }
 
   changeUserPassword() {
+    if (this.changPasswordForm.newPassword().value() !== this.changPasswordForm.confarmPassword().value()) {
+      this.alerts.error('كلمة السر الجديدة غير متطابقة');
+      return;
+    }
     this.subs.add(
       this._user.changePassword(this.changPasswordForm().value()).subscribe({
         next: (res) => {
@@ -313,37 +315,47 @@ catogerys=signal<Catog[]>(categories);
 
 
   getMyServicesAsClient() {
-    this._services.getSendedServices().subscribe({
-      next: (res) => {
-        this.clientServices.set(res.data.slice(0, 2));
-        console.log(res.data);
-      }
-    })
+    this.subs.add(
+      this._services.getSendedServices(1, 2).subscribe({
+        next: (res) => {
+          this.clientServices.set(res.data.slice(0, 2));
+          console.log(res.data);
+        }
+      })
+    )
   }
 
   getMyServicesAsWorker() {
-    this._services.getResivedServices().subscribe({
-      next: (res) => {
-        this.workerServices.set(res.data.slice(0, 2));
+    this.subs.add(
+      this._services.getResivedServices(1, 2).subscribe({
+        next: (res) => {
+          this.workerServices.set(res.data.slice(0, 2));
 
-        console.log(res.data);
-      }
-    })
+          console.log(res.data);
+        }
+      })
+    )
   }
 
- 
-  getAllWorkerReviews()
-  {
-this.subs.add(
-  this._review.getAllRevies().subscribe({
-    next:(res:any)=>{
-    this.workerReviews.set(res.data.splice(0,3))
-    console.log(this.workerReviews());
-    
-    console.log(res);
-    }
-  })
-)
+
+  getAllWorkerReviews() {
+    this.subs.add(
+      this._review.getAllRevies(1, 3).subscribe({
+        next: (res: any) => {
+          this.workerReviews.set(res.data)
+          console.log(this.workerReviews());
+          console.log(res);
+        }
+      })
+    )
+  }
+  routToServices() {
+    if (this.role() == UserRole.Clien_Role)
+      this.router.navigate(['/mainLayout/myServices'])
+    else if (this.role() == UserRole.Worker_Role)
+      this.router.navigate(['/dashboared/myServices'])
+
+
   }
 
 

@@ -40,6 +40,8 @@ export class Auth {
   {
     return this.getUser().role;
   }
+
+ 
   register(registerForm: RegisetrModel) {
     return this.http.post(`${environment.apiUrl}/Account/Register`, registerForm);
   }
@@ -47,7 +49,24 @@ export class Auth {
   login(loginForm: LoginModel) {
     return this.http.post(`${environment.apiUrl}/Account/Login`, loginForm);
   }
+getUserIdFromToken() {
+  const token = this.getUserToken()
+    ?.replace('Bearer ', '')
+    ?.replace(/"/g, '');
 
+  if (!token) return '';
+
+  const payload = JSON.parse(atob(token.split('.')[1]));
+
+  const claims = Object.keys(payload);
+
+  const nameIdKey = claims.find(k =>
+    k.includes('nameidentifier')
+  );
+ console.log(payload[nameIdKey!]);
+ 
+  return payload[nameIdKey!];
+}
   logout() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('user');

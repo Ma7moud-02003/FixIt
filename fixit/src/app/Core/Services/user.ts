@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserEditeModel, WorkerEditModel, WorkerModel } from '../../Shared/Models/UserProfile';
@@ -21,9 +21,40 @@ export class User {
   }
 
   // getting all workers 
-  getWorkers(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/Worker/AllWorkers`)
+ getWorkers(
+  page: number,
+  pageSize: number,
+  address?: string,
+  search?: string,
+  IsAvilable?: boolean
+
+): Observable<any> {
+
+  let params = new HttpParams()
+    .set('pageNum', page)
+    .set('pageSize', pageSize);
+
+
+  if (search) {
+    params = params.set('search', search);
   }
+
+  if (address) {
+    params = params.set('address', address);
+  }
+  if (IsAvilable) {
+    params = params.set('IsAvilable', IsAvilable.toString());
+  }
+
+  return this.http.get(
+    `${environment.apiUrl}/Worker/AllWorkers`,
+    { params }
+  );
+}
+
+
+
+
 
   // editing worker profile data  under processing
   editWorkerProfile(newProfileData: any) {

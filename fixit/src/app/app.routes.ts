@@ -1,65 +1,180 @@
-import { RouterModule, Routes } from '@angular/router';
-import { Register } from './Features/auth/register/register';
-import { Login } from './Features/auth/login/login';
+import { Routes } from '@angular/router';
 import { authGuardGuard } from './Core/Guards/auth-guard-guard';
-import { Home } from './Features/home/home';
-import { DashboaredLayout } from './Layouts/dashboared-layout/dashboared-layout';
-import { Component } from '@angular/core';
-import { MainLayout } from './Layouts/main-layout/main-layout';
-import { Require } from './Features/Client/Requests/require/require';
-import { MySendedServices } from './Features/Client/Requests/my-sended-services/my-sended-services';
 import { roleGuard } from './Core/Guards/role-guard';
-import { MyRecivedServices } from './Features/Workers/profile/my-recived-services/my-recived-services';
-import { ServiceDetails } from './Features/service-details/service-details';
-import { Profile } from './Shared/Components/profile/profile';
-import { Search } from './Features/search/search';
-import { UserProfile } from './Features/user-profile/user-profile';
-import { AddPortfolio } from './Features/Workers/add-portfolio/addPortfolio';
-import { Reviews } from './Features/reviews/reviews';
-import { Portfolis } from './Features/Workers/portfolis/portfolis';
-
 
 export const routes: Routes = [
 
+  { path: '', redirectTo: 'register', pathMatch: 'full' },
 
-    { path: '', redirectTo: 'register', pathMatch: 'full' },
-    { path: 'register', component: Register },
-    { path: 'home', component: Home },
-    { path: 'login', component: Login },
-    {
-        path: 'dashboared', canActivate: [authGuardGuard, roleGuard], data: { roles: ['worker'] },
-        component: DashboaredLayout,
-        children: [
-            { path: 'recivedService', component: MyRecivedServices },
-            { path: 'profile', component:Profile },
-            { path: 'ser_details/:id', component: ServiceDetails },
-            {path:'addPortfolio',component:AddPortfolio},
-            {path:'myPortfolio',component:Portfolis},
-            {path:'workerProfile/:workerId',component:UserProfile},
-            {path:'reviews/:workerId',component:Reviews},
-        ]
+  // ================= AUTH =================
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./Features/auth/register/register').then(m => m.Register)
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./Features/auth/login/login').then(m => m.Login)
+  },
 
-    },
-    {
-        path: 'mainLayout', canActivate: [authGuardGuard, roleGuard], data: { roles: ['client'] },
-        component: MainLayout,
-        children: [
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: Home },
-            {path:'reviews/:workerId',component:Reviews},
-            { path: 'profile', component:Profile },
-            { path: 'require/:workerId', component: Require },
-            { path: 'sendedServices', component: MySendedServices },
-            { path: 'ser_details/:id', component: ServiceDetails },
-            {path:'search',component:Search},
-            {path:'myPortfolio/:workerId',component:Portfolis},
-            {path:'workerProfile/:workerId',component:UserProfile}
-
-        ]
-    },
-    { path: '**', redirectTo: 'register', pathMatch: 'full' }
+  // ================= HOME =================
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./Features/home/home').then(m => m.Home)
+  },
+   {
+        path: 'my_notifs',canActivate: [authGuardGuard],
+        loadComponent: () =>
+          import('./Features/notifications/notifications').then(m => m.Notifications)
+      },
+      {
+        path: 'chat/:workerId',canActivate: [authGuardGuard],
+        loadComponent: () =>
+          import('./Features/chat/chat').then(m => m.Chat)
+      },
+      
+   
 
 
-    // {path:'home',component:Home}
+  // ================= DASHBOARD (WORKER) =================
+  {
+    path: 'dashboared',
+    canActivate: [authGuardGuard, roleGuard],
+    data: { roles: ['worker'] },
+    loadComponent: () =>
+      import('./Layouts/dashboared-layout/dashboared-layout').then(m => m.DashboaredLayout),
+    children: [
+        {
+        path: '',
+        loadComponent: () =>
+          import('./Features/Components/dashboared-home/dashboared-home')
+            .then(m => m.DashboaredHome)
+      },
+     
+        {
+        path: 'myServices',
+        loadComponent: () =>
+          import('./Features/Components/my-services/my-services')
+            .then(m => m.MyServices)
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./Shared/Components/profile/profile').then(m => m.Profile)
+      },
+      {
+        path: 'ser_details/:id',
+        loadComponent: () =>
+          import('./Features/service-details/service-details').then(m => m.ServiceDetails)
+      },
+      {
+        path: 'addPortfolio',
+        loadComponent: () =>
+          import('./Features/Workers/add-portfolio/addPortfolio').then(m => m.AddPortfolio)
+      },
+      {
+        path: 'myPortfolio',
+        loadComponent: () =>
+          import('./Features/Workers/portfolis/portfolis').then(m => m.Portfolis)
+      },
+      {
+        path: 'workerProfile/:workerId',
+        loadComponent: () =>
+          import('./Features/user-profile/user-profile').then(m => m.UserProfile)
+      },
+      {
+        path: 'reviews/:workerId',
+        loadComponent: () =>
+          import('./Features/reviews/reviews').then(m => m.Reviews)
+      },
+    ]
+  },
+
+  // ================= MAIN (CLIENT) =================
+  {
+    path: 'mainLayout',
+    canActivate: [authGuardGuard, roleGuard],
+    data: { roles: ['client'] },
+    loadComponent: () =>
+      import('./Layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+        {
+        path: 'myServices',
+        loadComponent: () =>
+          import('./Features/Components/my-services/my-services')
+            .then(m => m.MyServices)
+      },
+
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./Features/home/home').then(m => m.Home)
+      },
+       
+
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./Shared/Components/profile/profile').then(m => m.Profile)
+      },
+
+      {
+        path: 'require/:workerId',
+        loadComponent: () =>
+          import('./Features/Client/Requests/require/require').then(m => m.Require)
+      },
+
+      {
+        path: 'ser_details/:id',
+        loadComponent: () =>
+          import('./Features/service-details/service-details').then(m => m.ServiceDetails)
+      },
+
+      {
+        path: 'search',
+        loadComponent: () =>
+          import('./Features/search/search').then(m => m.Search)
+      },
+
+      {
+        path: 'myPortfolio/:workerId',
+        loadComponent: () =>
+          import('./Features/Workers/portfolis/portfolis').then(m => m.Portfolis)
+      },
+
+      {
+        path: 'my_favourites',
+        loadComponent: () =>
+          import('./Features/my-favorite/my-favorite').then(m => m.MyFavorite)
+      },
+
+      {
+        path: 'workerProfile/:workerId',
+        loadComponent: () =>
+          import('./Features/user-profile/user-profile').then(m => m.UserProfile)
+      },
+
+      {
+        path: 'reviews/:workerId',
+        loadComponent: () =>
+          import('./Features/reviews/reviews').then(m => m.Reviews)
+      }
+
+    ]
+  },
+
+  // ================= FALLBACK =================
+  {
+    path: '**',
+    redirectTo: 'register'
+  }
 
 ];

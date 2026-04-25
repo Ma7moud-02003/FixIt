@@ -1,0 +1,92 @@
+<app-top-nav></app-top-nav>
+<div class="relative top-15 max-w-2xl mx-auto p-4 md:p-6 bg-white min-h-screen" dir="rtl">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">الإشعارات</h2>
+      <p class="text-slate-500 text-sm">لديك {{ allNotifs().filter(n => !n.isRead).length }} إشعارات غير مقروءة</p>
+    </div>
+    <button 
+      (click)="markAllAsRead()"
+      class="px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+      تحديد الكل كمقروء
+    </button>
+  </div>
+
+  <div class="flex gap-2 p-1 bg-slate-100 rounded-2xl mb-8 w-fit">
+    @for (filter of filters; track filter) {
+      <button 
+        (click)="activeFilter.set(filter)"
+        [class.bg-white]="activeFilter() === filter"
+        [class.shadow-md]="activeFilter() === filter"
+        [class.text-indigo-600]="activeFilter() === filter"
+        class="px-6 py-2 rounded-xl text-sm font-bold transition-all text-slate-600">
+        {{ filter === 'all' ? 'الكل' : (filter === 'unread' ? 'غير مقروء' : 'المقروءة') }}
+      </button>
+    }
+  </div>
+
+  <div class="space-y-10">
+    
+    @if (todayNotifications().length > 0) {
+      <section>
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 px-2">اليوم</h3>
+        <div class="space-y-3">
+          @for (note of todayNotifications(); track note.notificationId) {
+            <div 
+              (click)="markAsRead(note.notificationId.toString()); routeTo(note.notificationType,note.relatedEntityId)"
+              [class.bg-indigo-50/50]="!note.isRead"
+              [class.border-indigo-200]="!note.isRead"
+              class="group relative flex items-start gap-4 p-5 rounded-2xl border border-transparent hover:border-slate-200 hover:bg-slate-50 transition-all cursor-pointer">
+              
+              <div class="flex-shrink-0">
+                <div [class]="'w-12 h-12 rounded-2xl flex items-center justify-center ' + 
+                  (note.notificationType === notifsType.SERVICE ? 'bg-red-100 text-red-600' : 
+                   note.notificationType === notifsType.WALLETE  ? 'bg-blue-100 text-blue-600' : 'bg-indigo-100 text-indigo-600')">
+                  @if (note.notificationType === notifsType.CHAT ) { <span>✉</span> }
+                  @else if (note.notificationType === notifsType.SYSTEM) { <span>⚠</span> }
+                  @else { <span>i</span> }
+                </div>
+              </div>
+
+              <div class="flex-1">
+                <div class="flex justify-between items-start">
+                  <h4 [class.font-bold]="!note.isRead" class="text-slate-900 text-base">{{ note.title }}</h4>
+                  <span class="text-xs text-slate-400">{{ note.createdAt|date:'short' }}</span>
+                </div>
+                <p class="text-sm text-slate-600 mt-1 leading-relaxed">{{ note.message }}</p>
+              </div>
+
+              @if (!note.isRead) {
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-indigo-600 rounded-full"></div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (earlierNotifications().length > 0) {
+      <section>
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 px-2">سابقاً</h3>
+        <div class="space-y-3">
+          @for (note of earlierNotifications(); track note.notificationId) {
+            <div class="flex items-start gap-4 p-5 rounded-2xl opacity-70 hover:opacity-100 grayscale hover:grayscale-0 transition-all">
+              <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">#</div>
+              <div class="flex-1">
+                <h4 class="text-slate-900 text-sm font-medium">{{ note.title }}</h4>
+                <p class="text-xs text-slate-500 mt-1">{{ note.message }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (filteredNotifications().length === 0) {
+      <div class="text-center py-20">
+        <div class="text-4xl mb-4">🔔</div>
+        <p class="text-slate-400 font-medium">لا توجد إشعارات حالياً</p>
+      </div>
+    }
+  </div>
+</div>

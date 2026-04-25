@@ -1,0 +1,23 @@
+/* دعم اتجاه النص RTL للأيقونات */
+[dir="rtl"] .fa-paper-plane {
+  transform: scaleX(-1) rotate(10deg);
+}
+
+/* تحسين شريط التمرير */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* حركة ظهور الرسائل */
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-bubble {
+  animation: fadeInSlide 0.3s ease-out;
+}

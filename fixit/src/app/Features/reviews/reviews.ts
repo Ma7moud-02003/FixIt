@@ -6,100 +6,174 @@ import { ActivatedRoute } from '@angular/router';
 import { Auth } from '../../Core/Services/auth';
 import { UserRole } from '../../Shared/enums/role';
 import { ReviewCard } from "../../Shared/Components/cards/review-card/review-card";
- 
-interface WorkerData
-{
-  imgUrl:string,
-  workerName:string
+import { CommonModule } from '@angular/common';
+
+interface WorkerData {
+  imgUrl: string,
+  workerName: string
 }
 
 @Component({
   selector: 'app-reviews',
-  imports: [ReviewCard],
+  imports: [ReviewCard,CommonModule],
   templateUrl: './reviews.html',
   styleUrl: './reviews.css',
 })
-export class Reviews implements OnInit,OnDestroy{
-  Roles=UserRole;
-  private _review=inject(Review);
-  private subs=new Subscription();
-  private router=inject(ActivatedRoute);
-  private auth=inject(Auth);
-  workerReviews=signal<ReviewModel[]>([]);
-  workerData=signal<WorkerData>({} as WorkerData)
+export class Reviews implements OnInit, OnDestroy {
 
- workerId=signal<string>('');
- role=signal<string>('');
+  Roles = UserRole;
 
-ngOnInit(): void {
-  this.role.set(this.auth.getRole()||'')
-  this.router.paramMap.subscribe({
-    next:(res)=>{
-this.workerId.set(res.get('workerId')||'')
-if(this.workerId()&&this.role()==UserRole.Clien_Role)
-  this.getAllWorkerReviewsForClient();
-else if(this.role()==UserRole.Worker_Role)
-  this.getAllWorkerReviews();
+  private _review = inject(Review);
+  private router = inject(ActivatedRoute);
+  private auth = inject(Auth);
+
+  private subs = new Subscription();
+
+  // ===================== STATE =====================
+  workerReviews = signal<ReviewModel[]>([]);
+  workerData = signal<WorkerData>({} as WorkerData);
+
+  workerId = signal<string>('');
+  role = signal<string>('');
+
+  filterBy = signal<string>('');
+
+  // pagination state
+  page = signal<number>(1);
+  pageSize = signal<number>(10);
+  totalItems = signal<number>(0);
+
+  // ===================== CACHE =====================
+  private cache = new Map<string, ReviewModel[]>();
+
+  // ===================== INIT =====================
+  ngOnInit(): void {
+    this.role.set(this.auth.getRole() || '');
+
+    this.router.paramMap.subscribe({
+      next: (res) => {
+        const id = res.get('workerId') || '';
+        this.workerId.set(id);
+
+        if (id && this.role() === UserRole.Clien_Role) {
+          this.loadWorkerReviewsForClient();
+        } else if (this.role() === UserRole.Worker_Role) {
+          this.loadWorkerReviews();
+        }
+      }
+    });
+  }
+
+  // ===================== WORKER REVIEWS =====================
+  loadWorkerReviews() {
+    const key = `worker-${this.page()}-${this.pageSize()}`;
+
+    // ✅ CACHE CHECK
+    if (this.cache.has(key)) {
+      this.workerReviews.set(this.cache.get(key)!);
+      return;
     }
-  })
+
+    this.subs.add(
+      this._review.getAllRevies(this.page(), this.pageSize()).subscribe({
+        next: (res: any) => {
+          const data = res.data || [];
+
+          this.workerReviews.set(data);
+
+          // cache
+          this.cache.set(key, data);
+
+          // optional total
+          this.totalItems.set(res.totalItems || 0);
+        }
+      })
+    );
+  }
+
+  // ===================== CLIENT REVIEWS =====================
+  loadWorkerReviewsForClient() {
+    const id = this.workerId();
+    const key = `client-${id}`;
+
+    // ✅ CACHE CHECK
+    if (this.cache.has(key)) {
+      const cached = this.cache.get(key)!;
+      this.workerReviews.set(cached);
+      return;
+    }
+
+    this.subs.add(
+      this._review.getAllReviewsForUser(id).subscribe({
+        next: (res: any) => {
+          const data = res.data || [];
+
+          const workerData: WorkerData = {
+            imgUrl: data?.imgUrl,
+            workerName: data?.workerName
+          };
+
+          this.workerReviews.set(data);
+          this.workerData.set(workerData);
+
+          this.cache.set(key, data);
+        }
+      })
+    );
+  }
+
+  // ===================== FILTER =====================
+  filteredReview = computed(() => {
+    const reviews = this.workerReviews();
+    const filter = this.filterBy();
+
+    let result = [...reviews];
+
+    if (filter === 'rate') {
+      result.sort((a, b) => b.rate - a.rate);
+    }
+
+    if (filter === 'newest') {
+      result.sort((a, b) =>
+        new Date(b.createdAt).getTime() -
+        new Date(a.createdAt).getTime()
+      );
+    }
+
+    return result;
+  });
+
+  getFilter(filter: string) {
+    this.filterBy.set(filter);
+  }
+
+  // ===================== PAGINATION =====================
+  changePage(page: number) {
+    this.page.set(page);
+    this.loadWorkerReviews();
+  }
+  nextPage() {
+
+    this.page.set(this.page() + 1);
+    this.loadWorkerReviews();
+  
 }
 
-  getAllWorkerReviews()
-  {
-    console.log('for worker');
-
-this.subs.add(
-  this._review.getAllRevies().subscribe({
-    next:(res:any)=>{
-    this.workerReviews.set(res.data.reviews)
-    console.log(this.workerReviews());  
-    console.log(res);
-    }
-  })
-)
+prevPage() {
+  if (this.page() > 1) {
+    this.page.set(this.page() - 1);
+    this.loadWorkerReviews();
   }
+}
 
-  
-  getAllWorkerReviewsForClient()
-  {
-    console.log('for client');
-    
-this.subs.add(
-  this._review.getAllReviewsForUser(this.workerId()).subscribe({
-    next:(res:any)=>{
-      const data=res.data;
-      const workerData={
-        imgUrl:data.imgUrl,
-        workerName:data.workerName
-      }
-    this.workerReviews.set(data.reviews);
-this.workerData.set(workerData)
-    console.log(this.workerReviews());
-    console.log(res);
-    }
-  })
-)
-  }
-  filterBy=signal<string>('');
-  filterdReview=computed(()=>{
-  const reviews = this.workerReviews(); // Assuming this is also a signal
-  const filter = this.filterBy();
-    if(!this.filterBy())
-      return [...reviews]
-    else if(filter=='rate')
-    return [...reviews].sort((a,b)=>b.rate-a.rate)
-  else if(filter=='newest')
-  return [...reviews].sort((a,b)=>  new Date(b.createdAt).getTime()-new Date(a.createdAt).getTime())
-else
-return null;
-  })
+goToPage(page: number) {
+  if (page !== this.page()) {
+    this.page.set(page);
+    this.loadWorkerReviews();
+  }}
 
-  getFilter(filter:string)
-  {
-this.filterBy.set(filter)
-  }
+  // ===================== CLEAN =====================
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
-
 }

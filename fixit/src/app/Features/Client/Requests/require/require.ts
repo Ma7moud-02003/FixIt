@@ -99,7 +99,7 @@ formData.forEach((value, key) => {
           next: (res) => {
             console.log(res);
             this.alerts.sucsess('تم تسليم الخدمه بنجاح 👍');
-            this.rout.navigate(['/mainLayout/sendedServices'])
+            this.rout.navigate(['/mainLayout/myServices'])
             this.clearForm();
           }
         })

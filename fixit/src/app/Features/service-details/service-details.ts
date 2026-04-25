@@ -25,7 +25,10 @@ import { Review } from '../../Core/Services/review';
 
 @Component({
   selector: 'app-service-details',
-  imports: [FormDatePipe, CommonModule, FormsModule, Skeleton, FormsModule, KnobModule, ClientPriceProcess, ClientPending, ClientInprocess, ClientSubmitted, WorkerPriceprocess, WorkerPending, WorkerSubmitted, WorkerInprocess],
+  imports: [FormDatePipe, CommonModule, FormsModule, Skeleton, FormsModule, KnobModule, ClientPriceProcess,
+    ClientPending, ClientInprocess, ClientSubmitted,
+    WorkerPriceprocess, WorkerPending, WorkerSubmitted,
+    WorkerInprocess, RouterLink],
   templateUrl: './service-details.html',
   styleUrl: './service-details.css',
 })
@@ -38,20 +41,23 @@ export class ServiceDetails implements OnInit, OnDestroy {
     rejected: 0,
     cancled: 0,
     submitted: 80,
-    completed: 100
+    completed: 95,
+    
   }
   // important part 
   statuses = ServiceStatus;
   Roles = UserRole;
   statusOfState = signal([
     { status: ['pending', 'inprocess', 'submitted', 'completed'], title: 'في انتظار التسعيير' },
-    { status: [  'canceled'], title: 'تم الغاء الخدمه من قبل الفني' },
+    { status: [ 'canceled'], title: 'تم الغاء الخدمه من قبل الفني' },
     { status: ['rejected',], title: 'تم  الغاء الخدمه من قبل احد الطرفين  ' },
     { status: ['pending', 'inprocess', 'submitted', 'completed'], title: 'تم التسعير ' },
     { status: ['inprocess', 'submitted', 'completed'], title: 'تم الموافقه علي السعر ' },
     { status: ['inprocess', 'submitted', 'completed'], title: 'جار التنفيذ' },
     { status: ['submitted', 'completed'], title: 'تم التسليم' },
     { status: ['completed'], title: 'مكتمله' },
+    { status: ['reviewed'], title: 'تم مراجعة الخدمة' },
+
   ])
   value = signal<number>(0);
   totalPrice = signal<number>(0);

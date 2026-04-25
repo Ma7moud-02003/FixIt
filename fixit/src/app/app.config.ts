@@ -26,6 +26,13 @@ export const appConfig: ApplicationConfig = {
       darkModeSelector: false
     }
   }
-})
+}),
+   provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled', // 👈 أهم حاجة
+        anchorScrolling: 'enabled'
+      })
+    )
   ]
 };

@@ -1,13 +1,7 @@
 import { Component, ElementRef, inject, QueryList, signal, ViewChildren } from '@angular/core';
 import { Footer } from "../../Shared/Components/footer/footer";
 import { RouterLink } from "@angular/router";
-import gsap from 'gsap';
-import { Observer } from "gsap/all";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Animation } from '../../Shared/Models/animation';
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(Observer);
 
 @Component({
   selector: 'app-home',
@@ -16,8 +10,7 @@ gsap.registerPlugin(Observer);
   styleUrl: './home.css',
 })
 export class Home {
-  @ViewChildren('serviceCard') serviceCards!: QueryList<ElementRef>;
-  _animate=inject(Animation);
+  
 services=signal([
   {
     type: 'سباكة',
@@ -106,9 +99,7 @@ steps = signal([
 ]);
 
 ngAfterViewInit() {
-this._animate.fadeUpSide('.homeText');
-this._animate.fadeForHomeIconInUp('.upIcon');
-this._animate.fadeForHomeIconInDown('.downIcon'); 
+
   
 }
 }

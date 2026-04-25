@@ -1,0 +1,183 @@
+<div class="min-h-screen bg-slate-50 p-4 md:p-8  text-slate-900">
+      <header class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img [src]="workerProfile().image" class="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-sm" alt="Profile">
+            <span [class]="'absolute -bottom-1 -left-1 w-4 h-4 rounded-full border-2 border-white ' + (isOnline() ? 'bg-emerald-500' : 'bg-amber-500')"></span>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-slate-800">أهلاً بك مجدداً، {{ workerProfile().name }}!</h1>
+            <p class="text-sm text-slate-500 flex items-center gap-2">
+              {{ isOnline() ? 'متاح لاستقبال طلبات جديدة' : 'مشغول حالياً' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button class="relative p-2.5 bg-white rounded-xl shadow-sm hover:bg-slate-50 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="absolute top-2.5 left-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+          </button>
+          <button class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-all">
+            تعديل الملف الشخصي
+          </button>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-12 gap-6">
+        
+        <div class="col-span-12 lg:col-span-8 space-y-6">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            @for (stat of stats(); track stat.label) {
+              <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+                <div [class]="'p-3 rounded-xl ' + stat.color">
+                  <span class="text-white text-xl">{{ stat.icon }}</span>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">{{ stat.label }}</p>
+                  <p class="text-2xl font-bold text-slate-800">{{ stat.value }}</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex justify-between items-end mb-6">
+              <div>
+                <h2 class="text-lg font-bold text-slate-800">نظرة عامة على الأرباح</h2>
+                <p class="text-sm text-slate-500">أداؤك المالي هذا الشهر</p>
+              </div>
+              <div class="text-left" dir="ltr">
+                <p class="text-3xl font-black text-indigo-600">{{ totalEarnings() }} ج.م</p>
+                <p class="text-xs font-bold text-emerald-500">+12.5% عن الشهر الماضي</p>
+              </div>
+            </div>
+            <div class="h-48 w-full bg-slate-50 rounded-xl flex items-end justify-between p-4 gap-2" dir="ltr">
+              @for (bar of [40, 70, 45, 90, 65, 80, 95]; track $index) {
+                <div [style.height.%]="bar" class="w-full bg-indigo-100 rounded-t-lg hover:bg-indigo-500 transition-all cursor-pointer relative group">
+                  <span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                    {{bar * 100}}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+              <h2 class="text-lg font-bold text-slate-800">الطلبات الأخيرة</h2>
+              <button class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">عرض الكل</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-right">
+                <thead class="bg-slate-50/50 text-slate-400 text-xs">
+                  <tr>
+                    <th class="px-6 py-4 font-semibold">العميل</th>
+                    <th class="px-6 py-4 font-semibold">الخدمة</th>
+                    <th class="px-6 py-4 font-semibold">السعر</th>
+                    <th class="px-6 py-4 font-semibold">الحالة</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50 text-sm">
+                  @for (order of orders(); track order.id) {
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                      <td class="px-6 py-4 font-medium text-slate-700">{{ order.clientName }}</td>
+                      <td class="px-6 py-4 text-slate-500">{{ order.service }}</td>
+                      <td class="px-6 py-4 font-bold text-slate-800">{{ order.price }} ج.م</td>
+                      <td class="px-6 py-4">
+                        <span [ngClass]="{
+                          'bg-amber-100 text-amber-700': order.status === 'قيد الانتظار',
+                          'bg-blue-100 text-blue-700': order.status === 'مقبول',
+                          'bg-emerald-100 text-emerald-700': order.status === 'مكتمل'
+                        }" class="px-3 py-1 rounded-full text-xs font-bold">
+                          {{ order.status }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-4 space-y-6">
+          
+          <div class="bg-indigo-900 p-6 rounded-3xl shadow-xl shadow-indigo-100 text-white">
+            <h3 class="text-lg font-bold mb-4 text-right">إجراءات سريعة</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button class="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                <span class="text-xl mb-1">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text-xs font-medium">أضف خدمة</span>
+              </button>
+              <button class="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                <span class="text-xl mb-1">
+                  <i class="fas fa-box-open"></i>
+                </span>
+                <span class="text-xs font-medium">الطلبات</span>
+              </button>
+              <button class="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                <i class="fas fa-message"></i>
+                <span class="text-xs font-medium">الرسائل</span>
+              </button>
+              <button class="flex flex-col items-center justify-center p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10">
+                <span class="text-xl mb-1">⚙️</span>
+                <span class="text-xs font-medium">الإعدادات</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-800 mb-5">آخر الرسائل</h2>
+            <div class="space-y-4">
+              @for (chat of chats(); track chat.id) {
+                <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-all cursor-pointer">
+                  <div class="flex items-center gap-3 overflow-hidden">
+                    <img [src]="chat.image" class="w-10 h-10 rounded-full object-cover">
+                    <div class="overflow-hidden">
+                      <p class="text-sm font-bold text-slate-800 truncate text-right">{{ chat.name }}</p>
+                      <p class="text-xs text-slate-500 truncate text-right">{{ chat.message }}</p>
+                    </div>
+                  </div>
+                  @if (chat.unread) {
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full flex-shrink-0"></span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="text-lg font-bold text-slate-800">أحدث التقييمات</h2>
+              <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg">
+                <span class="text-amber-500 text-sm">⭐</span>
+                <span class="text-sm font-bold text-amber-700">4.8</span>
+              </div>
+            </div>
+            <div class="space-y-5">
+              @for (review of reviews(); track review.id) {
+                <div class="border-b border-slate-50 pb-4 last:border-0 last:pb-0 text-right">
+                  <div class="flex justify-between items-center mb-1">
+                    <p class="text-sm font-bold text-slate-700">{{ review.user }}</p>
+                    <span class="text-[10px] text-slate-400">{{ review.date }}</span>
+                  </div>
+                  <div class="flex gap-0.5 mb-2 justify-end">
+                    @for (star of [1,2,3,4,5]; track star) {
+                      <span [class]="star <= review.rating ? 'text-amber-400' : 'text-slate-200'" class="text-[10px]">★</span>
+                    }
+                  </div>
+                  <p class="text-xs text-slate-500 leading-relaxed italic">"{{ review.comment }}"</p>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
