@@ -1,0 +1,264 @@
+<div class="flex h-screen bg-[#f5f6fa] font-[Tajawal,sans-serif] overflow-hidden" dir="rtl">
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+ 
+
+  <!-- ── Main ─────────────────────────────────────────────── -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Topbar -->
+    <header class="bg-white border-b border-slate-100 px-8 py-3.5 flex items-center justify-between shrink-0 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-3">
+        <img src="https://i.pravatar.cc/36?img=3" alt="avatar" class="w-9 h-9 rounded-full ring-2 ring-slate-200 object-cover"/>
+        <div class="leading-tight text-right">
+          <p class="text-sm font-bold text-slate-800">أحمد محمد</p>
+          <p class="text-[11px] text-slate-400">مدير النظام</p>
+        </div>
+      </div>
+
+      <div class="relative w-72">
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="بحث..." (input)="onSearch($event)"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pr-9 pl-4 text-sm text-right placeholder-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900/10 transition"/>
+      </div>
+
+      <button class="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-1 ring-white"></span>
+      </button>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto px-8 py-7">
+
+      <!-- Page header -->
+      <div class="flex items-start justify-between mb-7">
+        <div class="flex gap-2">
+          <button class="flex items-center gap-2 bg-slate-900 hover:bg-slate-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            تقرير الأداء
+          </button>
+          <button class="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+            </svg>
+            تصدير البيانات
+          </button>
+        </div>
+        <div class="text-right">
+          <div class="flex items-center justify-end gap-2 text-slate-400 text-xs mb-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            إدارة العمليات
+          </div>
+          <h1 class="text-2xl font-black text-slate-900">طلبات الخدمة</h1>
+          <p class="text-sm text-slate-400 mt-0.5">تتبع وإدارة جميع طلبات الصيانة والخدمات المنزلية عبر المنصة.</p>
+        </div>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="grid grid-cols-4 gap-4 mb-7">
+        <!-- Total -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center">
+            <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">إجمالي الطلبات</p>
+            <p class="text-2xl font-black text-slate-900">{{ totalRequests() | number }}</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+12% منذ الشهر الماضي</p>
+          </div>
+        </div>
+        <!-- Pending -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">قيد الانتظار</p>
+            <p class="text-2xl font-black text-slate-900">{{ pendingCount() }}</p>
+          </div>
+        </div>
+        <!-- In-progress -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">جاري تنفيذها</p>
+            <p class="text-2xl font-black text-slate-900">{{ inProgressCount() }}</p>
+          </div>
+        </div>
+        <!-- Completed -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">طلبات مكتملة</p>
+            <p class="text-2xl font-black text-slate-900">{{ completedCount() }}</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+5% منذ الشهر الماضي</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+        <!-- Toolbar -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 gap-4">
+          <!-- Search -->
+          <div class="relative">
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input placeholder="بحث برقم الطلب أو اسم العميل..." (input)="onSearch($event)"
+              class="text-sm bg-slate-50 border border-slate-200 rounded-lg pr-8 pl-3 py-1.5 text-right text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 w-64"/>
+          </div>
+
+          <!-- Filter tabs -->
+          <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+            @for (tab of filterTabs; track tab) {
+              <button
+                (click)="setFilter(tab)"
+                class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all"
+                [class]="activeFilter() === tab
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'">
+                {{ tab }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" dir="rtl">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs font-semibold">
+                <th class="px-5 py-3 text-right">رقم الطلب</th>
+                <th class="px-4 py-3 text-right">العميل</th>
+                <th class="px-4 py-3 text-right">نوع الخدمة</th>
+                <th class="px-4 py-3 text-right">العامل المسند</th>
+                <th class="px-4 py-3 text-center">تاريخ الطلب</th>
+                <th class="px-4 py-3 text-center">التكلفة</th>
+                <th class="px-4 py-3 text-center">الحالة</th>
+                <th class="px-4 py-3 text-center">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+
+              @for (req of pagedRequests(); track req.id) {
+                <tr class="hover:bg-slate-50/70 transition-colors">
+                  <!-- ID -->
+                  <td class="px-5 py-3.5">
+                    <span class="font-mono font-bold text-slate-700 text-xs bg-slate-100 px-2 py-0.5 rounded-md">{{ req.id }}</span>
+                  </td>
+                  <!-- Client -->
+                  <td class="px-4 py-3.5">
+                    <div class="flex items-center gap-2 flex-row-reverse">
+                      <img [src]="req.clientAvatar" [alt]="req.client" class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200"/>
+                      <span class="font-medium text-slate-800 text-xs">{{ req.client }}</span>
+                    </div>
+                  </td>
+                  <!-- Service type -->
+                  <td class="px-4 py-3.5">
+                    <span class="flex items-center gap-1.5 text-slate-600 text-xs">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+                      {{ req.serviceType }}
+                    </span>
+                  </td>
+                  <!-- Worker -->
+                  <td class="px-4 py-3.5">
+                    <div class="flex items-center gap-2 flex-row-reverse">
+                      <img [src]="req.workerAvatar" [alt]="req.assignedWorker" class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200"/>
+                      <span class="text-slate-600 text-xs">{{ req.assignedWorker }}</span>
+                    </div>
+                  </td>
+                  <!-- Date -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="flex items-center justify-center gap-1 text-slate-500 text-xs">
+                      <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                      </svg>
+                      {{ req.date }}
+                    </span>
+                  </td>
+                  <!-- Cost -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="font-bold text-slate-800 text-sm">{{ req.cost | number }} ريال</span>
+                  </td>
+                  <!-- Status -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold"
+                      [class]="statusCfg(req.status).bg + ' ' + statusCfg(req.status).text">
+                      <span class="w-1.5 h-1.5 rounded-full" [class]="statusCfg(req.status).dot"></span>
+                      {{ req.status }}
+                    </span>
+                  </td>
+                  <!-- Actions -->
+                  <td class="px-4 py-3.5 text-center">
+                    <button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 mx-auto transition">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+
+              @if (pagedRequests().length === 0) {
+                <tr>
+                  <td colspan="8" class="py-16 text-center text-slate-400 text-sm">لا توجد نتائج</td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-100">
+          <p class="text-xs text-slate-400">
+            طلب {{ (currentPage()-1)*pageSize + 1 }} إلى {{ displayEnd() }} من أصل {{ filteredRequests().length }} عرض
+          </p>
+          <div class="flex items-center gap-1" dir="ltr">
+            <button (click)="goToPage(currentPage()-1)" [disabled]="currentPage()===1"
+              class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              السابق
+            </button>
+            @for (p of pages(); track p) {
+              <button (click)="goToPage(p)"
+                class="w-8 h-8 text-xs rounded-lg font-semibold transition border"
+                [class]="p === currentPage() ? 'bg-slate-900 text-white border-slate-900 shadow' : 'border-slate-200 text-slate-500 hover:bg-slate-100'">
+                {{ p }}
+              </button>
+            }
+            <button (click)="goToPage(currentPage()+1)" [disabled]="currentPage()===totalPages()"
+              class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              التالي
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /table card -->
+
+      <p class="text-center text-xs text-slate-400 mt-6">© 2026 HandyHub Admin. جميع الحقوق محفوظة.</p>
+    </main>
+  </div>
+</div>

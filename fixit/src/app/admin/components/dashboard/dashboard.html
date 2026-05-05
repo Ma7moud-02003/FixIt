@@ -1,0 +1,238 @@
+<div class="flex h-screen bg-[#f5f6fa] font-[Tajawal,sans-serif] overflow-hidden" dir="rtl">
+
+  <!-- ── Sidebar ─────────────────────────────────────── -->
+  
+
+  <!-- ── Main ─────────────────────────────────────────── -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Topbar -->
+    <header class="bg-white border-b border-slate-100 px-8 py-3.5 flex items-center justify-between shrink-0 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-3">
+        <img src="https://i.pravatar.cc/36?img=3" class="w-9 h-9 rounded-full ring-2 ring-slate-200 object-cover"/>
+        <div class="text-right leading-tight">
+          <p class="text-sm font-bold text-slate-800">أحمد محمد</p>
+          <p class="text-[11px] text-slate-400">مدير النظام</p>
+        </div>
+      </div>
+      <div class="relative w-72">
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input placeholder="بحث..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pr-9 pl-4 text-sm text-right placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"/>
+      </div>
+      <button class="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-1 ring-white"></span>
+      </button>
+    </header>
+
+    <!-- Page Content -->
+    <main class="flex-1 overflow-y-auto px-8 py-7">
+
+      <!-- Welcome -->
+      <div class="text-right mb-7">
+        <h1 class="text-2xl font-black text-slate-900">مرحباً بك، أحمد! 👋</h1>
+        <p class="text-sm text-slate-400 mt-0.5">اليوم HandyHub يلقي نظرة سريعة على ما يحدث في.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-4 gap-4 mb-7">
+        <!-- Total Users -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-sky-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">إجمالي المستخدمين</p>
+            <p class="text-2xl font-black text-slate-900">{{ totalUsers()  }}</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+12% من الشهر الماضي</p>
+          </div>
+        </div>
+        <!-- Total Workers -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">إجمالي العمال</p>
+            <p class="text-2xl font-black text-slate-900">{{ totalWorkers()  }}</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+5% من الشهر الماضي</p>
+          </div>
+        </div>
+        <!-- Active Orders -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">الطلبات النشطة</p>
+            <p class="text-2xl font-black text-slate-900">{{ activeOrders() }}</p>
+            <p class="text-[11px] text-rose-500 font-medium">-2% من الشهر الماضي</p>
+          </div>
+        </div>
+        <!-- Revenue -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">إجمالي الأرباح</p>
+            <p class="text-2xl font-black text-slate-900">{{ totalRevenue()  }} ر.س</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+18% من الشهر الماضي</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-3 gap-5 mb-6">
+
+        <!-- Bar chart -->
+        <div class="col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+          <div class="text-right mb-5">
+            <h3 class="font-bold text-slate-800 text-sm">تحليل الطلبات الأسبوعي</h3>
+            <p class="text-xs text-slate-400">مقارنة بين إجمالي الطلبات والطلبات المنفذة بنجاح</p>
+          </div>
+          <!-- Y axis labels + bars -->
+          <div class="flex gap-3">
+            <!-- Y labels -->
+            <div class="flex flex-col justify-between text-[10px] text-slate-300 pb-5" style="height:130px">
+              <span>80</span><span>60</span><span>40</span><span>20</span><span>0</span>
+            </div>
+            <!-- Bars -->
+            <div class="flex-1 flex items-end gap-2" style="height:130px" dir="ltr">
+              @for (day of weekDays; track day; let i = $index) {
+                <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                  <div class="w-full flex items-end gap-0.5" style="height:110px">
+                    <div class="flex-1 rounded-t-sm bg-slate-800 transition-all"
+                      [style.height.%]="barH(totalBars[i])"></div>
+                    <div class="flex-1 rounded-t-sm bg-slate-300 transition-all"
+                      [style.height.%]="barH(doneBars[i])"></div>
+                  </div>
+                  <span class="text-[9px] text-slate-400 text-center leading-tight">{{ day }}</span>
+                </div>
+              }
+            </div>
+          </div>
+          <!-- Legend -->
+          <div class="flex items-center gap-4 mt-2 justify-end">
+            <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+              <span class="w-2.5 h-2.5 rounded-sm bg-slate-800 inline-block"></span>إجمالي الطلبات
+            </span>
+            <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+              <span class="w-2.5 h-2.5 rounded-sm bg-slate-300 inline-block"></span>الطلبات المنجزة
+            </span>
+          </div>
+        </div>
+
+        <!-- Donut chart -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+          <div class="text-right mb-4">
+            <h3 class="font-bold text-slate-800 text-sm">توزيع الأرباح</h3>
+            <p class="text-xs text-slate-400">حسب الفئات الأكثر طلباً</p>
+          </div>
+          <div class="flex justify-center mb-4">
+            <svg viewBox="0 0 120 120" class="w-28 h-28 -rotate-90">
+              @for (seg of donutSegments; track seg.label; let i = $index) {
+                <circle cx="60" cy="60" r="50" fill="none"
+                  [attr.stroke]="seg.color"
+                  stroke-width="20"
+                  [attr.style]="donutStyle(i)"/>
+              }
+            </svg>
+          </div>
+          <div class="space-y-2">
+            @for (seg of donutSegments; track seg.label) {
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400 font-medium">{{ seg.pct }}%</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-slate-700">{{ seg.label }}</span>
+                  <span class="w-2.5 h-2.5 rounded-full shrink-0" [style.background]="seg.color"></span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row -->
+      <div class="grid grid-cols-3 gap-5">
+
+        <!-- Recent ops table -->
+        <div class="col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+            <button class="text-xs text-slate-500 hover:text-slate-800 font-medium border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition">عرض الكل</button>
+            <div class="text-right">
+              <h3 class="font-bold text-slate-800 text-sm">آخر العمليات</h3>
+              <p class="text-xs text-slate-400">قائمة بأحدث طلبات الخدمات المنفذة</p>
+            </div>
+          </div>
+          <table class="w-full text-sm" dir="rtl">
+            <thead class="bg-slate-50 text-[11px] text-slate-500 font-semibold">
+              <tr>
+                <th class="px-5 py-2.5 text-right">المستخدم</th>
+                <th class="px-4 py-2.5 text-right">الخدمة</th>
+                <th class="px-4 py-2.5 text-center">الوقت</th>
+                <th class="px-4 py-2.5 text-center">السعر</th>
+                <th class="px-4 py-2.5 text-center">الحالة</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+              @for (op of recentOps(); track op.user) {
+                <tr class="hover:bg-slate-50/60 transition">
+                  <td class="px-5 py-3 font-semibold text-slate-800 text-xs">{{ op.user }}</td>
+                  <td class="px-4 py-3 text-slate-500 text-xs">{{ op.service }}</td>
+                  <td class="px-4 py-3 text-center text-slate-400 text-xs">{{ op.time }}</td>
+                  <td class="px-4 py-3 text-center font-bold text-slate-700 text-xs">{{ op.price }} ر.س</td>
+                  <td class="px-4 py-3 text-center">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold" [class]="statusCls(op.status)">
+                      {{ op.status }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col gap-4">
+          <div class="text-right">
+            <h3 class="font-bold text-slate-800 text-sm">نظرة سريعة</h3>
+            <p class="text-xs text-slate-400">التقارير اليومية</p>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between bg-slate-50 rounded-xl p-3">
+              <span class="text-sm font-black text-emerald-600">82%</span>
+              <div class="text-right">
+                <p class="text-xs font-semibold text-slate-700">نسبة الرضا</p>
+                <p class="text-[10px] text-slate-400">أفضل من الأسبوع الماضي</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between bg-slate-50 rounded-xl p-3">
+              <span class="text-sm font-black text-slate-700">4.2</span>
+              <div class="text-right">
+                <p class="text-xs font-semibold text-slate-700">دقيقة 4.2</p>
+                <p class="text-[10px] text-slate-400">متوسط زمن الاستجابة</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between bg-slate-50 rounded-xl p-3">
+              <span class="text-sm font-black text-sky-600">12</span>
+              <div class="text-right">
+                <p class="text-xs font-semibold text-slate-700">عاملاً جديداً 12</p>
+                <p class="text-[10px] text-slate-400">انضموا خلال الـ 24 ساعة</p>
+              </div>
+            </div>
+          </div>
+          <!-- Alert -->
+          <div class="mt-auto">
+            <p class="text-[10px] text-slate-400 font-semibold mb-1.5 text-right">التنبيهات الهامة</p>
+            <div class="bg-rose-50 border border-rose-200 rounded-xl p-3">
+              <p class="text-xs text-rose-600 text-right leading-relaxed">هناك 5 شكاوى معلقة تتطلب مراجعة فورية في قسم التقييمات.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-slate-400 mt-6">© 2026 HandyHub Admin. جميع الحقوق محفوظة.</p>
+    </main>
+  </div>
+</div>
