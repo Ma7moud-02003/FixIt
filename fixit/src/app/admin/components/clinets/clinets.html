@@ -1,0 +1,322 @@
+<!-- ╔═══════════════════════════════════════════════════════╗ -->
+<!-- ║         HandyHub – User Management Page              ║ -->
+<!-- ╚═══════════════════════════════════════════════════════╝ -->
+<div class="flex h-screen bg-[#f5f6fa] font-[Tajawal,sans-serif] overflow-hidden" dir="rtl">
+
+  <!-- ── Sidebar ──────────────────────────────────────────── -->
+ 
+
+  <!-- ── Main ──────────────────────────────────────────────── -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Topbar -->
+    <header class="bg-white border-b border-slate-100 px-8 py-3.5 flex items-center justify-between shrink-0 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+      <div class="flex items-center gap-3">
+        <img src="https://i.pravatar.cc/36?img=3" alt="avatar"
+          class="w-9 h-9 rounded-full ring-2 ring-slate-200 object-cover"/>
+        <div class="leading-tight text-right">
+          <p class="text-sm font-bold text-slate-800">أحمد محمد</p>
+          <p class="text-[11px] text-slate-400">مدير النظام</p>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="relative w-72">
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+          fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="بحث..."
+          (input)="onSearch($event)"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pr-9 pl-4
+                 text-sm text-right placeholder-slate-400 text-slate-700
+                 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition"/>
+      </div>
+
+      <!-- Bell -->
+      <button class="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+        <svg class="w-4.5 h-4.5 w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-1 ring-white"></span>
+      </button>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto px-8 py-7">
+
+      <!-- Page title + Add button -->
+      <div class="flex items-start justify-between mb-7">
+        <button
+          class="flex items-center gap-2 bg-slate-900 hover:bg-slate-700 text-white text-sm font-semibold
+                 px-5 py-2.5 rounded-xl shadow-md transition-all duration-150 active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+          إضافة مستخدم
+        </button>
+        <div class="text-right">
+          <h1 class="text-2xl font-black text-slate-900">إدارة المستخدمين</h1>
+          <p class="text-sm text-slate-400 mt-0.5">عرض، تعديل، وإدارة جميع المسجلين في منصة HandyHub.</p>
+        </div>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="grid grid-cols-4 gap-4 mb-7">
+
+        <!-- Total -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center">
+            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">إجمالي المستخدمين</p>
+            <p class="text-2xl font-black text-slate-900">{{ totalUsers() | number }}</p>
+            <p class="text-[11px] text-emerald-500 font-medium">+12% من الشهر الماضي</p>
+          </div>
+        </div>
+
+        <!-- Online -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <div class="w-4 h-4 rounded-full border-4 border-emerald-400"></div>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">متصلون الآن</p>
+            <p class="text-2xl font-black text-slate-900">{{ onlineUsers() }}</p>
+          </div>
+        </div>
+
+        <!-- New -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-sky-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6z"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">مستخدمون جدد</p>
+            <p class="text-2xl font-black text-slate-900">{{ newUsers() }}</p>
+            <p class="text-[11px] text-sky-500 font-medium">+5.2% هذا الأسبوع</p>
+          </div>
+        </div>
+
+        <!-- Suspended -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center">
+            <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/>
+            </svg>
+          </div>
+          <div class="text-right">
+            <p class="text-xs text-slate-400 mb-0.5">حسابات موقوفة</p>
+            <p class="text-2xl font-black text-slate-900">{{ suspendedUsers() }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Table card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+        <!-- Table header toolbar -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M3 6h18M7 12h10M10 18h4"/>
+              </svg>
+              <input placeholder="فلترة حسب الاسم..."
+                class="text-sm bg-slate-50 border border-slate-200 rounded-lg pr-8 pl-3 py-1.5
+                       text-right text-slate-700 placeholder-slate-400
+                       focus:outline-none focus:ring-2 focus:ring-slate-200 w-48"/>
+            </div>
+            <button class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+              </svg>
+            </button>
+          </div>
+          <h2 class="text-base font-bold text-slate-800">قائمة المستخدمين</h2>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" dir="rtl">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs font-semibold">
+                <th class="px-6 py-3 text-right">المستخدم</th>
+                <th class="px-4 py-3 text-center">الدور</th>
+                <th class="px-4 py-3 text-center">تاريخ الانضمام</th>
+                <th class="px-4 py-3 text-center">الحالة</th>
+                <th class="px-4 py-3 text-center">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+
+              @for (user of pagedUsers(); track user.id) {
+                <tr class="hover:bg-slate-50/60 transition-colors group">
+
+                  <!-- User -->
+                  <td class="px-6 py-3.5">
+                    <div class="flex items-center gap-3 flex-row-reverse">
+                      <div class="relative shrink-0">
+                        <img [src]="user.avatar" [alt]="user.name"
+                          class="w-9 h-9 rounded-full object-cover ring-2 ring-slate-100"/>
+                        @if (user.online) {
+                          <span class="absolute bottom-0 left-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+                        }
+                      </div>
+                      <div class="text-right leading-tight">
+                        <p class="font-semibold text-slate-800 text-sm">{{ user.name }}</p>
+                        <p class="text-xs text-slate-400">{{ user.email }}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Role -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
+                      [class]="roleBadgeClass(user.role)">
+                      {{ user.role }}
+                    </span>
+                  </td>
+
+                  <!-- Join date -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="flex items-center justify-center gap-1 text-slate-500">
+                      <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path stroke-linecap="round" d="M12 6v6l4 2"/>
+                      </svg>
+                      {{ user.joinDate }}
+                    </span>
+                  </td>
+
+                  <!-- Status -->
+                  <td class="px-4 py-3.5 text-center">
+                    <span class="inline-flex items-center gap-1.5 font-medium" [class]="statusClass(user.status)">
+                      <span class="w-1.5 h-1.5 rounded-full inline-block" [class]="statusDot(user.status)"></span>
+                      {{ user.status }}
+                    </span>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="px-4 py-3.5">
+                    <div class="flex items-center justify-center gap-2">
+                      <!-- View -->
+                      <button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition"
+                        title="عرض">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                      </button>
+                      <!-- Suspend -->
+                      <button (click)="toggleSuspend(user.id)"
+                        class="w-7 h-7 rounded-lg flex items-center justify-center transition"
+                        [class]="user.status === 'موقوف'
+                          ? 'bg-rose-100 hover:bg-rose-200 text-rose-500'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-500'"
+                        title="إيقاف / تفعيل">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/>
+                        </svg>
+                      </button>
+                      <!-- Delete -->
+                      <button (click)="deleteUser(user.id)"
+                        class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-rose-100 hover:text-rose-500 flex items-center justify-center text-slate-500 transition"
+                        title="حذف">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+
+                </tr>
+              }
+
+              <!-- Empty state -->
+              @if (pagedUsers().length === 0) {
+                <tr>
+                  <td colspan="5" class="py-16 text-center text-slate-400 text-sm">
+                    <svg class="w-10 h-10 mx-auto mb-3 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8z"/>
+                    </svg>
+                    لا توجد نتائج
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-100">
+          <p class="text-xs text-slate-400">
+            عرض {{ (currentPage()-1)*pageSize + 1 }} إلى
+            {{ [currentPage()*pageSize, filteredUsers().length] }}
+            من أصل {{ filteredUsers().length }} مستخدم
+          </p>
+
+          <div class="flex items-center gap-1" dir="ltr">
+            <!-- Prev -->
+            <button
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+              class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500
+                     hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              السابق
+            </button>
+
+            <!-- Page numbers -->
+            @for (p of pages(); track p) {
+              <button
+                (click)="goToPage(p)"
+                class="w-8 h-8 text-xs rounded-lg font-semibold transition border"
+                [class]="p === currentPage()
+                  ? 'bg-slate-900 text-white border-slate-900 shadow'
+                  : 'border-slate-200 text-slate-500 hover:bg-slate-100'">
+                {{ p }}
+              </button>
+            }
+
+            <!-- Ellipsis placeholder if many pages -->
+            @if (totalPages() > 4) {
+              <span class="px-1 text-slate-400 text-xs">...</span>
+            }
+
+            <!-- Next -->
+            <button
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="currentPage() === totalPages()"
+              class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500
+                     hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              التالي
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /table card -->
+
+      <!-- Footer -->
+      <p class="text-center text-xs text-slate-400 mt-6">© 2026 HandyHub Admin. جميع الحقوق محفوظة.</p>
+
+    </main>
+  </div><!-- /main -->
+</div>
