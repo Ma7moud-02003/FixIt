@@ -78,14 +78,20 @@ routingTo()
 this.subs.add(
   this._user.getUserData().subscribe({
     next:(res)=>{
+      const role=res.data.role;
       console.log(res);
       localStorage.setItem('user',JSON.stringify(res.data));
       this._auth.userProfileData.set(res.data); 
-      if(res.data.role==UserRole.Clien_Role)
+      if(role==UserRole.Clien_Role)
       this.router.navigate(['/mainLayout/home']);
-      else if(res.data.role==UserRole.Worker_Role)
+      else if(role==UserRole.Worker_Role)
     {  
       this.router.navigate(['/dashboared']);}
+    
+    else if(role==UserRole.Admin_Role)
+    {
+      this.router.navigate(['/admin']);
+    }
     }
   })
 )

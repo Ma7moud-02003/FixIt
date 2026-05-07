@@ -6,7 +6,6 @@ import { MyServiceModel } from '../../Models/services';
 import { RouterLink } from "@angular/router";
 import { Service } from '../../../Core/Services/service';
 import { Auth } from '../../../Core/Services/auth';
-
 @Component({
   selector: 'app-service-card',
   imports: [CommonModule, RouterLink],
@@ -16,6 +15,7 @@ import { Auth } from '../../../Core/Services/auth';
 export class ServiceCard implements OnInit {
  private _auth=inject(Auth);
  role=signal<string>('');
+ status=ServiceWorker;
 
   ngOnInit(): void {
     console.log(this.service());

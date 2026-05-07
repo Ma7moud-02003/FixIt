@@ -5,13 +5,19 @@ import { roleGuard } from './Core/Guards/role-guard';
 export const routes: Routes = [
 
   { path: '', redirectTo: 'register', pathMatch: 'full' },
-
   // ================= AUTH =================
   {
     path: 'register',
     loadComponent: () =>
       import('./Features/auth/register/register').then(m => m.Register)
   },
+  {
+    path: 'reports/:userId',
+    canActivate: [authGuardGuard],
+    loadComponent: () =>
+      import('./Features/Reports/add_reports/reports').then(m => m.Reports)
+  },
+  
   {
     path: 'login',
     loadComponent: () =>
@@ -24,18 +30,43 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Features/home/home').then(m => m.Home)
   },
-   {
-        path: 'my_notifs',canActivate: [authGuardGuard],
-        loadComponent: () =>
-          import('./Features/notifications/notifications').then(m => m.Notifications)
-      },
-      {
-        path: 'chat/:workerId',canActivate: [authGuardGuard],
-        loadComponent: () =>
-          import('./Features/chat/chat').then(m => m.Chat)
-      },
-      
-   
+  {
+    path: 'my_notifs', canActivate: [authGuardGuard],
+    loadComponent: () =>
+      import('./Features/notifications/notifications').then(m => m.Notifications)
+  },
+  {
+    path: 'chat/:workerId', canActivate: [authGuardGuard],
+    loadComponent: () =>
+      import('./Features/chat/chat').then(m => m.Chat)
+  },
+
+//===================Aamin===================
+
+{
+  path:'admin',canActivate:[authGuardGuard,roleGuard],
+  data:{roles:['admin']},
+  loadComponent:()=>import('./admin/admin-layout/admin-layout').then(m=>m.AdminLayout),
+  children:[
+
+{
+  path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
+
+},
+{
+  path:'users',loadComponent:()=>import('./admin/components/clinets/clinets').then(m=>m.Clinets)
+  
+},
+{
+  path:'workers',loadComponent:()=>import('./admin/components/workers/workers').then(m=>m.Workers)
+  
+},{
+  path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
+  
+}
+  ]
+
+},
 
 
   // ================= DASHBOARD (WORKER) =================
@@ -46,14 +77,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Layouts/dashboared-layout/dashboared-layout').then(m => m.DashboaredLayout),
     children: [
-        {
+      {
         path: '',
         loadComponent: () =>
           import('./Features/Components/dashboared-home/dashboared-home')
             .then(m => m.DashboaredHome)
       },
-     
-        {
+
+      {
         path: 'myServices',
         loadComponent: () =>
           import('./Features/Components/my-services/my-services')
@@ -106,7 +137,7 @@ export const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
       },
-        {
+      {
         path: 'myServices',
         loadComponent: () =>
           import('./Features/Components/my-services/my-services')
@@ -118,7 +149,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Features/home/home').then(m => m.Home)
       },
-       
+
 
       {
         path: 'profile',

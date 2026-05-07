@@ -1,7 +1,7 @@
 <!-- ╔═══════════════════════════════════════════════════════╗ -->
 <!-- ║         HandyHub – User Management Page              ║ -->
 <!-- ╚═══════════════════════════════════════════════════════╝ -->
-<div class="flex h-screen bg-[#f5f6fa] font-[Tajawal,sans-serif] overflow-hidden" dir="rtl">
+<div class="flex h-screen bg-[#f5f6fa] overflow-hidden" dir="rtl">
 
   <!-- ── Sidebar ──────────────────────────────────────────── -->
  
@@ -9,42 +9,7 @@
   <!-- ── Main ──────────────────────────────────────────────── -->
   <div class="flex-1 flex flex-col overflow-hidden">
 
-    <!-- Topbar -->
-    <header class="bg-white border-b border-slate-100 px-8 py-3.5 flex items-center justify-between shrink-0 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
-      <div class="flex items-center gap-3">
-        <img src="https://i.pravatar.cc/36?img=3" alt="avatar"
-          class="w-9 h-9 rounded-full ring-2 ring-slate-200 object-cover"/>
-        <div class="leading-tight text-right">
-          <p class="text-sm font-bold text-slate-800">أحمد محمد</p>
-          <p class="text-[11px] text-slate-400">مدير النظام</p>
-        </div>
-      </div>
-
-      <!-- Search -->
-      <div class="relative w-72">
-        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
-          fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-        </svg>
-        <input
-          type="text"
-          placeholder="بحث..."
-          (input)="onSearch($event)"
-          class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pr-9 pl-4
-                 text-sm text-right placeholder-slate-400 text-slate-700
-                 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition"/>
-      </div>
-
-      <!-- Bell -->
-      <button class="relative w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
-        <svg class="w-4.5 h-4.5 w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-        </svg>
-        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-1 ring-white"></span>
-      </button>
-    </header>
-
+  
     <!-- Content -->
     <main class="flex-1 overflow-y-auto px-8 py-7">
 
@@ -65,7 +30,7 @@
       </div>
 
       <!-- Stats cards -->
-      <div class="grid grid-cols-4 gap-4 mb-7">
+      <div class="grid lg:grid-cols-3 gap-4 mb-7">
 
         <!-- Total -->
         <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
@@ -89,7 +54,7 @@
           </div>
           <div class="text-right">
             <p class="text-xs text-slate-400 mb-0.5">متصلون الآن</p>
-            <p class="text-2xl font-black text-slate-900">{{ onlineUsers() }}</p>
+            <p class="text-2xl font-black text-slate-900">{{ onlineUsers().length }}</p>
           </div>
         </div>
 
@@ -109,18 +74,7 @@
         </div>
 
         <!-- Suspended -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center justify-between">
-          <div class="w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center">
-            <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/>
-            </svg>
-          </div>
-          <div class="text-right">
-            <p class="text-xs text-slate-400 mb-0.5">حسابات موقوفة</p>
-            <p class="text-2xl font-black text-slate-900">{{ suspendedUsers() }}</p>
-          </div>
-        </div>
+     
 
       </div>
 
@@ -130,21 +84,8 @@
         <!-- Table header toolbar -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <div class="flex items-center gap-2">
-            <div class="relative">
-              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path d="M3 6h18M7 12h10M10 18h4"/>
-              </svg>
-              <input placeholder="فلترة حسب الاسم..."
-                class="text-sm bg-slate-50 border border-slate-200 rounded-lg pr-8 pl-3 py-1.5
-                       text-right text-slate-700 placeholder-slate-400
-                       focus:outline-none focus:ring-2 focus:ring-slate-200 w-48"/>
-            </div>
-            <button class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-              </svg>
-            </button>
+            
+            
           </div>
           <h2 class="text-base font-bold text-slate-800">قائمة المستخدمين</h2>
         </div>
@@ -163,21 +104,21 @@
             </thead>
             <tbody class="divide-y divide-slate-50">
 
-              @for (user of pagedUsers(); track user.id) {
-                <tr class="hover:bg-slate-50/60 transition-colors group">
+              @for (user of allUsers(); track user.userId) {
+                <tr class="hover:bg-slate-50/60 transition-colors ">
 
                   <!-- User -->
                   <td class="px-6 py-3.5">
-                    <div class="flex items-center gap-3 flex-row-reverse">
+                    <div class="flex items-center gap-3">
                       <div class="relative shrink-0">
-                        <img [src]="user.avatar" [alt]="user.name"
+                        <img [src]="user.imgUrl" [alt]="user.fullName"
                           class="w-9 h-9 rounded-full object-cover ring-2 ring-slate-100"/>
-                        @if (user.online) {
+                        @if (user.isActive) {
                           <span class="absolute bottom-0 left-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"></span>
                         }
                       </div>
                       <div class="text-right leading-tight">
-                        <p class="font-semibold text-slate-800 text-sm">{{ user.name }}</p>
+                        <p class="font-semibold text-slate-800 text-sm">{{ user.fullName }}</p>
                         <p class="text-xs text-slate-400">{{ user.email }}</p>
                       </div>
                     </div>
@@ -198,15 +139,15 @@
                         <circle cx="12" cy="12" r="10"/>
                         <path stroke-linecap="round" d="M12 6v6l4 2"/>
                       </svg>
-                      {{ user.joinDate }}
+                      {{ user.createdAt }}
                     </span>
                   </td>
 
                   <!-- Status -->
                   <td class="px-4 py-3.5 text-center">
-                    <span class="inline-flex items-center gap-1.5 font-medium" [class]="statusClass(user.status)">
-                      <span class="w-1.5 h-1.5 rounded-full inline-block" [class]="statusDot(user.status)"></span>
-                      {{ user.status }}
+                    <span class="inline-flex items-center gap-1.5 font-medium" [class]="statusClass(user.isActive)">
+                      <span class="w-1.5 h-1.5 rounded-full inline-block" [class]="statusDot(user.isActive)"></span>
+                      {{ user.isActive?' نشظ ':' غير نشظ ' }}
                     </span>
                   </td>
 
@@ -214,7 +155,7 @@
                   <td class="px-4 py-3.5">
                     <div class="flex items-center justify-center gap-2">
                       <!-- View -->
-                      <button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition"
+                      <button (click)="getOpenDetails(user)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition"
                         title="عرض">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -223,19 +164,24 @@
                         </svg>
                       </button>
                       <!-- Suspend -->
-                      <button (click)="toggleSuspend(user.id)"
-                        class="w-7 h-7 rounded-lg flex items-center justify-center transition"
-                        [class]="user.status === 'موقوف'
-                          ? 'bg-rose-100 hover:bg-rose-200 text-rose-500'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-500'"
-                        title="إيقاف / تفعيل">
+                  @if(user.isBlocked)
+                  {
+                  <span class="bg-red-400 rounded-3xl text-white px-2 py-1.5">
+محظور   
+                  </span>
+                  }
+                  @else {
+                        <button  (click)="blockUser(user.userId)"
+                        class="w-7 h-7 rounded-lg flex items-center justify-center transitionbg-rose-100 hover:bg-rose-200 text-rose-500"
+                        title="حظر">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                           <circle cx="12" cy="12" r="10"/>
                           <path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/>
                         </svg>
                       </button>
+                  }
                       <!-- Delete -->
-                      <button (click)="deleteUser(user.id)"
+                      <button (click)="deleteUser(user.userId)"
                         class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-rose-100 hover:text-rose-500 flex items-center justify-center text-slate-500 transition"
                         title="حذف">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -277,33 +223,18 @@
           <div class="flex items-center gap-1" dir="ltr">
             <!-- Prev -->
             <button
-              (click)="goToPage(currentPage() - 1)"
+              (click)="getPrevious()"
               [disabled]="currentPage() === 1"
               class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500
                      hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
               السابق
             </button>
 
-            <!-- Page numbers -->
-            @for (p of pages(); track p) {
-              <button
-                (click)="goToPage(p)"
-                class="w-8 h-8 text-xs rounded-lg font-semibold transition border"
-                [class]="p === currentPage()
-                  ? 'bg-slate-900 text-white border-slate-900 shadow'
-                  : 'border-slate-200 text-slate-500 hover:bg-slate-100'">
-                {{ p }}
-              </button>
-            }
-
-            <!-- Ellipsis placeholder if many pages -->
-            @if (totalPages() > 4) {
-              <span class="px-1 text-slate-400 text-xs">...</span>
-            }
+         
 
             <!-- Next -->
             <button
-              (click)="goToPage(currentPage() + 1)"
+              (click)="getNext()"
               [disabled]="currentPage() === totalPages()"
               class="px-3 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-500
                      hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
@@ -320,3 +251,10 @@
     </main>
   </div><!-- /main -->
 </div>
+
+@if(openDetails())
+{
+  <div>
+  <app-clinet-details [user]="user()"></app-clinet-details>
+</div>
+}

@@ -1,0 +1,133 @@
+<app-top-nav></app-top-nav>
+<div  class="bg-[#fcfcfd] mt-10 flex items-center justify-center px-4 py-5 antialiased ">
+  <div class="w-full lg:w-2/3 animate-in fade-in duration-700">
+    
+    <div class="mb-10 text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-[22px] bg-white shadow-xl shadow-indigo-100/50 border border-slate-100 mb-6 group transition-transform hover:scale-105">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+      </div>
+      <h1 class="text-3xl font-black text-slate-900 tracking-tight leading-none mb-3">الإبلاغ عن مشكلة</h1>
+      <p class="text-slate-500 text-[15.5px] leading-relaxed max-w-sm mx-auto font-medium">
+        رضاكم هو أولويتنا. أخبرنا بالتفاصيل وسيقوم فريق المختصين لدينا بمراجعة بلاغك فوراً.
+      </p>
+    </div>
+
+    @if (isSuccess()) {
+      <div class="mb-8 p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-100/50 flex items-center gap-4 animate-in slide-in-from-top-2 duration-300">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-white border-2 border-emerald-200 flex items-center justify-center shadow-sm">
+          <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-bold text-emerald-900 leading-tight">تم الإرسال بنجاح</h3>
+          <p class="text-[13px] text-emerald-700/80 mt-1 font-medium">استلمنا بلاغك وسنقوم بالرد عليك خلال الـ 24 ساعة القادمة.</p>
+        </div>
+      </div>
+    }
+
+    <div class="bg-white rounded-[32px] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.06)] border border-slate-100 relative overflow-hidden group">
+      <div class="h-1.5 w-full bg-gradient-to-l from-indigo-600 via-violet-500 to-fuchsia-500"></div>
+
+      <div class="p-8 md:p-12 space-y-8">
+        
+        <div class="space-y-3">
+          <label class="flex items-center justify-between text-[13px] font-extrabold text-slate-800 uppercase tracking-widest mr-1">
+            <span>عنوان البلاغ</span>
+            <span class="text-indigo-200 group-focus-within:text-indigo-500 transition-colors">
+               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2" /></svg>
+            </span>
+          </label>
+          <input
+            type="text"
+            [ngModel]="title()"
+            (ngModelChange)="title.set($event)"
+            placeholder="مثال: لم يتم الالتزام بالوقت المتفق عليه"
+            class="w-full h-14 px-6 rounded-2xl border-2 border-slate-100 bg-slate-50/50 text-[15px] font-medium text-slate-900 transition-all outline-none focus:border-indigo-500/30 focus:bg-white focus:ring-[6px] focus:ring-indigo-50 placeholder:text-slate-400"
+          />
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-[13px] font-extrabold text-slate-800 uppercase tracking-widest mr-1">نوع المشكلة</label>
+          <div class="relative">
+            <select
+              [ngModel]="type()"
+              (ngModelChange)="type.set($event)"
+              class="w-full h-14 px-6 appearance-none rounded-2xl border-2 border-slate-100 bg-slate-50/50 text-[15px] font-medium text-slate-900 transition-all outline-none focus:border-indigo-500/30 focus:bg-white focus:ring-[6px] focus:ring-indigo-50 cursor-pointer"
+            >
+              <option value="" disabled selected>اختر تصنيف المشكلة</option>
+              @for (t of types; track t.value) {
+                <option [value]="t.value">{{ t.label }}</option>
+              }
+            </select>
+            <div class="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex justify-between items-center mr-1">
+            <label class="text-[13px] font-extrabold text-slate-800 uppercase tracking-widest">تفاصيل المشكلة</label>
+            <div class="px-2.5 py-1 rounded-lg bg-slate-100 text-[11px] font-bold tabular-nums" [class.text-red-500]="descLength > 1100">
+              {{ descLength }} / 1200
+            </div>
+          </div>
+          <textarea
+            [ngModel]="description()"
+            (ngModelChange)="description.set($event)"
+            rows="6"
+            placeholder="يرجى كتابة ما حدث بكل وضوح لنتمكن من مساعدتك..."
+            class="w-full p-6 rounded-2xl border-2 border-slate-100 bg-slate-50/50 text-[15px] font-medium text-slate-900 transition-all outline-none focus:border-indigo-500/30 focus:bg-white focus:ring-[6px] focus:ring-indigo-50 resize-none leading-relaxed placeholder:text-slate-400"
+          ></textarea>
+        </div>
+
+        <div class="flex gap-4 p-5 rounded-2xl bg-slate-50/80 border border-slate-100/50">
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-indigo-500">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <p class="text-[13px] text-slate-600 leading-relaxed font-medium">
+            <strong class="text-slate-900 block mb-0.5">خصوصيتك محمية</strong>
+            سيتم التعامل مع هذا البلاغ بسرية تامة بواسطة فريق الأمان، ولن يتم مشاركة هويتك مع الطرف الآخر.
+          </p>
+        </div>
+
+        <div class="pt-2">
+          <button
+            (click)="send()"
+            
+            class="group relative w-full h-16 rounded-[20px] font-black text-[17px] transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden shadow-2xl active:scale-[0.98]"
+            [class]="isValid && !isLoading() ? 'bg-slate-900 text-white shadow-slate-200 hover:shadow-indigo-200 hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400 cursor-not-allowed'"
+          >
+            @if (isLoading()) {
+              <div class="flex items-center gap-3">
+                <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span>جاري الإرسال...</span>
+              </div>
+            } @else {
+              <span class="flex items-center gap-3">
+                 إرسال البلاغ الآن
+                <svg class="w-5 h-5 transition-transform group-hover:-translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+              </span>
+            }
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mt-10 text-center space-y-4">
+      <p class="text-[14px] text-slate-500 font-medium tracking-wide">
+        لديك استفسار آخر؟ 
+        <a href="#" class="text-indigo-600 font-bold border-b-2 border-indigo-100 hover:border-indigo-500 transition-all pb-0.5 mr-1">مركز المساعدة</a>
+      </p>
+    </div>
+
+  </div>
+</div>

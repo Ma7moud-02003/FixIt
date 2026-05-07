@@ -1,50 +1,99 @@
+
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ClientServices } from '../../services/client-services';
 import { Subscription } from 'rxjs';
-export type UserRole = 'عميل' | 'عامل' | 'أدمن';
-export type UserStatus = 'متصل الآن' | 'نشط' | 'موقوف';
-export interface User {
-  id: number;
-  name: string;
+import { UserRole } from '../../../Shared/enums/role';
+import { Alerts } from '../../../Shared/Alerts/alerts';
+import { ClinetDetails } from "../clients-details/clinets";
+export type UserRolee = UserRole;
+export type UserStatus = true|false;
+export interface IClient {
+  userId: string;
+  fullName: string;
   email: string;
-  avatar: string;
-  role: UserRole;
-  joinDate: string;
-  status: UserStatus;
-  online: boolean;
+  phone: string;
+  city: string;
+  role: 'client' | 'worker' | string; // حددتها كـ 'client' بناءً على الداتا
+  imgUrl: string | null;
+  isActive: boolean;
+  isBlocked: boolean;
+  
+  // الإحصائيات والقوائم
+  favorites: any[]; // يمكنك تغيير any لـ Interface الخاص بـ Favorite
+  notifications: any[];
+  messages: any[];
+  reviews: any[];
+  
+  // العلاقات (Chat Rooms)
+  clientChatRooms: any[];
+  workerChatRooms: any[];
+  
+  // التقارير والطلبات
+  sentReports: any[];
+  receivedReports: any[];
+  sentRequests: any[];
+
+  // التواريخ والحماية
+  passwordHash: string;
+  createdAt: string | Date;
+  updatedAt: string | Date | null;
+  lastLogin: string | Date | null;
 }
 @Component({
   selector: 'app-clinets',
-  imports: [CommonModule],
+  imports: [CommonModule, ClinetDetails],
   templateUrl: './clinets.html',
   styleUrl: './clinets.css',
 })
 export class Clinets implements OnInit,OnDestroy{
  
+  userRole=UserRole;
   private _clients=inject(ClientServices)
   private subs=new Subscription();
   searchQuery = signal('');
   currentPage  = signal(1);
-  readonly pageSize = 5;
- 
+  readonly pageSize = 10;
+ private cache = new Map<number, any>();
 
 
    ngOnInit(): void {
    this.getAllUsers();
   }
 
+// تأكد إنك معرف الكاش فوق كـ Map
+// private cache = new Map<number, IClient[]>();
 
-getAllUsers()
-{
-this.subs.add(
-  this._clients.getUsers(this.currentPage(),10).subscribe({
+getAllUsers() {
+  const page = this.currentPage();
 
-    next:(clients)=>{
-this.allUsers.set(clients)
-    }
-  })
-)
+  // 1. شيك على الكاش أولاً
+  if (this.cache.has(page)) {
+    console.log(`Loading page ${page} from cache...`);
+    this.allUsers.set(this.cache.get(page)!);
+    return; // وقف تنفيذ الدالة هنا مش محتاجين نكلم السيرفر
+  }
+
+  // 2. لو مش موجود في الكاش، كلم السيرفر
+  this.subs.add(
+    this._clients.getUsers(page, 10).subscribe({
+      next: (clients) => {
+        // تحديث الـ Signals
+        this.totalUsers.set(clients.totalCount);
+        this.totalPages.set(clients.totalPage);
+        this.allUsers.set(clients.data);
+        console.log(clients);
+        
+        // حفظ الداتا في الكاش برقم الصفحة
+        this.cache.set(page, clients.data);
+        
+        console.log(`Page ${page} fetched from server and cached.`);
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+      }
+    })
+  );
 }
 getNext(){
 this.currentPage.set(this.currentPage()+1);
@@ -57,25 +106,24 @@ if(this.currentPage()>0)
 this.getAllUsers();
 }
 
-  allUsers = signal<User[]>([]);
+  allUsers = signal<IClient[]>([]);
  
   // ── Derived ───────────────────────────────────────────────────────────────
   filteredUsers = computed(() => {
     const q = this.searchQuery().toLowerCase();
     return this.allUsers().filter(u =>
-      u.name.includes(q) || u.email.toLowerCase().includes(q)
+      u.fullName?.includes(q) || u.email.toLowerCase().includes(q)
     );
   });
  
-  totalUsers   = computed(() => this.allUsers().length);
-  onlineUsers  = computed(() => this.allUsers().filter(u => u.online).length);
-  newUsers     = computed(() => this.allUsers().filter(u => u.joinDate >= '2024-01-01').length);
-  suspendedUsers = computed(() => this.allUsers().filter(u => u.status === 'موقوف').length);
- 
-  totalPages = computed(() =>
-    Math.ceil(this.filteredUsers().length / this.pageSize)
-  );
- 
+  totalUsers   = signal<number>(0);
+  onlineUsers  = computed(()=>{
+    return this.allUsers().filter((m)=>{
+     
+    })
+  });
+  newUsers     = signal<number>(0);
+  totalPages=signal<number>(0)
   pagedUsers = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
     return this.filteredUsers().slice(start, start + this.pageSize);
@@ -94,50 +142,87 @@ this.getAllUsers();
     this.currentPage.set(1);
   }
  
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage.set(page);
-    }
+  
+  private alerts=inject(Alerts);
+  deleteUser(id: string) {
+this.alerts.confirmDelete('هل انت متاكد').then((res)=>{
+  if(res.isConfirmed)
+    this.subs.add(this._clients.deletUser().subscribe({
+  next:()=>{
+      this.allUsers.update(users => users.filter(u => u.userId !== id));
+  }}))
+
+})
   }
  
-  deleteUser(id: number) {
-    this.allUsers.update(users => users.filter(u => u.id !== id));
-  }
- 
-  toggleSuspend(id: number) {
-    this.allUsers.update(users =>
-      users.map(u =>
-        u.id === id
-          ? { ...u, status: u.status === 'موقوف' ? 'نشط' : 'موقوف' as UserStatus }
-          : u
+  blockUser(id:string)
+  {
+    this.alerts.confirmWarning('سيتم حظر المستخدم').then((res)=>{
+    if(res.isConfirmed)
+    {
+      this.subs.add(
+        this._clients.blockUser(id).subscribe({
+          next:()=>{
+            this.alerts.sucsess('تم حظر المستخدم ')
+          }
+        })
       )
-    );
+    }
+    })
   }
+ 
  
   // ── Helpers ───────────────────────────────────────────────────────────────
-  roleBadgeClass(role: UserRole): string {
-    return {
-      'عميل': 'bg-amber-100 text-amber-700 border border-amber-200',
-      'عامل': 'bg-sky-100 text-sky-700 border border-sky-200',
-      'أدمن': 'bg-violet-100 text-violet-700 border border-violet-200',
-    }[role];
+roleBadgeClass(role: string): string {
+  switch (role) {
+    case 'client':
+      return 'bg-amber-100 text-amber-700 border border-amber-200';
+    case 'worker':
+      return 'bg-sky-100 text-sky-700 border border-sky-200';
+    case 'admin':
+      return 'bg-violet-100 text-violet-700 border border-violet-200';
+    default:
+      return 'bg-gray-100 text-gray-700 border border-gray-200'; // حالة احتياطية لأي دور آخر
   }
+}
  
   statusClass(status: UserStatus): string {
-    return {
-      'متصل الآن': 'text-emerald-600',
-      'نشط':       'text-slate-500',
-      'موقوف':     'text-rose-500 font-semibold',
-    }[status];
+    switch(status)
+    {
+      case true:
+        return 'text-emerald-600'
+       
+        case false :
+        return 'text-rose-500 font-semibold'
+       
+    }
+    
+    
   }
  
   statusDot(status: UserStatus): string {
-    return {
-      'متصل الآن': 'bg-emerald-500',
-      'نشط':       'bg-slate-400',
-      'موقوف':     'bg-rose-500',
-    }[status];
+    switch(status)
+    {
+      case true:
+        return 'bg-emerald-500' 
+        case false :
+        return  'bg-rose-500'
+       
+    }
   }
+
+  user=signal<IClient>({} as IClient);
+  openDetails=signal<boolean>(false);
+  getOpenDetails(user:IClient)
+  {
+this.user.set(user);
+this.openDetails.set(!this.openDetails());
+   }
+
+
+
+
+
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }

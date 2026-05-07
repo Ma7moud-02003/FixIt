@@ -179,6 +179,11 @@ export class Chat implements OnInit, OnDestroy {
     this.subs.add(this.chatService.getChatHistory(roomId).subscribe({
       next: (res: any) => {
         this.messageHistory.set(res.data);
+        this.targetUser.set({
+          
+        })
+        console.log(this.messageHistory());
+        
         this.triggerMarkAsRead();
        setTimeout(()=>{
  this.scrollToBottom()
