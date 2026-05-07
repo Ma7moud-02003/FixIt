@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class ClientServices {
+export class WorkerService {
   private _http=inject(HttpClient);
   
   getWorkers(pageNum:number=1,pageSize:number=10):Observable<any>

@@ -1,120 +1,138 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnDestroy, signal } from '@angular/core';
+import { WorkerService } from '../../services/worker-service';
+import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
+import { WorkerModel } from '../../../Shared/Models/UserProfile';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
  
-export type WorkerStatus  = 'نشط' | 'موقوف' | 'قيد المراجعة';
-export type WorkerFilter  = 'الكل' | 'للنشطين' | 'بانتظار المراجعة' | 'الموقوفون';
- 
-export interface Worker {
-  id: number;
-  name: string;
-  avatar: string;
-  specialty: string;
-  rating: number;
-  reviewCount: number;
-  since: string;
-  status: WorkerStatus;
-  online: boolean;
-  idVerified: boolean;
-}
-
 
 
 @Component({
   selector: 'app-workers',
-  imports: [],
+  imports: [CommonModule,FormsModule],
   templateUrl: './workers.html',
   styleUrl: './workers.css',
 })
-export class Workers {
-  activeFilter = signal<WorkerFilter>('الكل');
-  currentPage  = signal(1);
-  readonly pageSize = 6;
- 
-  allWorkers = signal<Worker[]>([
-    { id: 1, name: 'خالد العتيبي',    avatar: 'https://i.pravatar.cc/64?img=12', specialty: 'سباكة وكشف تسربات', rating: 4.8, reviewCount: 124, since: '2023-05-12', status: 'نشط',           online: true,  idVerified: true  },
-    { id: 2, name: 'محمد إبراهيم',   avatar: 'https://i.pravatar.cc/64?img=11', specialty: 'كهرباء وتمديدات',   rating: 4.9, reviewCount: 89,  since: '2023-06-20', status: 'نشط',           online: true,  idVerified: true  },
-    { id: 3, name: 'ياسين محمود',    avatar: 'https://i.pravatar.cc/64?img=15', specialty: 'نجارة وأثاث',       rating: 4.5, reviewCount: 56,  since: '2024-01-15', status: 'قيد المراجعة', online: false, idVerified: true  },
-    { id: 4, name: 'فهد الرشيدي',    avatar: 'https://i.pravatar.cc/64?img=17', specialty: 'تكييف وتبريد',      rating: 4.7, reviewCount: 210, since: '2023-03-05', status: 'نشط',           online: true,  idVerified: true  },
-    { id: 5, name: 'عبدالله الزهراني',avatar: 'https://i.pravatar.cc/64?img=18', specialty: 'دهانات وديكور',    rating: 4.2, reviewCount: 34,  since: '2023-11-10', status: 'موقوف',         online: false, idVerified: true  },
-    { id: 6, name: 'عمر كمال',       avatar: 'https://i.pravatar.cc/64?img=21', specialty: 'تنظيف وتعقيم',     rating: 4.6, reviewCount: 142, since: '2023-08-22', status: 'نشط',           online: false, idVerified: true  },
-    { id: 7, name: 'سامي العنزي',    avatar: 'https://i.pravatar.cc/64?img=22', specialty: 'إصلاح أجهزة',       rating: 4.3, reviewCount: 67,  since: '2023-09-01', status: 'قيد المراجعة', online: false, idVerified: false },
-    { id: 8, name: 'بندر الحارثي',   avatar: 'https://i.pravatar.cc/64?img=23', specialty: 'أعمال بناء',        rating: 4.1, reviewCount: 28,  since: '2024-02-10', status: 'نشط',           online: true,  idVerified: true  },
-    { id: 9, name: 'تركي السلمي',    avatar: 'https://i.pravatar.cc/64?img=24', specialty: 'سباكة',             rating: 4.0, reviewCount: 19,  since: '2024-03-15', status: 'موقوف',         online: false, idVerified: true  },
-  ]);
- 
-  // ── Stats ──────────────────────────────────────────────────
-  totalWorkers   = computed(() => this.allWorkers().length);
-  onlineCount    = computed(() => this.allWorkers().filter(w => w.online).length);
-  pendingCount   = computed(() => this.allWorkers().filter(w => w.status === 'قيد المراجعة').length);
-  suspendedCount = computed(() => this.allWorkers().filter(w => w.status === 'موقوف').length);
- 
-  // ── Filtered + paged ───────────────────────────────────────
-  filteredWorkers = computed(() => {
-    const f = this.activeFilter();
-    return this.allWorkers().filter(w => {
-      if (f === 'الكل')               return true;
-      if (f === 'للنشطين')            return w.status === 'نشط';
-      if (f === 'بانتظار المراجعة')   return w.status === 'قيد المراجعة';
-      if (f === 'الموقوفون')          return w.status === 'موقوف';
-      return true;
-    });
-  });
- 
-  totalPages = computed(() => Math.ceil(this.filteredWorkers().length / this.pageSize));
-  pages      = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
- 
-  pagedWorkers = computed(() => {
-    const s = (this.currentPage() - 1) * this.pageSize;
-    return this.filteredWorkers().slice(s, s + this.pageSize);
-  });
- 
-  readonly filterTabs: WorkerFilter[] = ['الكل', 'للنشطين', 'بانتظار المراجعة', 'الموقوفون'];
- 
-  // ── Nav ────────────────────────────────────────────────────
+export class Workers implements OnDestroy{
+    private workersService = inject(WorkerService);
 
  
-  // ── Actions ────────────────────────────────────────────────
-  setFilter(f: WorkerFilter) {
-    this.activeFilter.set(f);
-    this.currentPage.set(1);
+  // ── State signals ────────────────────────────────────────────────────────────
+  workers = signal<WorkerModel[]>([]);
+  isLoading = signal(true);
+  error = signal<string | null>(null);
+  currentPage = signal(1);
+  pageSize = signal(10);
+  totalCount = signal(0);
+  searchQuery = '';
+  availabilityFilter = signal<boolean | null>(null);
+  workerToDelete = signal<Worker | null>(null);
+ 
+  // Search debounce
+  private searchSubject = new Subject<string>();
+  skeletonRows = [1, 2, 3, 4, 5];
+ 
+  // ── Computed ─────────────────────────────────────────────────────────────────
+  totalWorkers = computed(() => this.workers().length + (this.totalCount() - this.workers().length));
+  availableWorkers = computed(() => this.workers().filter(w => w.availabilityStatus).length);
+  unavailableWorkers = computed(() => this.workers().filter(w => !w.availabilityStatus).length);
+  availabilityPercent = computed(() =>
+    this.workers().length ? Math.round((this.availableWorkers() / this.workers().length) * 100) : 0
+  );
+ 
+  filteredWorkers = computed(() => {
+    let result = this.workers();
+    const q = this.searchQuery.toLowerCase().trim();
+    if (q) result = result.filter(w => w.fullName.toLowerCase().includes(q));
+    const f = this.availabilityFilter();
+    if (f !== null) result = result.filter(w => w.availabilityStatus === f);
+    return result;
+  });
+ 
+  totalPages = computed(() => Math.ceil(this.totalCount() / this.pageSize()));
+ 
+  paginationStart = computed(() => (this.currentPage() - 1) * this.pageSize() + 1);
+  paginationEnd = computed(() =>
+    Math.min(this.currentPage() * this.pageSize(), this.totalCount())
+  );
+ 
+  visiblePages = computed<number[]>(() => {
+    const total = this.totalPages();
+    const cur = this.currentPage();
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    const pages: number[] = [1];
+    if (cur > 3) pages.push(-1);
+    for (let i = Math.max(2, cur - 1); i <= Math.min(total - 1, cur + 1); i++) pages.push(i);
+    if (cur < total - 2) pages.push(-1);
+    pages.push(total);
+    return pages;
+  });
+ 
+  // ── Lifecycle ────────────────────────────────────────────────────────────────
+  ngOnInit() {
+    this.fetchWorkers();
+ 
+  
   }
  
-  goToPage(p: number) {
-    if (p >= 1 && p <= this.totalPages()) this.currentPage.set(p);
+  private subs=new Subscription()
+    // ── Methods ──────────────────────────────────────────────────────────────────
+  fetchWorkers() {
+    this.isLoading.set(true);
+    this.error.set(null);
+ 
+     this.subs.add(this.workersService
+      .getWorkers(this.currentPage(), this.pageSize())
+      .subscribe({
+        next: (res: any) => {
+          // Adapt to your actual API response shape
+          const list = res?.data ?? res?.workers ?? res ?? [];
+          const count: number = res?.totalCount ?? res?.total ?? list.length;
+          this.workers.set(list);
+          this.totalCount.set(count);
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.error.set(err?.error?.message ?? 'Unable to reach the server. Please try again.');
+          this.isLoading.set(false);
+        },
+      }));
   }
  
-  toggleSuspend(id: number) {
-    this.allWorkers.update(ws =>
-      ws.map(w => w.id === id
-        ? { ...w, status: w.status === 'موقوف' ? 'نشط' : 'موقوف' as WorkerStatus }
-        : w
-      )
-    );
+  onSearchChange(value: string) {
+    this.searchSubject.next(value);
   }
  
-  approveWorker(id: number) {
-    this.allWorkers.update(ws =>
-      ws.map(w => w.id === id && w.status === 'قيد المراجعة'
-        ? { ...w, status: 'نشط' as WorkerStatus }
-        : w
-      )
-    );
+  setAvailabilityFilter(value: boolean | null) {
+    this.availabilityFilter.set(value);
   }
  
-  rejectWorker(id: number) {
-    this.allWorkers.update(ws => ws.filter(w => w.id !== id));
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.fetchWorkers();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
  
-  // ── Helpers ────────────────────────────────────────────────
-  statusCfg(status: WorkerStatus) {
-    const map: Record<WorkerStatus, { bg: string; text: string; dot: string }> = {
-      'نشط':           { bg: 'bg-emerald-50',  text: 'text-emerald-700', dot: 'bg-emerald-500' },
-      'موقوف':         { bg: 'bg-rose-50',     text: 'text-rose-600',    dot: 'bg-rose-500'    },
-      'قيد المراجعة':  { bg: 'bg-amber-50',   text: 'text-amber-700',   dot: 'bg-amber-500'   },
-    };
-    return map[status];
+  confirmDelete(worker: Worker) {
+    this.workerToDelete.set(worker);
   }
  
-  stars(rating: number): boolean[] {
-    return Array.from({ length: 5 }, (_, i) => i < Math.round(rating));
+  cancelDelete() {
+    this.workerToDelete.set(null);
+  }
+
+ 
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .slice(0, 2)
+      .map(n => n[0])
+      .join('')
+      .toUpperCase();
+  }
+  
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }
