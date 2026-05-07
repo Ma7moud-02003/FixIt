@@ -1,407 +1,442 @@
 @if(showPageDetails())
 {
-<div class="bg-slate-50 px-15 py-10 min-h-screen ">
-  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
+<div class="min-h-screen bg-[#f4f6f9]">
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="lg:col-span-8 space-y-4">
+  <!-- Top gradient accent -->
+  <div class="h-1 w-full bg-gradient-to-l from-sky-500 via-blue-600 to-indigo-600"></div>
 
-      <!-- Header Bar -->
-      <div class="bg-white rounded-2xl px-5 py-4 border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div class="flex flex-col gap-1.5">
-          <h2 class="text-lg font-semibold text-slate-800 leading-tight">
-            {{serviceDetails().serviceTitle}}
-          </h2>
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 text-amber-700 text-[10px] font-semibold rounded-md uppercase tracking-wide border border-amber-100">
-            تفاصيل الخدمة
-          </span>
-        </div>
-        <div class="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100 shrink-0">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-          </svg>
-          <p class="text-[11px] text-slate-500">
-            تم الإنشاء:
-            <span class="text-slate-700 font-semibold mr-1">{{serviceDetails().requestDate | formDate}}</span>
-          </p>
-        </div>
-      </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- Service Image + Meta -->
-      <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+      <!-- ===== MAIN CONTENT ===== -->
+      <main class="lg:col-span-8 space-y-5">
 
-        <!-- Image -->
-        <div class="relative h-64 overflow-hidden">
-          <img [src]="serviceDetails().requestedImgUrl"
-               class="w-full h-full object-cover"
-               alt="صورة الخدمة">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-          <span class="absolute top-3 right-3 bg-white/90 text-slate-700 text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-white/60 backdrop-blur-sm">
-            موقع العمل
-          </span>
-          <span class="absolute bottom-3 left-3 bg-black/40 text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">
-            صورة من أرض الواقع
-          </span>
-        </div>
-
-        <!-- Location + Price -->
-        <div class="grid grid-cols-2 divide-x divide-x-reverse divide-slate-100 border-b border-slate-100">
-          <div class="flex items-start gap-3 p-5">
-            <div class="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
+        <!-- Header Bar -->
+        <div class="bg-white rounded-2xl px-6 py-5 border border-slate-100 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-lg uppercase tracking-widest border border-amber-100">
+                <span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
+                تفاصيل الخدمة
+              </span>
             </div>
-            <div>
-              <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1">الموقع</p>
-              <p class="text-sm font-semibold text-slate-700">{{serviceDetails().serviceAddress||'سيتم التحديد لاحقا '}}</p>
-            </div>
+            <h2 class="text-xl font-bold text-slate-800 leading-snug">
+              {{serviceDetails().serviceTitle}}
+            </h2>
           </div>
 
-          <div class="p-5 flex flex-col items-start">
-            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1">الميزانية التقديرية</p>
-            @if(role() == Roles.Clien_Role) {
-              @if(serviceDetails().totalPrice > 0) {
-                <p class="text-xl font-bold text-sky-600">{{serviceDetails().totalPrice | currency:'EGP':'symbol'}}</p>
-              } @else {
-                <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">في انتظار التسعير</span>
-              }
-            }
-            @else if(role() == Roles.Worker_Role) {
-              @if(serviceDetails().totalPrice > 0) {
-                <p class="text-xl font-bold text-sky-600">{{serviceDetails().totalPrice}} ج.م</p>
-              } @else {
-                <span class="text-xs font-semibold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100 animate-pulse">
-                  يرجى إضافة عرض سعر
-                </span>
-              }
-            }
-          </div>
-        </div>
-
-        <!-- Description -->
-        <div class="p-5">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="w-0.5 h-4 bg-sky-500 rounded-full"></span>
-            <h4 class="text-sm font-semibold text-slate-700">الوصف والمتطلبات</h4>
-          </div>
-          <div class="bg-slate-50 rounded-xl border border-slate-100 p-4">
-            <p class="text-sm text-slate-600 leading-relaxed">
-              "{{serviceDetails().serviceDescription}}"
+          <div class="flex items-center gap-2 px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-100 shrink-0">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <p class="text-[11px] text-slate-500 font-medium">
+              تم الإنشاء:
+              <span class="text-slate-700 font-bold mr-1">{{serviceDetails().requestDate | formDate}}</span>
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- ===== STATE MANAGEMENT - WORKER ===== -->
-      @if(role() == Roles.Worker_Role) {
-        @if(serviceDetails().state == statuses.PRICE_PROCESS) {
-          <app-worker-priceprocess
-            [serviceId]="serviceDetails().serviceId"
-            (priceSent)="getRecivedServiveDetails()">
-          </app-worker-priceprocess>
-        }
-        @else if(serviceDetails().state == statuses.PENDING) {
-          <app-worker-pending></app-worker-pending>
-        }
-        @else if(serviceDetails().state == statuses.Submited) {
-          <app-worker-submitted></app-worker-submitted>
-        }
-        @else if(serviceDetails().state == statuses.InProcess) {
-          <app-worker-inprocess
-            [clientName]="serviceDetails().clientName"
-            [serviceId]="serviceDetails().serviceId"
-            (submitted)="getRecivedServiveDetails()">
-          </app-worker-inprocess>
-        }
-      }
+        <!-- Service Image + Meta -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
 
-      <!-- ===== STATE MANAGEMENT - CLIENT ===== -->
-      @else if(role() == Roles.Clien_Role) {
-        @if(serviceDetails().state == statuses.PRICE_PROCESS) {
-          <app-client-price-process></app-client-price-process>
-        }
-        @else if(serviceDetails().state == statuses.PENDING) {
-          <app-client-pending
-            [price]="serviceDetails().totalPrice"
-            [serviceId]="serviceDetails().serviceId"
-            (accepted)="getSendedServiveDetails()"
-            (reject)="getSendedServiveDetails()">
-          </app-client-pending>
-        }
-        @else if(serviceDetails().state == statuses.InProcess) {
-          <app-client-inprocess [workerName]="serviceDetails().workerName"></app-client-inprocess>
-        }
-        @else if(serviceDetails().state == statuses.Submited) {
-          <app-client-submitted
-            [serviceId]="serviceDetails().serviceId"
-            (accepted)="getSendedServiveDetails()"
-            (disputed)="getSendedServiveDetails()">
-          </app-client-submitted>
-        }
-      }
+          <!-- Image -->
+          <div class="relative h-64 overflow-hidden">
+            <img [src]="serviceDetails().requestedImgUrl"
+                 class="w-full h-full object-cover"
+                 alt="صورة الخدمة">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+            <span class="absolute top-4 right-4 bg-white/90 text-slate-700 text-[10px] font-bold px-3 py-1.5 rounded-lg border border-white/60 backdrop-blur-sm shadow-sm flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-sky-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+              موقع العمل
+            </span>
+            <span class="absolute bottom-4 left-4 bg-black/50 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10 flex items-center gap-1.5">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              صورة من أرض الواقع
+            </span>
+          </div>
 
-      <!-- ===== REJECTED STATE ===== -->
-      @if(serviceDetails().state == statuses.Rejected) {
-        <div class="bg-white rounded-2xl border border-rose-100 overflow-hidden" dir="rtl">
-          <div class="h-1 w-full bg-rose-400"></div>
-          <div class="p-6 flex items-start gap-4">
-            <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center border border-rose-100 shrink-0">
-              <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-base font-semibold text-slate-800">تم رفض الخدمة</h3>
-              <p class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider mt-0.5">الحالة: ملغاة</p>
-              <div class="mt-4 flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100 text-xs">
-                <span class="text-slate-400 font-semibold">تاريخ الإلغاء</span>
-                <span class="font-semibold text-slate-600" dir="ltr">
-                  {{ serviceDetails().completeDate | date:'mediumDate' }}
-                </span>
+          <!-- Location + Price -->
+          <div class="grid grid-cols-2 divide-x divide-x-reverse divide-slate-100 border-b border-slate-100">
+            <div class="flex items-start gap-3 p-5">
+              <div class="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center shrink-0 border border-sky-100">
+                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
               </div>
-              <p class="text-[10px] text-slate-400 text-center mt-4 font-medium">
-                يمكنك مراجعة الطلبات الأخرى في القائمة الرئيسية
+              <div>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">الموقع</p>
+                <p class="text-sm font-semibold text-slate-700">{{serviceDetails().serviceAddress || 'سيتم التحديد لاحقاً'}}</p>
+              </div>
+            </div>
+
+            <div class="p-5 flex flex-col items-start">
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">الميزانية التقديرية</p>
+              @if(role() == Roles.Clien_Role) {
+                @if(serviceDetails().totalPrice > 0) {
+                  <p class="text-xl font-black text-sky-600">{{serviceDetails().totalPrice | currency:'EGP':'symbol'}}</p>
+                } @else {
+                  <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">في انتظار التسعير</span>
+                }
+              }
+              @else if(role() == Roles.Worker_Role) {
+                @if(serviceDetails().totalPrice > 0) {
+                  <p class="text-xl font-black text-sky-600">{{serviceDetails().totalPrice}} ج.م</p>
+                } @else {
+                  <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100 animate-pulse flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full"></span>
+                    يرجى إضافة عرض سعر
+                  </span>
+                }
+              }
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="p-6">
+            <div class="flex items-center gap-2.5 mb-4">
+              <div class="w-1 h-5 bg-sky-500 rounded-full"></div>
+              <h4 class="text-sm font-bold text-slate-700">الوصف والمتطلبات</h4>
+            </div>
+            <div class="bg-slate-50 rounded-xl border border-slate-100 p-4">
+              <p class="text-sm text-slate-600 leading-relaxed">
+                "{{serviceDetails().serviceDescription}}"
               </p>
             </div>
           </div>
         </div>
-      }
 
-      <!-- ===== COMPLETED STATE ===== -->
-      @else if(serviceDetails().state == statuses.CPMLETED) {
-        <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-          <!-- Success Header -->
-          <div class="bg-emerald-50 border-b border-emerald-100 p-6 flex flex-col items-center text-center gap-3">
-            <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-sm shadow-emerald-200">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        <!-- ===== STATE MANAGEMENT - WORKER ===== -->
+        @if(role() == Roles.Worker_Role) {
+          @if(serviceDetails().state == statuses.PRICE_PROCESS) {
+            <app-worker-priceprocess
+              [serviceId]="serviceDetails().serviceId"
+              (priceSent)="getRecivedServiveDetails()">
+            </app-worker-priceprocess>
+          }
+          @else if(serviceDetails().state == statuses.PENDING) {
+            <app-worker-pending></app-worker-pending>
+          }
+          @else if(serviceDetails().state == statuses.Submited) {
+            <app-worker-submitted></app-worker-submitted>
+          }
+          @else if(serviceDetails().state == statuses.InProcess) {
+            <app-worker-inprocess
+              [clientName]="serviceDetails().clientName"
+              [serviceId]="serviceDetails().serviceId"
+              (submitted)="getRecivedServiveDetails()">
+            </app-worker-inprocess>
+          }
+        }
+
+        <!-- ===== STATE MANAGEMENT - CLIENT ===== -->
+        @else if(role() == Roles.Clien_Role) {
+          @if(serviceDetails().state == statuses.PRICE_PROCESS) {
+            <app-client-price-process></app-client-price-process>
+          }
+          @else if(serviceDetails().state == statuses.PENDING) {
+            <app-client-pending
+              [price]="serviceDetails().totalPrice"
+              [serviceId]="serviceDetails().serviceId"
+              (accepted)="getSendedServiveDetails()"
+              (reject)="getSendedServiveDetails()">
+            </app-client-pending>
+          }
+          @else if(serviceDetails().state == statuses.InProcess) {
+            <app-client-inprocess [workerName]="serviceDetails().workerName"></app-client-inprocess>
+          }
+          @else if(serviceDetails().state == statuses.Submited) {
+            <app-client-submitted
+              [serviceId]="serviceDetails().serviceId"
+              (accepted)="getSendedServiveDetails()"
+              (disputed)="getSendedServiveDetails()">
+            </app-client-submitted>
+          }
+        }
+
+        <!-- ===== REJECTED STATE ===== -->
+        @if(serviceDetails().state == statuses.Rejected) {
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
+            <div class="h-1 w-full bg-rose-500"></div>
+            <div class="p-6 flex items-start gap-4">
+              <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center border border-rose-100 shrink-0">
+                <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-base font-bold text-slate-800">تم رفض الخدمة</h3>
+                <p class="text-[11px] font-bold text-rose-400 uppercase tracking-wider mt-0.5">الحالة: ملغاة</p>
+                <div class="mt-4 flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100 text-xs">
+                  <span class="text-slate-400 font-semibold">تاريخ الإلغاء</span>
+                  <span class="font-bold text-slate-600" dir="ltr">{{ serviceDetails().completeDate | date:'mediumDate' }}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 text-center mt-4 font-medium">يمكنك مراجعة الطلبات الأخرى في القائمة الرئيسية</p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ===== COMPLETED STATE ===== -->
+        @else if(serviceDetails().state == statuses.CPMLETED) {
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <!-- Success Header -->
+            <div class="relative bg-gradient-to-l from-emerald-50 to-teal-50 border-b border-emerald-100 px-6 py-7 flex flex-col items-center text-center gap-3 overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-l from-emerald-400 to-teal-500"></div>
+              <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-emerald-100">
+                <svg class="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-slate-800">تم اكتمال الخدمة!</h3>
+                <p class="text-emerald-600 text-xs font-semibold mt-1">شكراً لاستخدامك منصة Fixit</p>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-5">
+              <!-- Worker + Price Summary -->
+              <div class="flex items-center justify-between bg-slate-50 rounded-xl border border-slate-100 p-4">
+                <div class="flex items-center gap-3">
+                  <div class="relative">
+                    <img src="/workers/manWorker.png" alt="worker"
+                         class="w-11 h-11 rounded-xl object-cover ring-2 ring-white border border-slate-100">
+                    <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">الفني المنفذ</p>
+                    <p class="text-sm font-bold text-slate-800 mt-0.5">{{serviceDetails().workerName}}</p>
+                  </div>
+                </div>
+                <div class="text-right border-r border-slate-200 pr-4">
+                  <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">التكلفة الإجمالية</p>
+                  <p class="text-lg font-black text-slate-900 mt-0.5">
+                    {{serviceDetails().totalPrice | currency:'EGP ':'symbol':'1.0-0'}}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Rating (Client Only) -->
+              @if(role() == Roles.Clien_Role) {
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-800 mb-1">ما هو تقييمك للخدمة؟</h4>
+                    <p class="text-xs text-slate-400 font-medium">رأيك يساعدنا في تحسين جودة الفنيين لدينا</p>
+                  </div>
+
+                  <!-- Stars -->
+                  <div class="flex gap-2 justify-center py-2">
+                    @for(i of [1,2,3,4,5]; track i) {
+                      <i (click)="setRating(i)"
+                         [ngClass]="{'text-yellow-400 scale-110': i <= rating()}"
+                         class="fas fa-star text-2xl text-slate-200 cursor-pointer transition-all hover:text-yellow-300 hover:scale-110">
+                      </i>
+                    }
+                  </div>
+
+                  <textarea [(ngModel)]="comment"
+                    placeholder="اكتب تجربتك مع الفني هنا... (اختياري)"
+                    class="w-full min-h-[100px] p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-2 focus:ring-sky-50 outline-none transition-all placeholder:text-slate-300 resize-none">
+                  </textarea>
+
+                  <div class="flex flex-col gap-2">
+                    <button (click)="getRateing()"
+                      class="w-full h-12 bg-slate-900 hover:bg-slate-700 text-white rounded-xl font-bold text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-slate-200">
+                      <i class="fas fa-star text-yellow-400 text-sm"></i>
+                      إرسال التقييم الآن
+                    </button>
+                    <button class="w-full h-10 text-slate-400 text-xs font-semibold hover:text-slate-600 transition-colors">
+                      تخطي والعودة للرئيسية
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- ===== REVIEWED STATE ===== -->
+        @else if(serviceDetails().state == statuses.Reviewed) {
+          <div class="relative bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
+            <div class="absolute top-0 right-0 bottom-0 w-1 bg-emerald-500 rounded-r-2xl"></div>
+            <div class="p-5 pr-6">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"/>
+                  </svg>
+                  تمت المراجعة
+                </div>
+                <span class="text-[10px] text-slate-400 font-semibold">{{serviceDetails().completeDate | date:'short'}}</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-800 mb-1">{{serviceDetails().serviceTitle}}</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">{{serviceDetails().serviceDescription}}</p>
+              <div class="mt-3 pt-3 border-t border-slate-100">
+                <span class="text-[10px] text-slate-400 font-mono">{{serviceDetails().serviceId}}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+      </main>
+
+      <!-- ===== SIDEBAR ===== -->
+      <aside class="lg:col-span-4 space-y-5">
+
+        <!-- Timeline Card -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm" dir="rtl">
+          <h3 class="flex items-center gap-3 text-sm font-bold text-slate-800 mb-6">
+            <div class="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500 border border-amber-100 flex-shrink-0">
+              <i class="fas fa-history text-xs"></i>
+            </div>
+            المسار الزمني للطلب
+          </h3>
+
+          <div class="relative mr-3 space-y-5">
+            <!-- Vertical line -->
+            <div class="absolute right-[5px] top-3 bottom-3 w-px bg-slate-100"></div>
+
+            <!-- Step: Sent -->
+            <div class="relative pr-7">
+              <div class="absolute right-0 top-[5px] w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white ring-2 ring-emerald-100 z-10"></div>
+              <p class="text-sm font-semibold text-slate-700">تم إرسال الطلب بنجاح</p>
+              <p class="text-[11px] text-slate-400 mt-0.5 font-medium">{{serviceDetails().requestDate | formDate}}</p>
+            </div>
+
+            <!-- Dynamic current state -->
+            @for(s of statusOfState(); track s) {
+              @if(s.status.includes(serviceDetails().state)) {
+                <div class="relative pr-7">
+                  <div class="absolute right-0 top-[5px] w-2.5 h-2.5 rounded-full bg-sky-500 border-2 border-white ring-2 ring-sky-100 z-10">
+                    <span class="absolute inset-0 rounded-full bg-sky-400 animate-ping opacity-40"></span>
+                  </div>
+                  <div class="bg-sky-50 px-4 py-3 rounded-xl border border-sky-100 inline-block">
+                    <p class="text-xs font-bold text-sky-700">{{s.title}}</p>
+                    <div class="flex items-center gap-1.5 mt-1">
+                      <span class="w-1.5 h-1.5 bg-sky-400 rounded-full animate-pulse"></span>
+                      <span class="text-[10px] text-sky-400 font-bold uppercase tracking-wider">الحالة الحالية</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+
+            <!-- Completed milestone -->
+            @if(serviceDetails().state == statuses.CPMLETED) {
+              <div class="relative pr-7">
+                <div class="absolute right-0 top-[5px] w-2.5 h-2.5 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-100 z-10"></div>
+                <div class="bg-emerald-500 px-4 py-3 rounded-xl inline-block shadow-sm shadow-emerald-100">
+                  <h4 class="text-white text-xs font-bold flex items-center gap-2">
+                    <i class="fas fa-check-double text-xs"></i>
+                    تم اكتمال المهمة بنجاح
+                  </h4>
+                </div>
+              </div>
+            }
+
+            @if(serviceDetails().state == statuses.Reviewed) {
+              <div class="relative pr-7">
+                <div class="absolute right-0 top-[5px] w-2.5 h-2.5 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-100 z-10"></div>
+                <div class="bg-emerald-500 px-4 py-3 rounded-xl inline-block shadow-sm shadow-emerald-100">
+                  <h4 class="text-white text-xs font-bold flex items-center gap-2">
+                    <i class="fas fa-check-double text-xs"></i>
+                    تم مراجعة الخدمة من قبل العميل
+                  </h4>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Progress Ring -->
+          <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center gap-2">
+            <p-knob
+              [(ngModel)]="value"
+              [min]="0" [max]="100"
+              valueColor="#0ea5e9"
+              rangeColor="#f1f5f9"
+              [size]="100"
+              strokeWidth="7"
+            />
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">نسبة الإنجاز</p>
+          </div>
+        </div>
+
+        <!-- Parties Card -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm" dir="rtl">
+          <h3 class="flex items-center gap-3 text-sm font-bold text-slate-800 mb-5">
+            <div class="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center text-sky-500 border border-sky-100 flex-shrink-0">
+              <i class="fas fa-users text-xs"></i>
+            </div>
+            أطراف الخدمة
+          </h3>
+
+          <div class="space-y-3">
+
+            <!-- Client -->
+            <div class="rounded-xl border border-slate-100 p-4 hover:border-sky-100 hover:bg-sky-50/30 transition-all group">
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">صاحب الطلب (العميل)</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center text-sky-700 text-sm font-black shrink-0 border border-sky-200">
+                    {{serviceDetails().clientName?.charAt(0)}}
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-700 leading-tight">{{serviceDetails().clientName}}</h4>
+                    <span class="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">عميل موثق</span>
+                  </div>
+                </div>
+                <button [routerLink]="[role()=='client'?'mainLayout/profile':'/chat']"
+                  class="text-[11px] font-bold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-sky-600 hover:text-white hover:border-sky-600 transition-all shadow-sm">
+                  عرض الملف
+                </button>
+              </div>
+            </div>
+
+            <!-- Worker -->
+            <div class="rounded-xl border border-slate-100 p-4 hover:border-emerald-100 hover:bg-emerald-50/30 transition-all group">
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">مقدم الخدمة (الفني)</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 text-sm font-black shrink-0 border border-emerald-200">
+                    {{serviceDetails().workerName?.charAt(0)}}
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-700 leading-tight">{{serviceDetails().workerName}}</h4>
+                    <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">فني متخصص</span>
+                  </div>
+                </div>
+                <button [routerLink]="role()=='client' ? ['/mainLayout/workerProfile', serviceDetails().workerId] : ['/mainLayout/profile']"
+                  class="text-[11px] font-bold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm">
+                  عرض الملف
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Quick Info Card -->
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-5 shadow-lg shadow-blue-200/50" dir="rtl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
             </div>
-            <div>
-              <h3 class="text-lg font-semibold text-slate-800">تم اكتمال الخدمة!</h3>
-              <p class="text-emerald-600 text-xs font-medium mt-0.5">شكراً لاستخدامك منصة Fixit</p>
-            </div>
+            <h4 class="text-white font-bold text-sm">مضمون بحماية Fixit</h4>
           </div>
-
-          <div class="p-6 space-y-5">
-            <!-- Worker + Price Summary -->
-            <div class="flex items-center justify-between bg-slate-50 rounded-xl border border-slate-100 p-4">
-              <div class="flex items-center gap-3">
-                <div class="relative">
-                  <img src="/workers/manWorker.png" alt="worker"
-                       class="w-11 h-11 rounded-xl object-cover ring-2 ring-white border border-slate-100">
-                  <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
-                </div>
-                <div>
-                  <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">الفني المنفذ</p>
-                  <p class="text-sm font-semibold text-slate-800 mt-0.5">{{serviceDetails().workerName}}</p>
-                </div>
-              </div>
-              <div class="text-right border-r border-slate-200 pr-4">
-                <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">التكلفة الإجمالية</p>
-                <p class="text-lg font-bold text-slate-900 mt-0.5">
-                  {{serviceDetails().totalPrice | currency:'EGP ':'symbol':'1.0-0'}}
-                </p>
-              </div>
-            </div>
-
-            <!-- Rating (Client Only) -->
-            @if(role() == Roles.Clien_Role) {
-              <div class="space-y-4">
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-800 mb-1">ما هو تقييمك للخدمة؟</h4>
-                  <p class="text-[11px] text-slate-400">رأيك يساعدنا في تحسين جودة الفنيين لدينا</p>
-                </div>
-
-                <textarea [(ngModel)]="comment"
-                  placeholder="اكتب تجربتك مع الفني هنا... (اختياري)"
-                  class="w-full min-h-[100px] p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-2 focus:ring-sky-50 outline-none transition-all placeholder:text-slate-300 resize-none">
-                </textarea>
-
-                <div class="flex gap-1">
-                  @for(i of [1,2,3,4,5]; track i) {
-                    <i (click)="setRating(i)"
-                       [ngClass]="{'text-yellow-400': i <= rating()}"
-                       class="fas fa-star text-xl text-slate-200 cursor-pointer transition-colors hover:text-yellow-300">
-                    </i>
-                  }
-                </div>
-
-                <div class="flex flex-col gap-2">
-                  <button (click)="getRateing()"
-                    class="w-full h-12 bg-slate-900 hover:bg-slate-700 text-white rounded-xl font-semibold text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fas fa-star text-yellow-400 text-sm"></i>
-                    إرسال التقييم الآن
-                  </button>
-                  <button class="w-full h-10 text-slate-400 text-xs font-semibold hover:text-slate-600 transition-colors">
-                    تخطي والعودة للرئيسية
-                  </button>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      }
-
-      <!-- ===== REVIEWED STATE ===== -->
-      @else if(serviceDetails().state == statuses.Reviewed) {
-        <div class="relative bg-white rounded-2xl border border-slate-100 border-r-4 border-r-emerald-500 p-5">
-          <div class="absolute -top-3 right-5 flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"/>
-            </svg>
-            تمت المراجعة
-          </div>
-          <div class="space-y-1.5 text-right mt-2">
-            <h3 class="text-sm font-semibold text-slate-800">{{serviceDetails().serviceTitle}}</h3>
-            <p class="text-xs text-slate-500 leading-relaxed">{{serviceDetails().serviceDescription}}</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-            <span class="text-slate-400">{{serviceDetails().serviceId}}</span>
-            <span class="text-emerald-600 font-semibold">{{serviceDetails().completeDate | date:'short'}}</span>
-          </div>
-        </div>
-      }
-
-    </main>
-
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="lg:col-span-4 space-y-4">
-
-      <!-- Timeline Card -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-100" dir="rtl">
-        <h3 class="flex items-center gap-2.5 text-sm font-semibold text-slate-800 mb-6">
-          <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center text-amber-500 border border-amber-100">
-            <i class="fas fa-history text-xs"></i>
-          </div>
-          المسار الزمني للطلب
-        </h3>
-
-        <div class="relative mr-4 space-y-6">
-          <div class="absolute right-1.5 top-2 bottom-2 w-px bg-slate-100"></div>
-
-          <!-- Step: Sent -->
-          <div class="relative pr-8">
-            <div class="absolute right-0 top-1.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white ring-2 ring-emerald-100"></div>
-            <p class="text-sm font-medium text-slate-700">تم إرسال الطلب بنجاح</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">{{serviceDetails().requestDate | formDate}}</p>
-          </div>
-
-          <!-- Dynamic current state -->
-          @for(s of statusOfState(); track s) {
-            @if(s.status.includes(serviceDetails().state)) {
-              <div class="relative pr-8">
-                <div class="absolute right-0 top-1.5 w-3 h-3 rounded-full bg-sky-500 border-2 border-white ring-2 ring-sky-100">
-                  <span class="absolute inset-0 rounded-full bg-sky-400 animate-ping opacity-30"></span>
-                </div>
-                <div class="bg-sky-50 px-3 py-2.5 rounded-xl border border-sky-100 inline-block">
-                  <p class="text-xs font-semibold text-sky-700">{{s.title}}</p>
-                  <span class="text-[10px] text-sky-400 font-medium uppercase tracking-wide">الحالة الحالية</span>
-                </div>
-              </div>
-            }
-          }
-
-          <!-- Completed milestone -->
-          @if(serviceDetails().state == statuses.CPMLETED) {
-            <div class="relative pr-8">
-              <div class="absolute right-0 top-1.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-100"></div>
-              <div class="bg-emerald-500 px-3 py-2.5 rounded-xl inline-block">
-                <h4 class="text-white text-xs font-semibold flex items-center gap-1.5">
-                  <i class="fas fa-check-double text-xs"></i>
-                  تم اكتمال المهمة بنجاح
-                </h4>
-              </div>
-            </div>
-          }
-
-          @if(serviceDetails().state == statuses.Reviewed) {
-            <div class="relative pr-8">
-              <div class="absolute right-0 top-1.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-100"></div>
-              <div class="bg-emerald-500 px-3 py-2.5 rounded-xl inline-block">
-                <h4 class="text-white text-xs font-semibold flex items-center gap-1.5">
-                  <i class="fas fa-check-double text-xs"></i>
-                  تم مراجعة الخدمة من قبل العميل
-                </h4>
-              </div>
-            </div>
-          }
+          <p class="text-blue-100 text-xs font-medium leading-relaxed">
+            جميع الخدمات محمية بضمان المنصة. لا يتم تحويل المبلغ للفني إلا بعد تأكيد استلامك للخدمة.
+          </p>
         </div>
 
-        <!-- Progress Ring -->
-        <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center">
-          <p-knob
-            [(ngModel)]="value"
-            [min]="0" [max]="100"
-            valueColor="#0ea5e9"
-            rangeColor="#f1f5f9"
-            [size]="100"
-            strokeWidth="7"
-          />
-          <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mt-2">نسبة الإنجاز</p>
-        </div>
-      </div>
-
-      <!-- Parties Card -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-100" dir="rtl">
-        <h3 class="flex items-center gap-2.5 text-sm font-semibold text-slate-800 mb-5">
-          <div class="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center text-sky-500 border border-sky-100">
-            <i class="fas fa-users text-xs"></i>
-          </div>
-          أطراف الخدمة
-        </h3>
-
-        <div class="space-y-3">
-
-          <!-- Client -->
-          <div class="bg-slate-50 rounded-xl border border-slate-100 p-4">
-            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-3">صاحب الطلب (العميل)</p>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-sky-100 flex items-center justify-center text-sky-700 text-xs font-bold shrink-0">
-                  {{serviceDetails().clientName?.charAt(0)}}
-                </div>
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-700 leading-tight">{{serviceDetails().clientName}}</h4>
-                  <span class="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">عميل موثق</span>
-                </div>
-              </div>
-              <button [routerLink]="[role()=='client'?'mainLayout/profile':'/chat']" class="text-[11px] font-semibold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-sky-600 hover:text-white hover:border-sky-600 transition-all">
-                عرض الملف
-              </button>
-            </div>
-          </div>
-
-          <!-- Worker -->
-          <div class="bg-slate-50 rounded-xl border border-slate-100 p-4">
-            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-3">مقدم الخدمة (الفني)</p>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold shrink-0">
-                  {{serviceDetails().workerName?.charAt(0)}}
-                </div>
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-700 leading-tight">{{serviceDetails().workerName}}</h4>
-                  <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">فني متخصص</span>
-                </div>
-              </div>
-              <button [routerLink]="role()=='client' ? ['/mainLayout/workerProfile', serviceDetails().workerId] : ['/mainLayout/profile']" class="text-[11px] font-semibold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all">
-                عرض الملف
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </aside>
+      </aside>
+    </div>
   </div>
 </div>
 }

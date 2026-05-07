@@ -13,8 +13,8 @@ export class TopNav implements OnInit{
  role=signal<string>('');
 ngOnInit(): void {
   this.role.set(this._auth.getRole()||'');
-
 }
+
 
   logOut()
   {

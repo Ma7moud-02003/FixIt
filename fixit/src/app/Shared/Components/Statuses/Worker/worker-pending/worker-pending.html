@@ -1,42 +1,62 @@
-<div class="mx-auto p-12 bg-white rounded-[2.5rem] border border-slate-50 shadow-2xl shadow-slate-200/40 text-center animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl">
-  
-  <div class="relative w-24 h-24 mx-auto mb-8">
-    <div class="absolute inset-0 rounded-full bg-orange-100 opacity-40 animate-ping"></div>
-    <div class="absolute inset-4 rounded-full bg-orange-200/30 animate-pulse"></div>
-    
-    <div class="relative w-24 h-24 bg-orange-50 rounded-4xl flex items-center justify-center border-4 border-white shadow-md">
-      <span class="text-3xl text-orange-500">
-        <i class="fas fa-hourglass-half animate-spin-slow"></i>
-      </span>
+<div class="mx-auto p-8 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40 text-center animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl" >
+
+  <!-- Pending Icon -->
+  <div class="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+    <div class="absolute inset-0 rounded-full bg-amber-100/50 animate-ping"></div>
+    <div class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center border border-amber-100 shadow-sm">
+      <i class="fas fa-hourglass-half text-2xl text-amber-500 animate-spin-slow"></i>
     </div>
   </div>
 
-  <div class="space-y-4">
-    <h3 class="text-3xl font-black text-slate-800 tracking-tight">العرض قيد الانتظار</h3>
-    
-    <div class="bg-orange-50/50 py-2 px-6 rounded-2xl inline-block border border-orange-100/50">
-       <p class="text-orange-700 font-bold text-xs flex items-center gap-2">
-         <span class="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></span>
-         بانتظار رد العميل النهائي
-       </p>
-    </div>
+  <!-- Title -->
+  <h3 class="text-2xl font-black text-slate-800 mb-3">العرض قيد الانتظار</h3>
 
-    <p class="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto text-sm px-2">
-      لقد تم إرسال عرض السعر بنجاح. نحن الآن بانتظار 
-      <span class="text-slate-900 font-black decoration-orange-200 underline decoration-4 underline-offset-1">موافقة العميل</span> 
-      على المبلغ المقترح لتبدأ العمل فوراً.
-    </p>
+  <!-- Status pill -->
+  <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-100 text-amber-700 font-semibold text-xs px-4 py-2 rounded-full mb-5">
+    <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse"></span>
+    بانتظار رد العميل النهائي
   </div>
 
-  <div class="mt-10 inline-flex items-center gap-3 px-6 py-2.5 bg-slate-50/80 backdrop-blur-sm rounded-full border border-slate-100 shadow-sm">
-    <span class="relative flex h-2 w-2">
-      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-      <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
-    </span>
-    <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">الحالة الحالية: معلّق</span>
-  </div>
-
-  <p class="mt-6 text-[10px] text-slate-300 font-bold uppercase tracking-widest">
-    سيتم إخطارك فور تحديث الحالة
+  <!-- Description -->
+  <p class="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto text-sm mb-7">
+    لقد تم إرسال عرض السعر بنجاح. نحن الآن بانتظار
+    <span class="text-slate-800 font-bold"> موافقة العميل </span>
+    على المبلغ المقترح لتبدأ العمل فوراً.
   </p>
+
+  <!-- Steps indicator -->
+  <div class="flex items-center justify-center gap-2 mb-7">
+    <div class="flex flex-col items-center gap-1">
+      <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+        <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      </div>
+      <span class="text-[9px] font-bold text-emerald-600">تم الإرسال</span>
+    </div>
+    <div class="flex-1 h-px bg-amber-200 max-w-[3rem]"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+        <span class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+      </div>
+      <span class="text-[9px] font-bold text-amber-600">بانتظار الرد</span>
+    </div>
+    <div class="flex-1 h-px bg-slate-100 max-w-[3rem]"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
+        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <span class="text-[9px] font-bold text-slate-300">بدء العمل</span>
+    </div>
+  </div>
+
+  <!-- Status badge -->
+  <div class="inline-flex items-center gap-2 px-5 py-2 bg-slate-50 rounded-full border border-slate-100 shadow-sm">
+    <span class="relative flex h-2 w-2">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+    </span>
+    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">الحالة: معلّق</span>
+  </div>
+
+  <p class="mt-5 text-[11px] text-slate-300 font-semibold">سيتم إخطارك فور تحديث الحالة</p>
+
 </div>

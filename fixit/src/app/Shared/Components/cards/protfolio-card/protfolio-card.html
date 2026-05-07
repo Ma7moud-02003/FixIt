@@ -1,33 +1,55 @@
-<div class="relative bg-white border border-slate-100 shadow-sm  overflow-hidden cursor-default">
-    <div class="relative h-64 overflow-hidden">
-        <img [src]="portfolio()?.imgUrl" loading="lazy"
-             class="w-full h-full object-cover">
+<div class="group relative bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2">
+    
+    <!-- Image Section with Overlay -->
+    <div class="relative h-72 overflow-hidden">
+        <img [src]="portfolio()?.imgUrl || 'assets/default-portfolio.png'" 
+             loading="lazy"
+             class="w-3/4 mx-auto mt-7 object-cover transition-transform duration-700 group-hover:scale-110"
+             [alt]="portfolio()?.title">
         
-        <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-3 py-1  shadow-sm">
-            <span class="text-[10px] font-bold text-slate-700 uppercase">
-                {{portfolio()?.createdAt | date:'shortDate'}}
+        <!-- Glassmorphism Badge -->
+        <div class="absolute top-5 right-5 bg-white/70 backdrop-blur-md px-4 py-2 rounded-2xl shadow-sm border border-white/20">
+            <span class="text-[11px] font-black text-cyan-700 uppercase tracking-wider">
+                {{portfolio()?.createdAt | date:'MMM yyyy'}}
             </span>
+        </div>
+
+        <!-- Hidden Gradient Overlay on Hover -->
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+             <span class="text-white/90 text-xs font-medium flex items-center gap-2">
+                <i class="fas fa-expand-alt"></i> عرض التفاصيل
+             </span>
         </div>
     </div>
 
+    <!-- Content Section -->
     <div class="p-6 space-y-4 text-right">
-        <div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">
-                {{portfolio()?.title}}
+        <div class="space-y-2">
+            <!-- Category or Tag (Optional) -->
+            <span class="text-[10px] font-bold text-cyan-500 uppercase tracking-widest bg-cyan-50 px-2 py-1 rounded-md">عمل مميز</span>
+            
+            <h3 class="text-xl font-black text-slate-800 group-hover:text-cyan-600 transition-colors duration-300">
+                {{portfolio()?.title || 'عنوان المشروع'}}
             </h3>
-            <p class="text-sm text-slate-500 leading-relaxed line-clamp-2">
-                {{portfolio()?.description}}
+            
+            <p class="text-sm text-slate-500 leading-relaxed line-clamp-2 font-medium">
+                {{portfolio()?.description || 'لا يوجد وصف متاح لهذا المشروع حالياً.'}}
             </p>
         </div>
 
-        <div class="pt-4 flex items-center justify-between border-t border-slate-50">
-            <span class="text-[11px] font-medium text-slate-400 flex items-center gap-2">
-                <i class="far fa-calendar-alt"></i> 
-                {{portfolio()?.createdAt | date:'longDate'}}
-            </span>
+        <!-- Footer Info -->
+        <div class="pt-5 flex items-center justify-between border-t border-slate-50/80">
+            <div class="flex flex-col items-start text-right">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">تاريخ النشر</span>
+                <span class="text-[12px] font-bold text-slate-600 flex items-center gap-2 mt-0.5">
+                    <i class="far fa-calendar-check text-cyan-500"></i> 
+                    {{portfolio()?.createdAt | date:'longDate'}}
+                </span>
+            </div>
 
-            <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white">
-                <i class="fas fa-arrow-left text-xs"></i>
+            <!-- Animated Action Button -->
+            <div class="relative overflow-hidden w-12 h-12 bg-slate-900 group-hover:bg-cyan-600 rounded-2xl flex items-center justify-center text-white transition-all duration-500 shadow-lg shadow-slate-200 group-hover:shadow-cyan-200 group-hover:rotate-[360deg]">
+                <i class="fas fa-arrow-left text-sm group-hover:scale-110"></i>
             </div>
         </div>
     </div>
