@@ -11,7 +11,9 @@ export interface MyServiceModel {
   state: string;
   workerName:string;
   clientName:string;
-  requestedImgUrl:string
+  requestedImgUrl:string;
+  workerUserId:string;
+  workerId:string
   workerImgUrl:string,
   clientImgUrl:string
 }

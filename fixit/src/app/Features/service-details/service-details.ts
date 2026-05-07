@@ -42,6 +42,7 @@ export class ServiceDetails implements OnInit, OnDestroy {
     cancled: 0,
     submitted: 80,
     completed: 95,
+    reviewed:100
     
   }
   // important part 

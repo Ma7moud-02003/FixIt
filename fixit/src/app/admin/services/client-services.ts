@@ -17,6 +17,8 @@ export class ClientServices {
   deletUser(){
     return this._http.delete(`${environment.apiUrl}/Admin/Client/Delet`)
   }
-
+  blockUser(userId:string){
+    return this._http.put(`${environment.apiUrl}/Admin/BlockUser/${userId}`,{});
+  }
 
 }

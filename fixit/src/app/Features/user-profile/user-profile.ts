@@ -23,9 +23,11 @@ import { FavoriteModel } from '../../Shared/Models/favorite';
 export class UserProfile implements OnInit,OnDestroy {
   viewdWorkerData=signal<ViewWorkerModel>({} as ViewWorkerModel)
   loading = signal<boolean>(true);
+
   private _user = inject(User);
   private subs = new Subscription();
   private router = inject(ActivatedRoute);
+
   workerId = signal<string>('');
   ngOnInit(): void {
     this.subs.add(
@@ -52,6 +54,7 @@ export class UserProfile implements OnInit,OnDestroy {
       this._user.viewWorkerProfile(this.workerId()).pipe(
         finalize(() => this.loading.set(false))).subscribe({
           next: (res) => {
+            console.log(res.data);
             this.viewdWorkerData.set(res.data);
             console.log(this.viewdWorkerData());
           }

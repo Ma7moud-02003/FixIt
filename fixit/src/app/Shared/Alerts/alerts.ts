@@ -40,6 +40,19 @@ confirmDelete(message: string) {
     reverseButtons: true
   });
 }
+confirmWarning(message:string)
+{
+   return Swal.fire({
+    title: "هل انت متأكد؟",
+    text: message,
+    icon:'warning',
+    showCancelButton: true,
+    confirmButtonText: 'نعم  ',
+    cancelButtonText: 'الغاء',
+    confirmButtonColor: "orange",
+    reverseButtons: true
+  });
+}
 
 confirmAccepting(message: string) {
   return Swal.fire({

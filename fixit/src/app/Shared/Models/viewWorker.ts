@@ -10,6 +10,8 @@ export interface ViewWorkerModel {
   ratingAverage: number | null;  
   imgUrl:string
   serviceBalance: number;
+  userId:string;
   reviewsCounter:number;
+  workerId:string
 }
 
