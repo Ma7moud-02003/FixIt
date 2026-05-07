@@ -60,7 +60,13 @@ export const routes: Routes = [
 {
   path:'workers',loadComponent:()=>import('./admin/components/workers/workers').then(m=>m.Workers)
   
-},{
+},
+{
+  path:'catogs',loadComponent:()=>import('./admin/components/catogs/catogs').then(m=>m.Catogs)
+  
+},
+
+{
   path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
   
 }
