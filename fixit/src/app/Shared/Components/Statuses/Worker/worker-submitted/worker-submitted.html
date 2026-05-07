@@ -1,41 +1,60 @@
-<div class="mx-auto p-12 bg-white rounded-[2.5rem] border border-slate-50 shadow-2xl shadow-emerald-100/30 text-center animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl">
-  
-  <div class="relative w-24 h-24 mx-auto mb-8">
-    <div class="absolute inset-0 rounded-full bg-emerald-100 opacity-40 animate-ping"></div>
-    
-    <div class="relative w-24 h-24 bg-emerald-50 rounded-4xl flex items-center justify-center border-4 border-white shadow-md transition-transform hover:rotate-3">
-      <span class="text-4xl text-emerald-500">
-        <i class="fas fa-check-double animate-bounce"></i>
-      </span>
+<div class="mx-auto p-8 bg-white rounded-3xl border border-emerald-100 shadow-xl shadow-emerald-100/30 text-center animate-in fade-in slide-in-from-bottom-4 duration-500" dir="rtl" >
+
+  <!-- Success Icon -->
+  <div class="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+    <div class="absolute inset-0 rounded-full bg-emerald-100/60 animate-ping"></div>
+    <div class="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center border border-emerald-100 shadow-sm">
+      <i class="fas fa-check-double text-2xl text-emerald-600"></i>
     </div>
   </div>
 
-  <div class="space-y-4">
-    <h3 class="text-2xl font-black text-slate-800 tracking-tight">بانتظار تأكيد العميل النهائي</h3>
-    
-    <div class="bg-emerald-50/50 py-2 px-6 rounded-2xl inline-block border border-emerald-100/50">
-       <p class="text-emerald-700 font-bold text-xs flex items-center gap-2">
-         <i class="fas fa-gift text-[10px]"></i>
-         تم تسليم المهمة بنجاح!
-       </p>
-    </div>
+  <!-- Title -->
+  <h3 class="text-xl font-black text-slate-800 mb-2">بانتظار تأكيد العميل</h3>
 
-    <p class="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto text-sm">
-      لقد قمت بإنهاء العمل المطلوب. نحن الآن بانتظار <span class="text-slate-900 font-black">موافقة العميل</span> لإتمام العملية وتحويل المستحقات لمحفظتك.
-    </p>
+  <!-- Status pill -->
+  <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 font-semibold text-xs px-4 py-2 rounded-full mb-5">
+    <i class="fas fa-gift text-[10px]"></i>
+    تم تسليم المهمة بنجاح!
   </div>
 
-  <div class="mt-10 inline-flex items-center gap-3 px-6 py-2.5 bg-slate-50 rounded-full border border-slate-100 shadow-sm">
+  <!-- Description -->
+  <p class="text-slate-500 font-medium leading-relaxed max-w-xs mx-auto text-sm mb-7">
+    لقد قمت بإنهاء العمل المطلوب. نحن الآن بانتظار
+    <span class="text-slate-800 font-bold"> موافقة العميل </span>
+    لإتمام العملية وتحويل المستحقات لمحفظتك.
+  </p>
+
+  <!-- Wallet info card -->
+  <div class="bg-gradient-to-l from-emerald-50 to-slate-50 rounded-2xl border border-emerald-100 p-5 mb-6 text-right">
+    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">بعد التأكيد ستحصل على</p>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 text-emerald-600">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+          <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-sm font-bold">تحويل فوري للمحفظة</span>
+      </div>
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Status badge -->
+  <div class="inline-flex items-center gap-2 px-5 py-2 bg-slate-50 rounded-full border border-slate-100 shadow-sm mb-6">
     <span class="relative flex h-2 w-2">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">المرحلة الأخيرة: بانتظار التأكيد</span>
+    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">المرحلة الأخيرة: بانتظار التأكيد</span>
   </div>
 
-  <div class="mt-8 pt-6 border-t border-slate-50">
-    <p class="text-[11px] text-slate-400 font-bold italic">
-      "شكراً لعملك الرائع، سيتم تحديث رصيدك فور التأكيد"
+  <!-- Footer note -->
+  <div class="pt-5 border-t border-slate-50">
+    <p class="text-xs text-slate-400 font-medium">
+      شكراً لعملك الرائع — سيتم تحديث رصيدك فور التأكيد ✨
     </p>
   </div>
+
 </div>

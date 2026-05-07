@@ -1,37 +1,52 @@
 <div class="min-h-screen bg-slate-50/50 px-4 py-8 sm:px-8 lg:px-12">
   <main class="max-w-7xl mx-auto">
     
-    <header class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
-
+  <div class="min-h-screen bg-[#F8FAFC] px-4 py-8 sm:px-8 lg:px-12" dir="rtl">
+  <main class="max-w-7xl mx-auto">
+    
+    <!-- Header Section: نضفنا التصميم وخليناه أوضح -->
+    <header class="flex flex-col lg:flex-row lg:items-center justify-between mb-12 gap-8">
       @if(role() === Roles.Worker_Role) {
-        <div class="space-y-2">
-          <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-            معرض الأعمال
+        <div class="relative">
+          <div class="absolute -right-4 top-0 w-1 h-full bg-cyan-600 rounded-full"></div>
+          <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3">
+            معرض <span class="text-cyan-600">الأعمال</span>
           </h1>
-          <p class="text-slate-500 font-medium max-w-md">
-            استعرض مشاريعك المنجزة وقم بإدارتها من مكان واحد لزيادة فرص توظيفك.
+          <p class="text-slate-500 font-medium max-w-lg leading-relaxed">
+            منصة عرض مهاراتك؛ هنا يمكنك إدارة مشاريعك المنجزة وتحويلها إلى فرص عمل حقيقية.
           </p>
         </div>
         
-        <button 
-          routerLink="/dashboard/addPortfolio" 
-          class="group relative flex items-center gap-5 bg-cyan-600 text-white pl-4 pr-6 py-3.5 rounded-2xl hover:bg-cyan-700 transition-all duration-300 shadow-xl shadow-cyan-900/10 active:scale-[0.98]"
-        >
-          <div class="flex flex-col items-end border-r border-white/20 pr-5">
-            <span class="text-[10px] font-bold opacity-80 uppercase tracking-tighter">مشروع جديد</span>
-            <span class="text-sm font-bold whitespace-nowrap">أضف إلى أعمالك</span>
+        <div class="flex items-center gap-4">
+          <!-- إضافة إحصائيات سريعة (من خبرتي بتدي ثقة للمستخدم) -->
+          <div class="hidden sm:flex items-center gap-6 ml-8 px-8 border-l border-slate-200">
+             <div class="text-center">
+                <span class="block text-2xl font-black text-slate-900">{{ myPortfolio().length }}</span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">مشروع</span>
+             </div>
           </div>
-          <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 group-hover:rotate-90 transition-all duration-500">
-            <i class="fas fa-plus text-lg"></i>
-          </div>
-        </button>
-      }
 
+          <button 
+            routerLink="/dashboard/addPortfolio" 
+            class="group relative flex items-center gap-6 bg-slate-900 text-white pl-5 pr-8 py-4 rounded-[2rem] hover:bg-cyan-600 transition-all duration-500 shadow-2xl shadow-slate-900/20 active:scale-95 overflow-hidden"
+          >
+            <div class="flex flex-col items-end border-r border-white/10 pr-6 relative z-10">
+              <span class="text-[10px] font-black opacity-60 uppercase tracking-widest">إضافة عمل</span>
+              <span class="text-sm font-black whitespace-nowrap">مشروع جديد</span>
+            </div>
+            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:bg-white/20 group-hover:rotate-[360deg] transition-all duration-700 relative z-10">
+              <i class="fas fa-plus text-lg"></i>
+            </div>
+            <!-- تأثير لمعة عند الـ Hover -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          </button>
+        </div>
+      }
     </header>
 
     <div class="relative">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 lg:gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
         
         @for(work of filterdPortfolio(); track work.createdAt) {
           <div 

@@ -1,39 +1,66 @@
-<div class="mx-auto mt-12 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden border border-slate-50 relative group" dir="rtl">
-  <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-l from-blue-600 to-indigo-400"></div>
+<div class="mx-auto mt-12 bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100 relative" dir="rtl" style="font-family: 'Cairo', 'Segoe UI', sans-serif;">
 
-  <div class="p-10">
-    <div class="text-center mb-8">
-      <div class="relative mx-auto flex items-center justify-center h-20 w-20 rounded-[2rem] bg-blue-50 mb-6 group-hover:rotate-6 transition-transform duration-500">
-        <div class="absolute inset-0 rounded-[2rem] bg-blue-100/50 animate-pulse"></div>
-        <svg class="h-10 w-10 text-blue-600 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- Top accent bar -->
+  <div class="h-1.5 bg-gradient-to-l from-blue-600 to-indigo-500 w-full"></div>
+
+  <div class="p-7">
+
+    <!-- Icon & Title -->
+    <div class="text-center mb-7">
+      <div class="relative mx-auto flex items-center justify-center h-16 w-16 rounded-2xl bg-blue-50 border border-blue-100 mb-5">
+        <div class="absolute inset-0 rounded-2xl bg-blue-100/60 animate-pulse"></div>
+        <svg class="h-8 w-8 text-blue-600 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      
-      <h3 class="text-2xl font-black text-slate-800 tracking-tight leading-tight">تأكيد استلام المهمة</h3>
-      <p class="mt-3 text-sm text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
+
+      <h3 class="text-xl font-black text-slate-800 leading-tight mb-2">تأكيد استلام المهمة</h3>
+      <p class="text-sm text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
         لقد قام المنفذ بتسليم العمل. يرجى مراجعة النتائج وتأكيد الاستلام لإكمال العملية بنجاح.
       </p>
     </div>
 
-    <div class="flex flex-col space-y-4">
-      <button (click)="acceptTask()" 
-        class="w-full py-4 px-6 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl transition-all shadow-lg shadow-blue-100 active:scale-[0.98] flex items-center justify-center gap-2 group/btn">
-        <span>نعم، أؤكد الاستلام</span>
-        <i class="fas fa-arrow-left text-[10px] group-hover/btn:-translate-x-1 transition-transform"></i>
+    <!-- Escrow notice -->
+    <div class="mb-6 flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100">
+      <div class="flex-shrink-0 mt-0.5">
+        <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-amber-800 mb-0.5">تنبيه مهم</p>
+        <p class="text-[11px] text-amber-700 font-medium leading-relaxed">
+          بمجرد التأكيد، سيتم تحويل المستحقات للمنفذ مباشرةً. تأكد من فحص العمل جيداً قبل التأكيد.
+        </p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col gap-3">
+      <button (click)="acceptTask()"
+        class="w-full py-3.5 px-6 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md shadow-blue-200 active:scale-[0.98] flex items-center justify-center gap-2 text-sm group">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+        نعم، أؤكد استلام المهمة
       </button>
-      
+
       <button (click)="DisputedTask()"
-        class="w-full py-4 px-6 bg-white border-2 border-slate-100 cursor-pointer text-slate-400 font-bold rounded-2xl transition-all hover:bg-red-50 hover:text-red-500 hover:border-red-100 active:scale-[0.98]">
+        class="w-full py-3.5 px-6 bg-white border border-slate-200 cursor-pointer text-slate-500 font-semibold rounded-xl transition-all hover:bg-red-50 hover:text-red-600 hover:border-red-200 active:scale-[0.98] text-sm flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
         لم أقم باستلام المهمة بعد
       </button>
     </div>
 
-    <div class="mt-8 p-4 bg-slate-50 rounded-2xl border border-slate-100/50">
-       <p class="text-[11px] text-center text-slate-400 font-bold flex items-center justify-center gap-2">
-         <i class="fas fa-shield-alt text-blue-400"></i>
-         بمجرد التأكيد، سيتم تحويل المستحقات للمنفذ مباشرةً.
-       </p>
+    <!-- Trust footer -->
+    <div class="mt-5 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
+      <svg class="w-3.5 h-3.5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span>محمي بضمان المنصة</span>
     </div>
+
   </div>
 </div>

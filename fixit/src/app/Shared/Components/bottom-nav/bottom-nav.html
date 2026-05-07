@@ -1,4 +1,4 @@
-<nav class="md:hidden fixid bottom-0 left-0 w-full h-20 bg-white border-t border-gray-100 z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-safe">
+<nav class="md:hidden w-full h-20 bg-white border-t border-gray-100 z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-safe">
   <div class="flex justify-around items-center h-full px-2">
     
   @if(role()==Role.Clien_Role)
@@ -43,7 +43,7 @@
     </a>
     }
 
-    <a routerLink="/requests" routerLinkActive="text-cyan-500" class="nav-item text-gray-600 hover:text-sky-500 cursor-pointer group">
+    <a routerLink="/mainLayout/myServices" routerLinkActive="text-cyan-500" class="nav-item text-gray-600 hover:text-sky-500 cursor-pointer group">
       <div class="nav-icon-wrapper">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -74,7 +74,7 @@
       </a>
     }
 
-    <a routerLink="/chat" routerLinkActive="text-cyan-500" class="nav-item text-gray-600 hover:text-sky-500 cursor-pointer group">
+    <a [routerLink]="['/chat','']" routerLinkActive="text-cyan-500" class="nav-item text-gray-600 hover:text-sky-500 cursor-pointer group">
       <div class="nav-icon-wrapper relative">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />

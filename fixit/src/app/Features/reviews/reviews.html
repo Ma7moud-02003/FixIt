@@ -94,34 +94,39 @@
     </div>
   </div>
 </div>
+<div class="flex items-center justify-center mt-12 mb-6" dir="rtl">
+  <!-- الحاوية الرئيسية بتصميم ناعم وألوان متناسقة -->
+  <nav class="inline-flex items-center p-1.5 bg-white border border-cyan-50 rounded-[2rem] shadow-[0_10px_30px_-10px_rgba(6,182,212,0.1)] gap-1">
+    
+    <!-- زر السابق -->
+    <button
+      (click)="changePage(page() - 1)"
+      [disabled]="page() === 1"
+      class="flex items-center justify-center h-11 px-5 text-sm font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-[1.5rem] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group">
+      <i class="fas fa-chevron-right ml-2 text-[10px] group-hover:translate-x-1 transition-transform"></i>
+      السابق
+    </button>
 
-<div class="flex items-center justify-center gap-2 mt-6">
+    <!-- الأرقام -->
+    <div class="flex items-center gap-1.5 px-2 border-x border-slate-50">
+      <button
+        *ngFor="let p of [1,2,3,4,5]; let i = index"
+        (click)="changePage(i + 1)"
+        class="w-11 h-11 flex items-center justify-center rounded-[1.2rem] text-sm font-black transition-all duration-300 active:scale-95"
+        [ngClass]="(i + 1) === page()
+          ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200 scale-110 z-10'
+          : 'bg-transparent text-slate-500 hover:bg-cyan-50 hover:text-cyan-600'">
+        {{ i + 1 }}
+      </button>
+    </div>
 
-  <!-- Prev -->
-  <button
-    (click)="changePage(page() - 1)"
-    [disabled]="page() === 1"
-    class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-40">
-    Prev
-  </button>
+    <!-- زر التالي -->
+    <button
+      (click)="changePage(page() + 1)"
+      class="flex items-center justify-center h-11 px-5 text-sm font-black text-cyan-600 hover:bg-cyan-50 rounded-[1.5rem] transition-all duration-300 group">
+      التالي
+      <i class="fas fa-chevron-left mr-2 text-[10px] group-hover:-translate-x-1 transition-transform"></i>
+    </button>
 
-  <!-- Pages -->
-  <button
-    *ngFor="let p of [1,2,3,4,5]; let i = index"
-    (click)="changePage(i + 1)"
-    class="px-3 py-1 rounded transition"
-    [ngClass]="(i + 1) === page()
-      ? 'bg-blue-600 text-white'
-      : 'bg-gray-100 hover:bg-gray-200'">
-    {{ i + 1 }}
-  </button>
-
-  <!-- Next -->
-  <button
-    (click)="changePage(page() + 1)"
-
-    class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-40">
-    Next
-  </button>
-
+  </nav>
 </div>

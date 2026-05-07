@@ -3,7 +3,7 @@ import { authGuardGuard } from './Core/Guards/auth-guard-guard';
 import { roleGuard } from './Core/Guards/role-guard';
 
 export const routes: Routes = [
-
+ 
   { path: '', redirectTo: 'register', pathMatch: 'full' },
   // ================= AUTH =================
   {
@@ -90,6 +90,8 @@ export const routes: Routes = [
           import('./Features/Components/my-services/my-services')
             .then(m => m.MyServices)
       },
+     
+       
       {
         path: 'profile',
         loadComponent: () =>
@@ -127,10 +129,16 @@ export const routes: Routes = [
   {
     path: 'mainLayout',
     canActivate: [authGuardGuard, roleGuard],
-    data: { roles: ['client'] },
+    data: { roles: ['client','worker'] },
     loadComponent: () =>
       import('./Layouts/main-layout/main-layout').then(m => m.MainLayout),
     children: [
+{
+        path: 'myServices',
+        loadComponent: () =>
+          import('./Features/Components/my-services/my-services')
+            .then(m => m.MyServices)
+      },
 
       {
         path: '',

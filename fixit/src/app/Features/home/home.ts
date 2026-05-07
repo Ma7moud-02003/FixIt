@@ -14,34 +14,34 @@ export class Home {
 services=signal([
   {
     type: 'سباكة',
-    image: '/icons8-wrench-96.png',
+    image: './services/Plumber.png',
     desc: 'إصلاح تسريب المياه، تركيب الخلاطات والسخانات، وحلول سريعة لكل مشاكل السباكة في منزلك.'
   },
   {
     type: 'كهرباء',
-    image: '/icons8-electricity-94.png',
+    image: './services/Electrician.png',
     desc: 'تركيب وصيانة التمديدات الكهربائية وإصلاح الأعطال لضمان أمان وكفاءة الكهرباء في منزلك.'
   },
   {
     type: 'نجارة',
-    image: '/icons8-saw-96.png',
+    image: './services/carpenter.png',
     desc: 'تصميم وصيانة الأبواب والأثاث الخشبي بدقة وجودة تضيف لمسة جمالية لمنزلك.'
   },
   {
     type: 'دهان',
-    image: '/icons8-paint-palette-96.png',
+    image: './services/painter.png',
     desc: 'دهانات وتشطيبات احترافية للجدران والأسقف تمنح منزلك مظهرًا أنيقًا ومتجددًا.'
   },
   
   {
     type: 'صيانة منزلية',
-    image: '/icons8-tools-96.png',
+    image: './services/home.png',
     desc: 'حلول صيانة شاملة لكل أعطال المنزل بسرعة وكفاءة على يد فنيين متخصصين.'
   },
   {
-    type: 'حلاقة',
-    image: '/icons8-barbershop-96.png',
-    desc: 'خدمات حلاقة وتصفيف شعر احترافية تمنحك مظهرًا أنيقًا ومميزًا.'
+    type: 'حداد',
+    image: './services/ironman.png',
+    desc: 'خدمات حداد وتصفيف شعر احترافية تمنحك مظهرًا أنيقًا ومميزًا.'
   }
 
 ]);
