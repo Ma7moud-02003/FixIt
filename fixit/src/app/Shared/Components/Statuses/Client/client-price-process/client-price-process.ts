@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -8,4 +8,6 @@ import { RouterModule } from '@angular/router';
   templateUrl: './client-price-process.html',
   styleUrl: './client-price-process.css',
 })
-export class ClientPriceProcess {}
+export class ClientPriceProcess {
+  
+}

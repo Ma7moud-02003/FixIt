@@ -1,13 +1,13 @@
 @if(showPageDetails())
 {
-<div class="bg-slate-50 px-15 py-10 min-h-screen ">
-  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
+<div class="bg-slate-50 px-5 py-10 min-h-screen ">
+  <div class="mx-auto grid w-full grid-cols-1 lg:grid-cols-12 gap-5">
 
     <!-- ===== MAIN CONTENT ===== -->
-    <main class="lg:col-span-8 space-y-4">
+    <main class="lg:col-span-8 space-y-4 w-full">
 
       <!-- Header Bar -->
-      <div class="bg-white rounded-2xl px-5 py-4 border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div class=" rounded-2xl px-5 py-4 border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div class="flex flex-col gap-1.5">
           <h2 class="text-lg font-semibold text-slate-800 leading-tight">
             {{serviceDetails().serviceTitle}}
@@ -250,24 +250,71 @@
 
       <!-- ===== REVIEWED STATE ===== -->
       @else if(serviceDetails().state == statuses.Reviewed) {
-        <div class="relative bg-white rounded-2xl border border-slate-100 border-r-4 border-r-emerald-500 p-5">
-          <div class="absolute -top-3 right-5 flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"/>
-            </svg>
-            تمت المراجعة
-          </div>
-          <div class="space-y-1.5 text-right mt-2">
-            <h3 class="text-sm font-semibold text-slate-800">{{serviceDetails().serviceTitle}}</h3>
-            <p class="text-xs text-slate-500 leading-relaxed">{{serviceDetails().serviceDescription}}</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-            <span class="text-slate-400">{{serviceDetails().serviceId}}</span>
-            <span class="text-emerald-600 font-semibold">{{serviceDetails().completeDate | date:'short'}}</span>
-          </div>
+   <div class="relative bg-white rounded-2xl border border-slate-100 border-r-4 border-r-emerald-500 p-5 shadow-sm">
+  <!-- حالة الخدمة -->
+  <div class="absolute -top-3 right-5 flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+    </svg>
+    تمت المراجعة
+  </div>
+
+  <div class="space-y-3 text-right mt-2">
+    <!-- عنوان الخدمة والوصف -->
+    <div class="space-y-1">
+      <h3 class="text-sm font-bold text-slate-800">{{ serviceDetails().serviceTitle }}</h3>
+      <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">{{ serviceDetails().serviceDescription }}</p>
+    </div>
+
+    <!-- قسم التقييم والتعليق -->
+    <div class="bg-slate-50 rounded-xl p-3 space-y-2 border border-slate-100">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-medium text-slate-400">تقييم العميل: {{ serviceDetails().clientName }}</span>
+        <!-- عرض النجوم بناءً على الـ rate -->
+        <div class="flex items-center gap-0.5 text-amber-400">
+        @for (star of [1, 2, 3, 4, 5]; track $index) {
+  <svg class="w-3.5 h-3.5" 
+       [attr.fill]="$index < serviceDetails().rate ? 'currentColor' : 'none'" 
+       [attr.stroke]="$index < serviceDetails().rate ? 'none' : 'currentColor'" 
+       viewBox="0 0 24 24">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+  </svg>
+}
         </div>
+      </div>
+      
+      @if (serviceDetails().comment) {
+        <p class="text-xs italic text-slate-600 bg-white p-2 rounded-lg border border-slate-100 relative">
+          <span class="text-lg leading-none absolute -right-1 -top-1 text-slate-200">"</span>
+          {{ serviceDetails().comment }}
+        </p>
+      }
+    </div>
+
+    <!-- تفاصيل مالية سريعة -->
+    <div class="flex items-center gap-4 text-[11px]">
+       <div class="flex items-center gap-1">
+          <span class="text-slate-400">الإجمالي:</span>
+          <span class="font-bold text-slate-700">{{ serviceDetails().totalPrice }} ج.م</span>
+       </div>
+       <div class="flex items-center gap-1">
+          <span class="text-slate-400">تاريخ الطلب:</span>
+          <span class="text-slate-700">{{ serviceDetails().requestDate | date:'dd/MM/yyyy' }}</span>
+       </div>
+    </div>
+  </div>
+
+  <!-- التذييل -->
+  <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-[10px]">
+    <div class="flex items-center gap-2">
+      <span class="text-slate-400">رقم الخدمة:</span>
+      <span class="text-slate-500 font-mono">{{ serviceDetails().serviceId.substring(0,8) }}...</span>
+    </div>
+    <span class="text-emerald-600 font-semibold italic">
+        {{ serviceDetails().completeDate ? (serviceDetails().completeDate | date:'short') : 'بانتظار التحديث' }}
+    </span>
+  </div>
+</div>
       }
 
     </main>

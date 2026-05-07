@@ -122,6 +122,8 @@
             <button [routerLink]="['/mainLayout/require', workerId()]" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black text-lg py-4 rounded-2xl transition-all shadow-lg shadow-blue-200 active:scale-95 flex justify-center items-center gap-3">
               طلب خدمة الآن <i class="far fa-calendar-check"></i>
             </button>
+
+         
          @if(checkIfWorkerIsFavourite(workerId())) {
              
                   <button (click)="removeFromFavourite()" class="w-full mt-4 bg-red-100 hover:bg-red-200 text-red-600 font-bold py-3 rounded-2xl transition-colors flex justify-center items-center gap-2">
@@ -132,6 +134,9 @@
               اضافته للمفضلة <i class="far fa-heart text-gray-400"></i>
             </button>
          }
+               <button [routerLink]="['/reports',viewdWorkerData().userId]" class="w-full mt-5 bg-red-400 hover:bg-red-700 text-white font-black text-lg py-4 rounded-2xl transition-all shadow-lg shadow-blue-200 active:scale-95 flex justify-center items-center gap-3">
+              ابلاغ عن العامل<i class="fas fa-warning"></i>
+            </button>
 
             <div class="mt-8 space-y-5">
               <div class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-xl transition-colors">

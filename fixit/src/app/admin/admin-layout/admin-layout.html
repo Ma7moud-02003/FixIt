@@ -1,4 +1,11 @@
+
+<div class="hidden md:block">
 <app-sidebar></app-sidebar>
-<div class="w-[80%] relative right-[20%]">
-    <router-outlet></router-outlet>
 </div>
+<div class="lg:w-[80%] relative w-full lg:right-[20%]">
+    <router-outlet></router-outlet>
+   <div class="lg:hidden">
+     <app-bottom-nav></app-bottom-nav>
+   </div>
+</div>
+    

@@ -1,5 +1,6 @@
 export  enum UserRole{
 Clien_Role='client',
-Worker_Role='worker'
+Worker_Role='worker',
+Admin_Role='admin'
 }
     
