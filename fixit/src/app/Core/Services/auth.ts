@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { RegisetrModel } from '../../Shared/Models/regiserModel';
 import { LoginModel } from '../../Shared/Models/loginModel';
 import { environment } from '../../../environments/environment';
@@ -10,7 +10,11 @@ import { UserModel } from '../../Shared/Models/UserProfile';
   providedIn: 'root',
 })
 
-export class Auth {
+export class Auth implements OnInit{
+  ngOnInit(): void {
+    console.log(this.getUser());
+    
+  }
   private router = inject(Router);
 
   constructor() {
@@ -73,5 +77,11 @@ getUserIdFromToken() {
     this.userProfileData.set({} as UserModel);
     this.userToken.set('');
     this.router.navigate(['/login']);
+  }
+  getNavDetails(){
+     const{fullName,imgUrl,role} =this.getUser();
+     return {fullName,imgUrl,role
+
+     }
   }
 }

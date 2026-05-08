@@ -68,7 +68,7 @@ localStorage.setItem('userToken',JSON.stringify(res.token));
 this.alerts.sucsess('تم تسجيل الدخول ينجاح');
 this.routingTo();
 
-  }
+  },error:()=>{ button.innerText='تسجيل الدخول';}
 })
 )
 }
