@@ -32,6 +32,13 @@ export class Auth implements OnInit{
     return this.userToken();
   }
 
+  getUserId()
+  {
+        const userString = JSON.parse(localStorage.getItem('user')!);
+    if (userString != null)
+    return userString.userId;
+  }
+
 
   getUser() {
     const userString = localStorage.getItem('user');

@@ -3,7 +3,7 @@ import { Review } from './../../../Core/Services/review';
 import { Component, computed, inject, input, OnChanges, OnDestroy, OnInit, signal, SimpleChanges } from '@angular/core';
 import { User } from '../../../Core/Services/user';
 import { Subscription } from 'rxjs';
-import { UserEditeModel, UserModel, WorkerModel } from '../../../Shared/Models/UserProfile';
+import { UserEditeModel, WorkerModel } from '../../../Shared/Models/UserProfile';
 import { email, form, FormField, pattern, required } from '@angular/forms/signals';
 import { Alerts } from '../../../Shared/Alerts/alerts';
 import { NewPasswordModel } from '../../../Shared/Models/changingPass';

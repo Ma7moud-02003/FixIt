@@ -22,13 +22,15 @@ import { WorkerPending } from "../../Shared/Components/Statuses/Worker/worker-pe
 import { WorkerSubmitted } from "../../Shared/Components/Statuses/Worker/worker-submitted/worker-submitted";
 import { WorkerInprocess } from "../../Shared/Components/Statuses/Worker/worker-inprocess/worker-inprocess";
 import { Review } from '../../Core/Services/review';
+import { ClientDisputed } from "../../Shared/Components/Statuses/Client/client-disputed/client-disputed";
+import { WorkerDisputed } from "../../Shared/Components/Statuses/Worker/worker-disputed/worker-disputed";
 
 @Component({
   selector: 'app-service-details',
   imports: [FormDatePipe, CommonModule, FormsModule, Skeleton, FormsModule, KnobModule, ClientPriceProcess,
     ClientPending, ClientInprocess, ClientSubmitted,
     WorkerPriceprocess, WorkerPending, WorkerSubmitted,
-    WorkerInprocess, RouterLink],
+    WorkerInprocess, RouterLink, ClientDisputed, WorkerDisputed],
   templateUrl: './service-details.html',
   styleUrl: './service-details.css',
 })

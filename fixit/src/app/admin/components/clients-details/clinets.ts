@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, OnDestroy, OnInit, output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, inject, input, OnDestroy, OnInit, Output, output, signal } from '@angular/core';
 import { UserRole } from '../../../Shared/enums/role';
 import { IClient } from '../clinets/clinets';
 export type UserRolee = UserRole;
@@ -18,7 +18,11 @@ interface ArraySection {
 })
 export class ClinetDetails { // ── Inputs ──────────────────────────────────────────────────────
   user = input.required<IClient>();
- 
+  @Output() cancle=new EventEmitter<void>();
+  skip()
+  {
+    this.cancle.emit()
+  }
   // ── Output: يبعت للـ parent إنه يقفل ──────────────────────────
   closePanel = output<void>();
  

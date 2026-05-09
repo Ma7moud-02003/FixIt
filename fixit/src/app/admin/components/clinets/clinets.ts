@@ -230,8 +230,10 @@ roleBadgeClass(role: string): string {
   openDetails=signal<boolean>(false);
   getOpenDetails(user:IClient)
   {
-this.user.set(user);
-this.openDetails.set(!this.openDetails());
+    this.openDetails.set(!this.openDetails());
+    if(this.openDetails())
+   this.user.set(user);
+
    }
 
 

@@ -199,7 +199,10 @@
       </main>
     </div>
   </div>
-  <section id="myReviews" class="space-y-6 lg:w-full mx-auto w-full mt-10 px-20 py-5">
+ 
+
+@if(role() === 'worker') {
+   <section id="myReviews" class="space-y-6 lg:w-full mx-auto w-full mt-10 px-20 py-5">
   <div class="flex items-center justify-between px-4">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100">
@@ -228,8 +231,6 @@
     }
   </div>
 </section>
-
-@if(role() === 'worker') {
 <section id="myPortfolio" class="pt-4  lg:w-3/4 mx-auto w-full mt-10 p-5">
   <div class="flex items-center justify-between mb-6 px-4">
     <div class="flex items-center gap-3">

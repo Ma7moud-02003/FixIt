@@ -34,9 +34,18 @@ export class MyServices implements OnInit, OnDestroy {
   // 📦 البيانات الحالية
   myServices = signal<MyServiceModel[]>([]);
 
-  statuses = signal<any[]>([
+ 
+
+  ngOnInit(): void {
+    this.role.set(this._auth.getRole() || '');
+    console.log(this.role());
+    
+    this.loadPage(this.pageNume());
+  }
+
+   statuses = signal<any[]>([
     { name: 'الكل', value: '' },
-    { name: this.role()=='client'?'مرسله':'مستلمه', value: 'priceprocess' },
+    { name:'مرسله|مستلمه', value: 'priceprocess' },
     { name: 'معلقه', value: 'pending' },
     { name: 'مرفوضه | ملغاه', value: 'rejected' },
     { name: 'قيد التنفيذ', value: 'inprocess' },
@@ -47,11 +56,6 @@ export class MyServices implements OnInit, OnDestroy {
   ]);
 
 
-
-  ngOnInit(): void {
-    this.role.set(this._auth.getRole() || '');
-    this.loadPage(this.pageNume());
-  }
 
   // 🎯 فلترة
   filterdServices = computed(() => {

@@ -1,0 +1,63 @@
+<div class="min-h-screen bg-slate-50 p-4 md:p-8" >
+  
+
+    <!-- 1. واجهة العميل (CLIENT DISPUTE CARD) -->
+    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 flex flex-col h-full">
+      <!-- Header -->
+      <div class="p-6 bg-gradient-to-br from-orange-50 to-white border-b border-orange-100">
+        <div class="flex justify-between items-start mb-4">
+          <span class="px-4 py-1.5 bg-orange-100 text-orange-700 text-xs font-black rounded-full flex items-center gap-2">
+            <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+            قيد مراجعة الاعتراض
+          </span>
+          <p class="text-lg font-black text-slate-800">{{ serviceDetails()?.totalPrice }} ج.م</p>
+        </div>
+        <h2 class="text-xl font-bold text-slate-900 mb-2">{{ serviceDetails()?.serviceTitle }}</h2>
+        <div class="flex items-center gap-2 text-slate-500">
+          <i class="fas fa-user-gear text-sm"></i>
+          <p class="text-sm font-medium">الفني: {{ serviceDetails()?.workerName }}</p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 space-y-5 flex-1">
+        <!-- Support Message -->
+        <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100 flex gap-3">
+          <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <p class="text-sm leading-relaxed text-blue-800 font-medium">
+            تم رفع اعتراضك بنجاح. جاري مراجعة الصور المرفوعة من الفني ومطابقتها مع طلبك من قبل فريق الدعم.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">إثبات العمل المرفوع</p>
+          <div class="relative group rounded-2xl overflow-hidden border-2 border-slate-100 shadow-sm transition-transform hover:scale-[1.01]">
+            <img [src]="serviceDetails()?.submitedImgUrl" class="w-full h-48 object-cover" alt="Worker Proof">
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+               <span class="bg-white/90 px-4 py-2 rounded-lg text-xs font-bold shadow-xl">تكبير الصورة</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold text-slate-400">تاريخ الطلب</p>
+                <p class="text-xs font-bold text-slate-700">{{serviceDetails()?.createdAt|date:'short'}}</p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-[10px] font-bold text-slate-400">العنوان</p>
+                <p class="text-xs font-bold text-slate-700 truncate">{{ serviceDetails()?.serviceAddress }}</p>
+            </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="p-6 bg-slate-50/50 space-y-3">
+        <button class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm transition-all hover:bg-slate-800 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2">
+          التواصل مع الدعم الفني
+        </button>
+       
+      </div>
+   

@@ -1,0 +1,182 @@
+<div dir="rtl" class="flex flex-col h-screen bg-slate-100  overflow-hidden">
+
+  <!-- ══ STICKY HEADER ══════════════════════════════════════ -->
+  <div class="shrink-0 bg-white border-b border-slate-200 shadow-sm z-20">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
+
+      <!-- Back -->
+      <button (click)="goBack()"
+              class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center transition-all duration-150 active:scale-95 shrink-0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <!-- ── Skeleton header ── -->
+      @if (isLoading()) {
+        <div class="flex items-center gap-3 flex-1 animate-pulse">
+          <div class="w-10 h-10 rounded-full bg-slate-200 shrink-0"></div>
+          <div class="space-y-1.5 flex-1">
+            <div class="h-4 bg-slate-200 rounded w-36"></div>
+            <div class="h-3 bg-slate-200 rounded w-20"></div>
+          </div>
+        </div>
+      }
+
+      <!-- ── Real header ── -->
+      @if (!isLoading() && headerInfo(); as info) {
+        <div class="flex items-center gap-3 flex-1 min-w-0">
+          <!-- Avatar -->
+          <div class="relative shrink-0">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center overflow-hidden shadow-md">
+              @if (info.otherImg) {
+                <img [src]="info.otherImg" [alt]="info.otherName" class="w-full h-full object-cover">
+              } @else {
+                <span class="text-white text-sm font-bold">{{ getInitials(info.otherName) }}</span>
+              }
+            </div>
+            @if (info.otherActive) {
+              <span class="absolute bottom-0 left-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white animate-pulse"></span>
+            }
+          </div>
+          
+
+          <!-- Info -->
+          <div class="min-w-0 flex-1">
+            <p class="font-bold text-slate-800 text-sm truncate">{{ info.otherName }}</p>
+            <p class="text-xs font-medium"
+               [ngClass]="info.otherActive ? 'text-emerald-500' : 'text-slate-400'">
+              {{ info.otherActive ? 'متصل الآن' : 'غير متصل' }}
+            </p>
+          </div>
+        </div>
+      }
+
+      <!-- Room ID badge -->
+      <span class="shrink-0 px-3 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-500">
+        #{{ roomId() }}
+      </span>
+    </div>
+  </div>
+
+  <!-- ══ MESSAGES AREA ═══════════════════════════════════════ -->
+  <div #scrollContainer
+       class="flex-1 overflow-y-auto overscroll-contain"
+       style="background: linear-gradient(135deg, #f1f5f9 0%, #e8edf5 100%);">
+    <div class="max-w-3xl mx-auto px-4 py-5 space-y-1">
+
+      <!-- ── Skeleton messages ── -->
+      @if (isLoading()) {
+        <div class="space-y-4">
+          @for (s of skeletons; track $index) {
+            <div class="flex gap-2 animate-pulse"
+                 [ngClass]="$index % 3 === 0 ? 'flex-row-reverse' : 'flex-row'">
+              <div class="w-8 h-8 rounded-full bg-slate-300 shrink-0 self-end"></div>
+              <div class="space-y-1">
+                <div class="h-10 rounded-2xl bg-slate-300"
+                     [style.width]="(80 + ($index * 23) % 80) + 'px'"></div>
+                <div class="h-2.5 bg-slate-200 rounded w-12"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ── Message groups ── -->
+      @if (!isLoading()) {
+        @for (group of messageGroups(); track trackByDate($index, group)) {
+
+          <!-- Date separator -->
+          <div class="flex items-center gap-3 my-5">
+            <div class="flex-1 h-px bg-slate-300/60"></div>
+            <span class="px-4 py-1.5 bg-white/80 backdrop-blur-sm rounded-full text-xs font-bold text-slate-400 shadow-sm border border-slate-200/60 whitespace-nowrap">
+              {{ group.date }}
+            </span>
+            <div class="flex-1 h-px bg-slate-300/60"></div>
+          </div>
+
+          <!-- Messages in group -->
+          @for (msg of group.messages; track trackByMessageId($index, msg)) {
+            <div class="flex items-end gap-2 mb-2"
+                 [ngClass]="isMyMessage(msg) ? 'flex-row-reverse' : 'flex-row'">
+
+              <!-- Avatar -->
+              <div class="shrink-0 self-end mb-1">
+                <div class="w-7 h-7 rounded-full overflow-hidden shadow-sm flex items-center justify-center"
+                     [ngClass]="isMyMessage(msg)
+                       ? 'bg-gradient-to-br from-orange-400 to-orange-600'
+                       : 'bg-gradient-to-br from-blue-500 to-blue-700'">
+                  @if (msg.senderImgUrl) {
+                    <img [src]="msg.senderImgUrl" [alt]="msg.senderName" class="w-full h-full object-cover">
+                  } @else {
+                    <span class="text-white text-[10px] font-bold">{{ getInitials(msg.senderName) }}</span>
+                  }
+                </div>
+              </div>
+
+              <!-- Bubble -->
+              <div class="max-w-[72%] sm:max-w-[60%]"
+                   [ngClass]="isMyMessage(msg) ? 'items-end' : 'items-start'"
+                   style="display: flex; flex-direction: column;">
+
+                <!-- Sender name (only for received) -->
+                @if (!isMyMessage(msg)) {
+                  <p class="text-[11px] font-bold text-slate-500 mb-1 px-1">{{ msg.senderName }}</p>
+                }
+
+                <!-- Bubble body -->
+                <div class="relative px-4 py-2.5 shadow-sm"
+                     [ngClass]="isMyMessage(msg)
+                       ? 'bg-blue-600 text-white rounded-2xl rounded-bl-none'
+                       : 'bg-white text-slate-800 rounded-2xl rounded-br-none border border-slate-100'">
+
+                  <p class="text-sm leading-relaxed whitespace-pre-wrap break-words">{{ msg.messageText }}</p>
+
+                  <!-- Time + read status -->
+                  <div class="flex items-center gap-1 mt-1.5"
+                       [ngClass]="isMyMessage(msg) ? 'justify-end' : 'justify-start'">
+                    <span class="text-[10px]"
+                          [ngClass]="isMyMessage(msg) ? 'text-blue-200' : 'text-slate-400'">
+                      {{ formatTime(msg.createdAt) }}
+                    </span>
+                    @if (isMyMessage(msg)) {
+                      <!-- Read receipts -->
+                      <svg class="w-3.5 h-3.5"
+                           [ngClass]="msg.isRead ? 'text-blue-200' : 'text-blue-300/60'"
+                           fill="currentColor" viewBox="0 0 20 20">
+                        @if (msg.isRead) {
+                          <!-- Double check (read) -->
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        } @else {
+                          <!-- Single check (sent) -->
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        }
+                      </svg>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+
+        <!-- Scroll anchor -->
+        <div #messagesEnd class="h-2"></div>
+      }
+
+    </div>
+  </div>
+
+  <!-- ══ READ-ONLY FOOTER NOTE ══════════════════════════════ -->
+  <div class="shrink-0 bg-white border-t border-slate-200">
+    <div class="max-w-3xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-center gap-2 text-slate-400 text-xs">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+        </svg>
+        <span class="font-semibold">وضع العرض فقط — لوحة تحكم المدير</span>
+      </div>
+    </div>
+  </div>
+
+</div>

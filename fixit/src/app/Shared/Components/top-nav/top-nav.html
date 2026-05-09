@@ -37,8 +37,12 @@
     </button>
 
     <!-- زر الشات -->
-    <button [routerLink]="['/chat','']" class="p-2.5 text-slate-500 hover:bg-sky-50 rounded-2xl transition-all group active:scale-90">
+    <button [routerLink]="['/chat','']" class="relative p-2.5 text-slate-500 hover:bg-sky-50 rounded-2xl transition-all group active:scale-90">
       <i class="far fa-comment-dots text-xl group-hover:text-sky-600"></i>
+        <span class="absolute top-2.5 left-2.5 flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500 border border-white"></span>
+      </span>
     </button>
 
     @if(role() === 'client') {
