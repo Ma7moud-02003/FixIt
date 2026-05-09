@@ -3,9 +3,10 @@ import { Component, inject, input, Input, OnInit, signal } from '@angular/core';
 import { ServiceStatus } from '../../enums/status';
 import { CommonModule } from '@angular/common';
 import { MyServiceModel } from '../../Models/services';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Service } from '../../../Core/Services/service';
 import { Auth } from '../../../Core/Services/auth';
+import { Alerts } from '../../Alerts/alerts';
 @Component({
   selector: 'app-service-card',
   imports: [CommonModule, RouterLink],
@@ -32,5 +33,14 @@ export class ServiceCard implements OnInit {
 
   getStausByArabic(status: string): string {
     return this._service.getStausByArabic(status);
+  }
+  private rout=inject(Router);
+  private alerts=inject(Alerts);
+  routeTo(id:string,state:any){
+    if(!id||state==ServiceStatus.PRICE_PROCESS||state==ServiceStatus.PENDING){
+       this.alerts.sucsess('اطلب خدمه من العميل لكي تتواصل معه');
+       return;
+    }
+this.rout.navigate(['/chat',id])
   }
 }

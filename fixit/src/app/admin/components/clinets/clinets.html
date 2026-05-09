@@ -252,6 +252,6 @@
 @if(openDetails())
 {
   <div>
-  <app-clinet-details [user]="user()"></app-clinet-details>
+  <app-clinet-details (cancle)="openDetails.set(false)" [user]="user()"></app-clinet-details>
 </div>
 }

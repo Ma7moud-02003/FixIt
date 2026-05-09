@@ -43,8 +43,7 @@ export class Service {
 
   // dening getting task from worker
   disPutedTask(serviceId: string) {
-    return this._http.put(`${environment.apiUrl}/${this.endPoint}/recivedJobs/${serviceId}/Disputed`, {});
-
+    return this._http.put(`${environment.apiUrl}/${this.endPoint}/sendsJobs/${serviceId}/Disputed`, {});
   }
 
 // rejecting the price offeerd from worker 

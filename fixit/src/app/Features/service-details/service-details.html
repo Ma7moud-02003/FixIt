@@ -7,7 +7,7 @@
     <main class="space-y-4 w-full">
 
       <!-- Header Bar -->
-      <div class=" rounded-2xl px-5 py-4 border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div class="lg:px-10  rounded-2xl  py-1 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div class="flex flex-col gap-1.5">
           <h2 class="text-lg font-semibold text-slate-800 leading-tight">
             {{serviceDetails().serviceTitle}}
@@ -33,13 +33,7 @@
 
     
 <div class="min-h-screen bg-[#f4f6f9]">
-
-  <!-- Top gradient accent -->
-  <div class="h-1 w-full bg-linear-to-l from-sky-500 via-blue-600 to-indigo-600">
-
-  </div>
-
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mx-auto px-3  lg:px-8 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
       <!-- ===== MAIN CONTENT ===== -->
@@ -49,7 +43,6 @@
 
         <!-- Service Image + Meta -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-
           <!-- Image -->
           <div class="relative h-64 overflow-hidden">
             <img [src]="serviceDetails().requestedImgUrl"
@@ -139,12 +132,15 @@
               (submitted)="getRecivedServiveDetails()">
             </app-worker-inprocess>
           }
+           @else if(serviceDetails().state == statuses.DISPUTED) {
+          <app-worker-disputed [serviceDetails]="serviceDetails()"></app-worker-disputed>
+          }
         }
 
         <!-- ===== STATE MANAGEMENT - CLIENT ===== -->
         @else if(role() == Roles.Clien_Role) {
           @if(serviceDetails().state == statuses.PRICE_PROCESS) {
-            <app-client-price-process></app-client-price-process>
+            <app-client-price-process (cancle)="cancelService()"></app-client-price-process>
           }
           @else if(serviceDetails().state == statuses.PENDING) {
             <app-client-pending
@@ -155,7 +151,7 @@
             </app-client-pending>
           }
           @else if(serviceDetails().state == statuses.InProcess) {
-            <app-client-inprocess [workerName]="serviceDetails().workerName"></app-client-inprocess>
+            <app-client-inprocess  [workerName]="serviceDetails().workerName"></app-client-inprocess>
           }
           @else if(serviceDetails().state == statuses.Submited) {
             <app-client-submitted
@@ -164,30 +160,74 @@
               (disputed)="getSendedServiveDetails()">
             </app-client-submitted>
           }
+           @else if(serviceDetails().state == statuses.DISPUTED) {
+            <app-client-disputed [serviceDetails]="serviceDetails()"></app-client-disputed>
+            
+          }
         }
 
         <!-- ===== REJECTED STATE ===== -->
         @if(serviceDetails().state == statuses.Rejected) {
-          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
-            <div class="h-1 w-full bg-rose-500"></div>
-            <div class="p-6 flex items-start gap-4">
-              <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center border border-rose-100 shrink-0">
-                <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        <div class="mx-auto  rounded-3xl border border-slate-100  overflow-hidden transition-all duration-300" dir="rtl">
+    
+  
+
+    <div class="p-8">
+        <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center border-4 border-white shadow-sm ring-1 ring-rose-100 mb-4">
+                <svg class="w-10 h-10 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-base font-bold text-slate-800">تم رفض الخدمة</h3>
-                <p class="text-[11px] font-bold text-rose-400 uppercase tracking-wider mt-0.5">الحالة: ملغاة</p>
-                <div class="mt-4 flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100 text-xs">
-                  <span class="text-slate-400 font-semibold">تاريخ الإلغاء</span>
-                  <span class="font-bold text-slate-600" dir="ltr">{{ serviceDetails().completeDate | date:'mediumDate' }}</span>
-                </div>
-                <p class="text-[11px] text-slate-400 text-center mt-4 font-medium">يمكنك مراجعة الطلبات الأخرى في القائمة الرئيسية</p>
-              </div>
             </div>
-          </div>
+            <h3 class="text-xl font-black text-slate-800">تم إلغاء طلب الخدمة</h3>
+            <p class="text-xs font-bold text-rose-500 uppercase tracking-widest mt-1 bg-rose-50 px-3 py-1 rounded-full">الحالة: ملغاة نهائياً</p>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100 mb-6">
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">اسم الخدمة</span>
+                <span class="text-xs font-black text-slate-700">{{ serviceDetails().serviceTitle }}</span>
+            </div>
+            
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">الفني الموكل</span>
+                <span class="text-xs font-bold text-slate-600">{{ serviceDetails().workerName }}</span>
+            </div>
+
+            <div class="border-t border-slate-200/60 my-3"></div>
+
+            <div class="flex justify-between items-center">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">التكلفة التي لُغيت</span>
+                <span class="text-sm font-black text-slate-400 line-through">{{ serviceDetails().totalPrice }} ج.م</span>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-slate-100 shadow-sm mb-6">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <span class="text-xs text-slate-500 font-semibold">تاريخ التحديث</span>
+            </div>
+            <span class="text-xs font-bold text-slate-700" dir="ltr">
+                {{ (serviceDetails().completeDate || serviceDetails().requestDate) | date:'mediumDate' }}
+            </span>
+        </div>
+
+        <div class="text-center">
+            <p class="text-[12px] text-slate-400 font-medium leading-relaxed mb-6">
+                نعتذر، لا يمكن إتمام هذه العملية لأن الخدمة ملغاة. يمكنك تصفح الخدمات المتاحة أو إنشاء طلب جديد.
+            </p>
+            
+            <button class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                العودة للقائمة الرئيسية
+            </button>
+        </div>
+    </div>
+</div>
         }
 
         <!-- ===== COMPLETED STATE ===== -->

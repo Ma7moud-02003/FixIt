@@ -44,11 +44,11 @@ export const routes: Routes = [
 //===================Aamin===================
 
 {
-  path:'admin',canActivate:[authGuardGuard,roleGuard],
-  data:{roles:['admin']},
+                 // canActivate:[authGuardGuard,roleGuard]
+  path:'admin', 
+  // data:{roles:['admin']},
   loadComponent:()=>import('./admin/admin-layout/admin-layout').then(m=>m.AdminLayout),
   children:[
-
 {
   path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
 
@@ -65,11 +65,30 @@ export const routes: Routes = [
   path:'catogs',loadComponent:()=>import('./admin/components/catogs/catogs').then(m=>m.Catogs)
   
 },
-
+{
+  path:'services',loadComponent:()=>import('./admin/components/services/services').then(m=>m.Services)
+  
+},
+{
+  path:'serDetails/:id',loadComponent:()=>import('./admin/components/ser-details/ser-details').then(m=>m.SerDetails)
+},
+{
+  path:'reviews',loadComponent:()=>import('./admin/components/review/review').then(m=>m.Review)
+},
+{
+  path:'profile',loadComponent:()=>import('./admin/components/profile/profile').then(m=>m.Profile)
+},
+{
+  path:'chats',loadComponent:()=>import('./admin/components/chats/chats').then(m=>m.Chats)
+},
+{
+  path:'chatDetails/:roomId',loadComponent:()=>import('./admin/components/chat-details/chat-details').then(m=>m.ChatDetails)
+},
 {
   path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
-  
-}
+},
+
+
   ]
 
 },

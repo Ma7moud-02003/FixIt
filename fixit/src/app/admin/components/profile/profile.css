@@ -1,0 +1,92 @@
+/* ── Shimmer skeleton ─────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -800px 0; }
+  100% { background-position:  800px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 0.5rem;
+}
+
+/* ── Toast slide-in ───────────────────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(100%); }
+}
+
+.toast-item {
+  animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Section fade-in ──────────────────────────────────────── */
+@keyframes sectionFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-enter {
+  animation: sectionFade 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Header avatar pulse on hover ─────────────────────────── */
+.avatar-wrap:hover .avatar-ring {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.25);
+}
+
+.avatar-ring {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ── Input focus ring ─────────────────────────────────────── */
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ── Button press ─────────────────────────────────────────── */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ── Drag zone highlight ──────────────────────────────────── */
+.drag-active {
+  border-color: #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+/* ── Spinner ──────────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 0.7s linear infinite;
+}
+
+/* ── Password strength bar fill ───────────────────────────── */
+.strength-bar {
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* ── Nav pill active underline ────────────────────────────── */
+.nav-pill-active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: #3b82f6;
+  border-radius: 9999px;
+}

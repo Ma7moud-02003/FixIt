@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,5 +9,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './client-price-process.css',
 })
 export class ClientPriceProcess {
-  
+    @Output() cancle=new EventEmitter<void>();
+   cancleService()
+   {
+    this.cancle.emit();
+   }
+
 }

@@ -14,6 +14,7 @@ export interface ServiceDetailsModel {
   serviceTitle: string;
   state: string;
   totalPrice: number;
+submitedImgUrl?:string;
   workerId: string;
   requestedImgUrl:string;
   workerName: string;

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink, RouterModule } from "@angular/router";
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-sidebar',
@@ -10,13 +10,23 @@ import { RouterLink, RouterModule } from "@angular/router";
 })
 export class Sidebar {
     navItems = [
-    { label: 'الرئيسية',        icon: 'grid'       },
-    { label: 'المستخدمين',      icon: 'users',  active: true },
-    { label: 'العمال',           icon: 'briefcase'  },
-    { label: 'التصنيفات',        icon: 'table'      },
-    { label: 'طلبات الخدمة',    icon: 'clipboard'  },
-    { label: 'المدفوعات',        icon: 'credit-card'},
-    { label: 'التقييمات',        icon: 'star'       },
-    { label: 'مراقبة المحادثات', icon: 'message'    },
+    { label: 'الرئيسية',        icon: 'grid',     rout:'/admin'   },
+    { label: 'المستخدمين',      icon: 'users',  active: false, rout:'/admin/users' },
+    { label: 'العمال',           icon: 'briefcase',  rout:'/admin/workers' },
+    { label: 'التصنيفات',        icon: 'table' , active:false , rout:'/admin/catogs'   },
+    { label: 'طلبات الخدمة',    icon: 'clipboard',  rout:'/admin/services'  },
+    { label: 'المدفوعات',        icon: 'credit-card',  rout:'/admin'},
+    { label: 'التقييمات',        icon: 'star'   , rout:'/admin/reviews' },
+    { label: 'مراقبة المحادثات', icon: 'message' ,  rout:'/admin/chats' },
+    { label: 'الملف الشخصي ', icon: 'profile' ,  rout:'/admin/profile' },
+
   ];
+   
+  private rout=inject(Router);
+  index=signal<number>(-1);
+  routTo(router:string,index:number)
+  {
+this.rout.navigate([router]);
+this.index.set(index);
+  }
 }

@@ -15,12 +15,12 @@ export class CatogsService {
 
 editeCategory(id:string,catog:any)
 {
-  return this._http.put(`${environment.apiUrl}/EditeCategory/${id}`,catog)
+  return this._http.put(`${environment.apiUrl}/Category/EditeCategory/${id}`,catog)
 }
 
 addCatog(catog:any)
 {
-  return this._http.post(`${environment.apiUrl}/AddCategory`,catog);
+  return this._http.post(`${environment.apiUrl}/Category/AddCategory`,catog);
 }
 
 deleteCatog(id:string)
