@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap');
+
 body
 {
-     font-family: "Beiruti", sans-serif;
+      font-family: "Amiri Quran", serif;
+
      
 
 }

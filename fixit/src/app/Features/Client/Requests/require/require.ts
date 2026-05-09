@@ -63,6 +63,12 @@ export class Require implements OnInit {
     })
   }
 
+  
+// تعريف الحالة
+isLoading = signal(false);
+
+
+
   selectedFile!:File;
   imagePreview=signal<string>('');
   onFileSelected(event: Event) {
@@ -82,7 +88,8 @@ export class Require implements OnInit {
 }
 requireService()
 {
-  
+    if (this.addServiceForm().invalid()) return;
+    this.isLoading.set(true)
   if (!this.selectedFile) {
  this.alerts.error('اختار صورة الأول');
   return;
@@ -101,8 +108,11 @@ formData.forEach((value, key) => {
             this.alerts.sucsess('تم تسليم الخدمه بنجاح 👍');
             this.rout.navigate(['/mainLayout/myServices'])
             this.clearForm();
-          }
+            this.isLoading.set(false);
+
+          },error:()=>(this.isLoading.set(false))
         })
       )
 }
 }
+
