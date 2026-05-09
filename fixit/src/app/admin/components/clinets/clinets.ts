@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserRole } from '../../../Shared/enums/role';
 import { Alerts } from '../../../Shared/Alerts/alerts';
 import { ClinetDetails } from "../clients-details/clinets";
+import { WorkerService } from '../../services/worker-service';
 export type UserRolee = UserRole;
 export type UserStatus = true|false;
 export interface IClient {
@@ -50,6 +51,8 @@ export class Clinets implements OnInit,OnDestroy{
  
   userRole=UserRole;
   private _clients=inject(ClientServices)
+  private _workers=inject(WorkerService)
+
   private subs=new Subscription();
   searchQuery = signal('');
   currentPage  = signal(1);
@@ -59,10 +62,12 @@ export class Clinets implements OnInit,OnDestroy{
 
    ngOnInit(): void {
    this.getAllUsers();
+   this.getAllWorkers()
   }
 
 // تأكد إنك معرف الكاش فوق كـ Map
 // private cache = new Map<number, IClient[]>();
+
 
 getAllUsers() {
   const page = this.currentPage();
@@ -94,6 +99,16 @@ getAllUsers() {
       }
     })
   );
+}
+
+getAllWorkers()
+{
+  this._workers.getWorkers().subscribe({
+    next:(res)=>{
+console.log(res);
+
+    }
+  })
 }
 getNext(){
 this.currentPage.set(this.currentPage()+1);
