@@ -2,12 +2,12 @@
   
   <div class="flex items-center gap-10">
     <!-- Logo الذكي بتأثير الـ Floating -->
-    <div class="group relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-lg shadow-sky-200/50 transition-transform duration-500 hover:rotate-[360deg] cursor-pointer">
-      <i class="fas fa-hammer text-xl"></i>
-      <span class="absolute inset-0 rounded-2xl bg-sky-400 animate-pulse opacity-20 group-hover:hidden"></span>
+    <div class=" relative flex h-11 w-11 items-center justify-center rounded-2xl   bg-sky-600 text-white shadow-lg shadow-sky-200/50 transition-transform duration-500 cursor-pointer">
+      <i class="fas text-white fa-hammer text-xl"></i>
     </div>
 
     <!-- الروابط بتأثير الـ Underline الحديث -->
+     @if (role()==Role.Clien_Role) {
     <div class="hidden items-center gap-8 md:flex">
       <a routerLink="/mainLayout/home" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
          class="relative py-2 text-[15px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">الرئيسية</a>
@@ -22,6 +22,7 @@
       <a routerLink="/mainLayout/myServices" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
          class="relative py-2 text-[15px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">طلباتي</a>
     </div>
+  }
   </div>
 
   <div class="flex items-center gap-3">
@@ -55,15 +56,17 @@
 
     <!-- بروفايل المستخدم المطور -->
     <div class="relative cursor-pointer group">
-      <div class="flex items-center gap-3 bg-slate-50/50 p-1.5 pl-4 rounded-[2rem] border border-transparent hover:border-sky-100 hover:bg-white transition-all duration-300">
+      <div class="flex items-center gap-3 bg-slate-50/50 p-1.5 pl-4 rounded-4xl border border-transparent hover:border-sky-100 hover:bg-white transition-all duration-300">
         <div class="relative">
           <img 
-            src="/icons8-user-50.png" 
+            [src]="user().imgUrl||'/icons8-user-50.png'" 
             alt="Profile" 
-            class="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-sky-100 transition-transform group-hover:scale-105"
-          >
+            class="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-sky-100 transition-transform group-hover:scale-105" >
           <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500 shadow-sm"></span>
         </div>
+        <p class="text-sm">
+          {{user().fullName}}
+        </p>
         <div class="hidden lg:flex flex-col items-start leading-tight">
 
           <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{{ role() == 'client' ? 'عميل' : 'فني' }}</span>
@@ -72,7 +75,7 @@
       </div>
 
       <!-- القائمة المنسدلة (Dropdown) بتصميم Glassmorphism -->
-      <div class="invisible absolute left-0 mt-4 w-56 translate-y-2 scale-95 rounded-[1.5rem] border border-slate-100 bg-white/90 backdrop-blur-xl p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
+      <div class="invisible absolute left-0 mt-4 w-56 translate-y-2 scale-95 rounded-3xl border border-slate-100 bg-white/90 backdrop-blur-xl p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.1)] transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
         <div class="px-4 py-3 border-b border-slate-50 mb-1">
           <p class="text-[10px] font-black text-sky-600 uppercase tracking-widest">إدارة الحساب</p>
         </div>
