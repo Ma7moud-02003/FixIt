@@ -1,12 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
 body
 {
-      font-family: "Amiri Quran", serif;
-
-     
+       font-family: "Vazirmatn", sans-serif;
 
 }
 button

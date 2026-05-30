@@ -102,6 +102,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Layouts/dashboared-layout/dashboared-layout').then(m => m.DashboaredLayout),
     children: [
+      
       {
         path: '',
         loadComponent: () =>

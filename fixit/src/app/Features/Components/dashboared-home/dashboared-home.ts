@@ -1,80 +1,104 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
-interface StatCard {
-  label: string;
-  value: number;
-  icon: string;
-  color: string;
-}
-interface StatCard {
-  label: string;
-  value: number;
-  icon: string;
-  color: string;
-}
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { DetailsSer } from '../../../Core/Services/details-ser';
+import { forkJoin, Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { FormDatePipe } from '../../../Shared/Pipes/form-date-pipe';
 
-interface Order {
-  id: number;
+interface ServiceItem {
+  clientImgUrl: string;
   clientName: string;
-  service: string;
-  price: number;
-  status: 'قيد الانتظار' | 'مقبول' | 'مكتمل';
+  workerImgUrl: string;
+  workerName: string;
+  serviceTitle: string;
+  totalPrice: number;
+  state: number;
 }
-
-interface Chat {
-  id: number;
-  name: string;
-  message: string;
-  image: string;
-  unread: boolean;
+ 
+interface MessageItem {
+  senderImgUrl: string;
+  senderName: string;
+  targetUserImgUrl: string;
+  targetUserName: string;
+  lastMessage: string;
+  lastMessageAt: string;
 }
-
-interface Review {
-  id: number;
-  user: string;
-  rating: number;
+ 
+interface ReviewItem {
+  reviewerImgUrl: string;
+  reviewerName: string;
   comment: string;
-  date: string;
+  rate: number;
+}
+ 
+interface TotalsData {
+  totalNumberOfPortfolioes: number;
+  totalNumberOfReportes: number;
+  totalNumberOfReviews: number;
+  totalNumberOfServicesRequests: number;
 }
 @Component({
   selector: 'app-dashboared-home',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule,FormDatePipe],
   templateUrl: './dashboared-home.html',
   styleUrl: './dashboared-home.css',
 })
-export class DashboaredHome {
-workerProfile = signal({
-    name: 'محمود',
-    image: 'https://i.pravatar.cc/150?u=mahmoud',
-    status: 'Online'
-  });
+export class DashboaredHome implements OnInit ,OnDestroy{
+  private details = inject(DetailsSer);
+  private subscription = new Subscription();
+ 
+  services: ServiceItem[] = [];
+  messages: MessageItem[] = [];
+  reviews: ReviewItem[] = [];
+  totals: TotalsData | null = null;
+ 
+  isLoading = signal<boolean>(false);
+  hasError = false;
 
-  isOnline = computed(() => this.workerProfile().status === 'Online');
-  
-  stats = signal<StatCard[]>([
-    { label: 'إجمالي المهام', value: 128, icon: '📦', color: 'text-blue-500' },
-    { label: 'مهام نشطة', value: 5, icon: '⚡', color: 'text-indigo-500' },
-    { label: 'مهام مكتملة', value: 114, icon: '✅', color: 'text-emerald-500' },
-    { label: 'رسائل غير مقروءة', value: 3, icon: '💬', color: 'text-rose-500' },
-  ]);
+  ngOnInit(): void {
+    this.loadData();
+  }
+ 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+ 
+  loadData(): void {
+    this.isLoading.set(true);
+    this.hasError = false;
+ 
+    const sub = forkJoin({
+      services: this.details.getWorkerDetails('Services'),
+      messages: this.details.getWorkerDetails('Messasges'),
+      reviews: this.details.getWorkerDetails('Reviews'),
+      totals: this.details.getNumbers('TotalNumbersDetailsForWorker'),
+    }).subscribe({
+      next: (result:any) => {
+        console.log(result);
+        
+        this.services = result.services.data as ServiceItem[];
+        this.messages = result.messages.data as MessageItem[];
+        this.reviews = result.reviews.data as ReviewItem[];
+        this.totals = result.totals.data as TotalsData;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.hasError = true;
+             this.isLoading.set(false);
 
-  totalEarnings = signal(4250);
-
-  orders = signal<Order[]>([
-    { id: 1, clientName: 'سارة جلال', service: 'دهان حوائط', price: 450, status: 'مقبول' },
-    { id: 2, clientName: 'أحمد كمال', service: 'تصليح سباكة', price: 120, status: 'قيد الانتظار' },
-    { id: 3, clientName: 'لمياء محمد', service: 'تمديدات كهرباء', price: 800, status: 'مكتمل' },
-    { id: 4, clientName: 'عمر فاروق', service: 'تنسيق حدائق', price: 300, status: 'مكتمل' },
-  ]);
-
-  chats = signal<Chat[]>([
-    { id: 1, name: 'سارة جلال', message: 'متى يمكنك البدء في العمل؟', image: 'https://i.pravatar.cc/100?u=sarah', unread: true },
-    { id: 2, name: 'أحمد كمال', message: 'التسريب أصبح أسوأ من قبل...', image: 'https://i.pravatar.cc/100?u=ahmed', unread: true },
-    { id: 3, name: 'لمياء محمد', message: 'شكراً جزيلاً على مجهودك!', image: 'https://i.pravatar.cc/100?u=lucie', unread: false },
-  ]);
-
-  reviews = signal<Review[]>([
-    { id: 1, user: 'محمد علي', rating: 5, comment: 'خدمة ممتازة واحترافية عالية في المواعيد.', date: 'منذ يومين' },
-    { id: 2, user: 'منى حسن', rating: 4, comment: 'عمل جيد جداً، قام بإصلاح كل شيء بدقة.', date: 'منذ أسبوع' },
-  ]);
+      },
+    });
+ 
+    this.subscription.add(sub);
+  }
+ 
+ 
+ 
+  getStarsArray(rate: number): boolean[] {
+    return Array.from({ length: 5 }, (_, i) => i < Math.round(rate));
+  }
+ 
+  trackByIndex(index: number): number {
+    return index;
+  }
 }

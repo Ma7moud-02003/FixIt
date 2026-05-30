@@ -17,7 +17,10 @@ export class TopNav implements OnInit{
  _auth=inject(Auth);
  role=signal<string>('');
  Role=UserRole
+
+
 ngOnInit(): void {
+
   this.user.set(this._auth.getNavDetails() as User)
   console.log(this.user());
   

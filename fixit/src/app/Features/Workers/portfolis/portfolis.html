@@ -1,92 +1,136 @@
-<div class="min-h-screen bg-slate-50/50 px-4 py-8 sm:px-8 lg:px-12">
-  <main class="max-w-7xl mx-auto">
-    
-  <div class="min-h-screen bg-[#F8FAFC] px-4 py-8 sm:px-8 lg:px-12" dir="rtl">
-  <main class="max-w-7xl mx-auto">
-    
-    <!-- Header Section: نضفنا التصميم وخليناه أوضح -->
-    <header class="flex flex-col lg:flex-row lg:items-center justify-between mb-12 gap-8">
-      @if(role() === Roles.Worker_Role) {
-        <div class="relative">
-          <div class="absolute -right-4 top-0 w-1 h-full bg-cyan-600 rounded-full"></div>
-          <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3">
-            معرض <span class="text-cyan-600">الأعمال</span>
-          </h1>
-          <p class="text-slate-500 font-medium max-w-lg leading-relaxed">
-            منصة عرض مهاراتك؛ هنا يمكنك إدارة مشاريعك المنجزة وتحويلها إلى فرص عمل حقيقية.
-          </p>
-        </div>
-        
-        <div class="flex items-center gap-4">
-          <!-- إضافة إحصائيات سريعة (من خبرتي بتدي ثقة للمستخدم) -->
-          <div class="hidden sm:flex items-center gap-6 ml-8 px-8 border-l border-slate-200">
-             <div class="text-center">
-                <span class="block text-2xl font-black text-slate-900">{{ myPortfolio().length }}</span>
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">مشروع</span>
-             </div>
-          </div>
+<div  class="min-h-screen bg-stone-100 font-[Tajawal,sans-serif]">
 
-          <button 
-            routerLink="/dashboard/addPortfolio" 
-            class="group relative flex items-center gap-6 bg-slate-900 text-white pl-5 pr-8 py-4 rounded-[2rem] hover:bg-cyan-600 transition-all duration-500 shadow-2xl shadow-slate-900/20 active:scale-95 overflow-hidden"
-          >
-            <div class="flex flex-col items-end border-r border-white/10 pr-6 relative z-10">
-              <span class="text-[10px] font-black opacity-60 uppercase tracking-widest">إضافة عمل</span>
-              <span class="text-sm font-black whitespace-nowrap">مشروع جديد</span>
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SIDEBAR + CONTENT LAYOUT                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="flex flex-col lg:flex-row min-h-screen">
+
+    <!-- ── LEFT SIDEBAR (fixed brand strip) ──────────────────── -->
+    <aside class="lg:w-72 xl:w-80  text-black shrink-0 flex flex-col">
+
+      <!-- Brand block -->
+      <div class="p-8 border-b border-black/10">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+            <i class="fas fa-hard-hat text-white text-lg"></i>
+          </div>
+          <div>
+            <p class="text-xs text-stone-400 font-semibold uppercase tracking-widest">لوحة التحكم</p>
+            <p class="text-sm font-black text-black">HandyPro</p>
+          </div>
+        </div>
+
+        <!-- Page title -->
+        <h1 class="text-3xl font-black text-black leading-tight mb-2">
+          معرض<br><span class="text-blue-400">الأعمال</span>
+        </h1>
+        <p class="text-stone-400 text-sm leading-relaxed">
+          منصة عرض مهاراتك — حوّل مشاريعك إلى فرص عمل حقيقية.
+        </p>
+      </div>
+
+      <!-- Stats block -->
+      @if(role() === Roles.Worker_Role) {
+        <div class="p-8 border-b border-black/10">
+          <p class="text-xs text-stone-500 font-bold uppercase tracking-widest mb-4">إحصائياتك</p>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-stone-400 text-sm flex items-center gap-2">
+                <i class="fas fa-images text-blue-500 text-xs"></i> إجمالي المشاريع
+              </span>
+              <span class="text-2xl font-black text-black">{{ myPortfolio().length }}</span>
             </div>
-            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:bg-white/20 group-hover:rotate-[360deg] transition-all duration-700 relative z-10">
-              <i class="fas fa-plus text-lg"></i>
+            <div class="w-full bg-stone-700 rounded-full h-1">
+              <div class="bg-blue-500 h-1 rounded-full transition-all duration-700"
+                   [style.width.%]="myPortfolio().length > 0 ? (myPortfolio().length / 20 * 100) : 5">
+              </div>
             </div>
-            <!-- تأثير لمعة عند الـ Hover -->
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            <p class="text-xs text-stone-600">الهدف: ٢٠ مشروع</p>
+          </div>
+        </div>
+      }
+
+      <!-- Add button -->
+      @if(role() === Roles.Worker_Role) {
+        <div class="p-8 mt-auto">
+          <button
+            routerLink="/dashboared/addPortfolio"
+            class="w-full group flex items-center justify-between bg-blue-500 hover:bg-blue-400 text-white font-black px-5 py-4 rounded-2xl transition-all duration-300 active:scale-95">
+            <span class="text-sm">أضف مشروع جديد</span>
+            <div class="w-9 h-9 bg-stone-900/10 group-hover:bg-stone-900/20 rounded-xl flex items-center justify-center transition-colors">
+              <i class="fas fa-plus text-sm"></i>
+            </div>
           </button>
         </div>
       }
-    </header>
 
-    <div class="relative">
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
-        
+    </aside>
+
+    <!-- ── MAIN CONTENT AREA ──────────────────────────────────── -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+
+      <!-- Toolbar row -->
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-bold text-stone-400 uppercase tracking-widest">عرض</span>
+          <span class="text-xs bg-stone-200 text-stone-600 px-3 py-1 rounded-full font-bold">
+            {{ filterdPortfolio().length }} نتيجة
+          </span>
+        </div>
+        <!-- Decorative divider line -->
+        <div class="flex-1 mx-6 h-px bg-stone-300"></div>
+        <div class="flex items-center gap-2 text-stone-400">
+          <i class="fas fa-hammer text-xs"></i>
+          <i class="fas fa-wrench text-xs"></i>
+          <i class="fas fa-screwdriver text-xs"></i>
+        </div>
+      </div>
+
+      <!-- ── PORTFOLIO GRID ──────────────────────────────────── -->
+      <div class="grid grid-cols-1 gap-5">
+
         @for(work of filterdPortfolio(); track work.createdAt) {
-          <div 
-            (click)="routForEditing(work)" 
-            class="group cursor-pointer relative bg-white rounded-[2rem] p-2 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-200/50"
+          <div
+            (click)="routForEditing(work)"
+            class="cursor-pointer"
           >
-            <app-protfolio-card 
-              [portfolio]="work" 
-              class="block w-full h-full"
+            <app-protfolio-card
+              [portfolio]="work"
+              class="block w-full"
             ></app-protfolio-card>
-            
-            <div class="absolute inset-0 border-2 border-transparent group-hover:border-cyan-500/10 rounded-[2rem] pointer-events-none transition-colors"></div>
           </div>
         }
 
+        <!-- ── EMPTY STATE ──────────────────────────────────── -->
         @if(myPortfolio().length === 0) {
-          <div 
-            class="col-span-full border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center p-16 md:p-28 hover:border-cyan-400 hover:bg-cyan-50/20 transition-all group cursor-pointer"
+          <div
             routerLink="/dashboard/addPortfolio"
-          >
-            <div class="relative mb-6">
-              <div class="absolute inset-0 bg-cyan-100 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div class="relative w-24 h-24 bg-white shadow-inner border border-slate-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                <i class="fas fa-images text-slate-300 text-4xl group-hover:text-cyan-600 transition-colors"></i>
+            class="cursor-pointer group border-2 border-dashed border-stone-300 hover:border-blue-400 bg-black hover:bg-blue-50/40 rounded-3xl transition-all duration-300 p-20 flex flex-col items-center text-center">
+
+            <div class="relative mb-8">
+              <div class="w-24 h-24 bg-stone-100 border-2 border-stone-200 group-hover:border-blue-300 rounded-3xl flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+                <i class="fas fa-images text-5xl text-stone-300 group-hover:text-blue-400 transition-colors"></i>
+              </div>
+              <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 group-hover:bg-blue-400 rounded-xl flex items-center justify-center transition-colors">
+                <i class="fas fa-plus text-black text-xs"></i>
               </div>
             </div>
-            
-            <h3 class="text-slate-900 text-xl font-extrabold mb-2">ابدأ ببناء ملفك الشخصي</h3>
-            <p class="text-slate-400 text-sm text-center max-w-sm leading-relaxed">
-              لم تقم بإضافة أي مشاريع حتى الآن. قم برفع أفضل أعمالك لتظهر بشكل احترافي أمام العملاء.
+
+            <h3 class="text-stone-800 text-2xl font-black mb-3">ابدأ ببناء ملفك الشخصي</h3>
+            <p class="text-stone-400 text-sm max-w-sm leading-relaxed mb-8">
+              لم تقم بإضافة أي مشاريع حتى الآن. ارفع أفضل أعمالك لتظهر احترافياً أمام العملاء.
             </p>
-            
-            <span class="mt-8 text-cyan-600 font-bold text-sm flex items-center gap-2 group-hover:gap-4 transition-all">
+
+            <span class="inline-flex items-center gap-3 bg-stone-900 group-hover:bg-blue-500 text-black group-hover:text-stone-900 font-bold text-sm px-6 py-3 rounded-2xl transition-all duration-300">
+              <i class="fas fa-plus text-xs"></i>
               اضغط هنا للبدء
-              <i class="fas fa-arrow-left text-xs"></i>
+              <i class="fas fa-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
             </span>
+
           </div>
         }
 
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 </div>

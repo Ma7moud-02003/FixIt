@@ -1,12 +1,17 @@
-  <nav class="w-full bg-white mx-auto  px-6 py-2 flex justify-between  items-center  shadow-sm sticky top-0 z-50">
-        <div class="flex items-center gap-2">
-            <div routerLink="/mainLayout" class="bg-blue-500 cursor-pointer w-12 h-12 flex items-center justify-center rounded-full text-white">
-                       <i class="fa-solid fa-hammer"></i>
-            </div>
-            <span class="font-bold text-xl text-blue-600">FixIt</span>
+<nav class="w-full bg-white mx-auto px-4 py-1.5 flex justify-between items-center shadow-sm sticky top-0 z-50">
+    <div class="flex items-center gap-1.5">
+        <div routerLink="/mainLayout" class="bg-blue-500 cursor-pointer w-9 h-9 flex items-center justify-center rounded-full text-white text-sm">
+            <i class="fa-solid fa-hammer"></i>
         </div>
-        <div class="flex ">
-            <button routerLink="/login" class="text-gray-600 hover:text-blue-600 mx-3.5 transition">تسجيل الدخول</button>
-            <button routerLink="/register" class="bg-blue-500 text-white md:px-5 px-2 text-sm py-2 rounded-lg hover:bg-blue-600 transition">إنشاء حساب</button>
-        </div>
-    </nav>
+        <span class="font-bold text-lg text-blue-600">FixIt</span>
+    </div>    
+    
+    <div class="flex items-center">
+        <button routerLink="/login" class="text-gray-600 hover:text-blue-600 mx-2 transition text-xs font-medium">
+            تسجيل الدخول
+        </button>
+        <button routerLink="/register" class="bg-blue-500 text-white md:px-4 px-2.5 text-xs py-1.5 rounded-md hover:bg-blue-600 transition">
+            إنشاء حساب
+        </button>
+    </div>
+</nav>
