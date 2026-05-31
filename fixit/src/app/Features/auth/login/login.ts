@@ -50,14 +50,10 @@ showAndHidePassword(pass:HTMLInputElement)
 pass.type='password'
 }
 
-submitForm(agreed:HTMLInputElement,button:HTMLElement)
+submitForm(button:HTMLElement)
 {
   button.innerText='.....جار التسجيل';
-  if(!agreed.checked)
-{
-    alert('يرجي الموافقه علي سياسة الخصوصية');
-    return;
-}
+  
   if(!this.loginForm().valid())
   alert('الحقول مطلوبه')
 this.subs.add(this._auth.login(this.loginForm().value()).subscribe({

@@ -76,9 +76,11 @@ pass.type='password'
 
 
 
-
+isLoading = signal(false);
 submitForm(role:HTMLInputElement,agreed:HTMLInputElement)
 {
+
+  if(this.isLoading()) return;
   if(!agreed.checked)
 {
     alert('يرجي الموافقه علي سياسة الخصوصية');
@@ -88,12 +90,22 @@ submitForm(role:HTMLInputElement,agreed:HTMLInputElement)
   this.regiterForm.role().value.set('worker');
   else
   this.regiterForm.role().value.set('client');
+
+ this.isLoading.set(true)
+
 this.subs.add(this._auth.register(this.regiterForm().value()).subscribe({
   next:(res)=>{
-  this.alert.sucsess('تم تسجيل حسابك بنجاح ')
+  this.alert.sucsess('تم تسجيل حسابك بنجاح ');
+  this.isLoading.set(false);
 this.router.navigate(['/login'])
 console.log(res);
 console.log(typeof(res));
+  },error: () => {
+        // حبل الأمان: لو السيرفر رجع 400 أو 500 أو أي إيرور، اللودر هيقفل فوراً هنا
+        this.isLoading.set(false);
+  }
+  ,complete:()=>{
+    this.isLoading.set(false)
   }
 })
 )

@@ -71,14 +71,9 @@
         </p>
       </div>
 
-      <div class="flex items-center gap-2">
-        <input #agreed type="checkbox" formControlName="agreeTerms" class="rounded text-cyan-500 focus:ring-cyan-500 h-3.5 w-3.5">
-        <p class="text-[11px] text-gray-400 leading-tight">
-          أنت توافق على <span class="text-cyan-500 underline cursor-pointer">شروط الخدمة</span> و <span class="text-cyan-500 underline cursor-pointer">سياسة الخصوصية</span>.
-        </p>
-      </div>
+      
 
-      <button #submitButton [disabled]="!loginForm().valid()" type="button" (click)="submitForm(agreed,submitButton)" 
+      <button #submitButton [disabled]="!loginForm().valid()" type="button" (click)="submitForm(submitButton)" 
         class="w-full bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition duration-200 text-sm">
         <span>تسجيل دخول</span>
         <svg class="h-4 w-4 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
