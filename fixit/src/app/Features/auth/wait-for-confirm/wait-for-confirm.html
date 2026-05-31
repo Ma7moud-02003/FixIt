@@ -1,0 +1,37 @@
+<div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4" dir="rtl">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-6 text-center space-y-6">
+    
+    <div class="mx-auto bg-cyan-50 w-16 h-16 flex items-center justify-center rounded-full text-cyan-500 text-2xl animate-bounce">
+      <i class="fa-solid fa-envelope-open-text"></i>
+    </div>
+
+    <div class="space-y-2">
+      @if (mode() === 'register') {
+        <h1 class="text-xl font-extrabold text-gray-800">تفقد بريدك الإلكتروني 📨</h1>
+        <p class="text-xs text-gray-500 leading-relaxed">
+          لقد أرسلنا رابط تفعيل الحساب إلى البريد الإلكتروني الذي سجلت به. يرجى الضغط على الرابط لتفعيل حسابك والبدء في استخدام <b>FixIt</b>.
+        </p>
+      } @else {
+        <h1 class="text-xl font-extrabold text-gray-800">استعادة كلمة المرور 🔐</h1>
+        <p class="text-xs text-gray-500 leading-relaxed">
+          لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى الضغط على الرابط المرفق لتعيين كلمة سر جديدة لحسابك في <b>FixIt</b>.
+        </p>
+      }
+    </div>
+
+    <a href="https://mail.google.com" target="_blank" 
+       class="block w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition duration-200 shadow-md shadow-cyan-100 cursor-pointer">
+       <i class="fa-brands fa-google ml-1"></i> الانتقال إلى Gmail
+    </a>
+
+    <div class="border-t border-gray-100 pt-4 space-y-3">
+      <p class="text-[11px] text-gray-400">لم يصلك البريد الإلكتروني؟ تفقد ملف الرسائل غير المرغوب فيها (Spam)</p>
+      
+      <a [routerLink]="mode() === 'register' ? '/register' : '/login'" 
+         class="inline-block text-xs text-cyan-600 font-bold hover:underline cursor-pointer">
+         {{ mode() === 'register' ? 'العودة لإنشاء الحساب' : 'العودة لتسجيل الدخول' }}
+      </a>
+    </div>
+
+  </div>
+</div>

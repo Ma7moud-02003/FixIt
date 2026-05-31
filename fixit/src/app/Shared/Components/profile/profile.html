@@ -298,35 +298,72 @@
               </button>
             </div>
 
-            @if(showChangePassForm()) {
-              <div class="mt-10 p-8 bg-neutral-900 rounded-[2.5rem] text-white animate-in zoom-in-95 duration-300">
-                <div class="flex items-center justify-between mb-8">
-                  <h4 class="text-xl font-black">تحديث كلمة السر</h4>
-                  <button (click)="showChangePassForm.set(false)" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-neutral-400 mr-1">كلمة السر الحالية</label>
-                    <input type="password" [formField]="changPasswordForm.currentPassword" class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 text-white focus:bg-white/20 outline-none transition-all">
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-neutral-400 mr-1">كلمة السر الجديدة</label>
-                    <input type="password" [formField]="changPasswordForm.newPassword" class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 text-white focus:bg-white/20 outline-none transition-all">
-                  </div>
-                    <div class="space-y-2">
-                    <label class="text-xs font-bold text-neutral-400 mr-1">تأكيد كلمة السر الجديدة</label>
-                    <input type="password" [formField]="changPasswordForm.confarmPassword" class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 text-white focus:bg-white/20 outline-none transition-all">
-                  </div>
-                </div>
-                
-                
-                <button (click)="changeUserPassword()" [disabled]="changPasswordForm().invalid()" class="w-full py-4 bg-sky-500 hover:bg-sky-600 text-white rounded-2xl font-black shadow-lg shadow-sky-900 transition-all active:scale-95">
-                  تأكيد التحديث
-                </button>
-              </div>
-            }
+         @if(showChangePassForm()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-all duration-300 animate-fade-in"
+       (click)="showChangePassForm.set(false)">
+    
+    <div class="bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden w-full max-w-lg transform transition-all duration-300 scale-in mx-auto flex flex-col"
+         (click)="$event.stopPropagation()" dir="rtl">
+      
+      <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600">
+            <i class="fas fa-lock text-base"></i>
+          </div>
+          <div>
+            <h4 class="text-base font-black text-slate-800">تحديث كلمة السر</h4>
+            <p class="text-xs text-slate-400">تأكد من كتابة كلمة مرور قوية لحماية حسابك</p>
+          </div>
+        </div>
+        
+        <button (click)="showChangePassForm.set(false)" 
+                class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-200 hover:text-slate-600 transition-colors cursor-pointer">
+          <i class="fas fa-times text-xs"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 space-y-4 max-h-[calc(100vh-140px)] overflow-y-auto">
+        
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-600 mr-1">كلمة السر الحالية <span class="text-red-500">*</span></label>
+          <input type="password" 
+                 [formField]="changPasswordForm.currentPassword" 
+                 placeholder="••••••••"
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-sky-500 outline-none transition-all border-2 text-sm font-medium">
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-600 mr-1">كلمة السر الجديدة <span class="text-red-500">*</span></label>
+          <input type="password" 
+                 [formField]="changPasswordForm.newPassword" 
+                 placeholder="••••••••"
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-sky-500 outline-none transition-all border-2 text-sm font-medium">
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-600 mr-1">تأكيد كلمة السر الجديدة <span class="text-red-500">*</span></label>
+          <input type="password" 
+                 [formField]="changPasswordForm.confarmPassword" 
+                 placeholder="••••••••"
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-sky-500 outline-none transition-all border-2 text-sm font-medium">
+        </div>
+
+      </div>
+      
+      <div class="p-6 border-t border-slate-100 flex flex-col sm:flex-row gap-3 bg-slate-50/50">
+        <button (click)="changeUserPassword()" 
+                [disabled]="changPasswordForm().invalid()" 
+                class="flex-1 py-3 bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 text-white rounded-xl font-black shadow-md shadow-sky-100 transition-all active:scale-95 cursor-pointer text-sm">
+          تأكيد التحديث
+        </button>
+        <button (click)="showChangePassForm.set(false)" 
+                class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-bold transition-all text-sm cursor-pointer">
+          إلغاء
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
           </div>
         </section>

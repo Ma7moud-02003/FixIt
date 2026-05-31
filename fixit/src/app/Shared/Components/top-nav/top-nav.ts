@@ -1,7 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink, RouterModule } from "@angular/router";
 import { Auth } from '../../../Core/Services/auth';
 import { UserRole } from '../../enums/role';
+import { CommonModule } from '@angular/common';
 interface User{
   fullName:string,
   imgUrl:string,
@@ -9,7 +10,7 @@ interface User{
 }
 @Component({
   selector: 'app-top-nav',
-  imports: [RouterLink],
+  imports: [RouterLink,RouterModule,CommonModule],
   templateUrl: './top-nav.html',
   styleUrl: './top-nav.css',
 })
@@ -17,7 +18,7 @@ export class TopNav implements OnInit{
  _auth=inject(Auth);
  role=signal<string>('');
  Role=UserRole
-
+ router=inject(Router);
 
 ngOnInit(): void {
 
@@ -27,6 +28,14 @@ ngOnInit(): void {
   this.role.set(this._auth.getRole()||'');
 }
 
+routeTo(route:string){
+this.router.navigate([`/mainLayout/${route}`])
+}
+
+isLinkActive(path: string): boolean {
+  return this.router.url === path;
+}
+showDropDowen=signal<boolean>(false);
 user=signal<User>({} as User)
 
   logOut()

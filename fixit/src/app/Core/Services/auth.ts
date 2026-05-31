@@ -91,4 +91,11 @@ getUserIdFromToken() {
 
      }
   }
+// reset forgetten password
+sendEmail(email:string){
+  console.log(email);
+  
+return this.http.post(`${environment.apiUrl}/Account/ForgotPassword`, {email});
+}
+
 }

@@ -1,24 +1,45 @@
 <nav class="fixed top-0 z-100 flex h-14 w-full left-0 items-center justify-between px-4 backdrop-blur-xl border-b border-slate-100/80 transition-all duration-300" dir="rtl">
   
-  <div  [routerLink]="role() === Role.Worker_Role ? '/dashboared/' : '/mainLayout/home'" class="flex items-center gap-6"> <div class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-sky-200/50 transition-transform duration-500 cursor-pointer">
+  <div  class="flex items-center gap-6"> 
+    <div  [routerLink]="role() === Role.Worker_Role ? '/dashboared/' : '/mainLayout/home'" class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-sky-200/50 transition-transform duration-500 ">
       <i class="fas text-white fa-hammer text-base"></i>
     </div>
 
-    @if (role()==Role.Clien_Role) {
-      <div class="hidden items-center gap-5 md:flex">
-        <a routerLink="/mainLayout/home" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
-           class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">الرئيسية</a>
-        
-        <a routerLink="/mainLayout/search" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
-           class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">تصفح الخدمات</a>
-        
-        <a routerLink="/my-services" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
-           class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">الرسائل</a>
-        
-        <a routerLink="/mainLayout/myServices" routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
-           class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">طلباتي</a>
-      </div>
-    }
+   @if (role() == Role.Clien_Role) {
+  <div class="hidden items-center gap-5 md:flex">
+    
+    <!-- الرئيسية -->
+    <a routerLink="/mainLayout/home" 
+       [routerLinkActiveOptions]="{ exact: true }"
+       routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
+       class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
+       الرئيسية
+    </a>
+    
+    <!-- تصفح الخدمات (تم دمج دالة الـ Active يدوياً) -->
+    <div (click)="routeTo('search')" 
+       [class]="isLinkActive('/mainLayout/search') 
+                ? 'relative py-1 text-[13px] font-bold text-sky-600 opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-full after:bg-sky-500 cursor-pointer' 
+                : 'relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer'">
+       تصفح الخدمات
+  </div>
+    
+    <!-- الرسائل -->
+    <a [routerLink]="['/chat','']" 
+       routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
+       class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
+       الرسائل
+    </a>
+    
+    <!-- طلباتي -->
+    <a [routerLink]="[role()===Role.Clien_Role? '/mainLayout/myServices' : '/dashboared/myServices'] " 
+       routerLinkActive="text-sky-600 !opacity-100 after:w-full" 
+       class="relative py-1 text-[13px] font-medium text-slate-600 transition-all opacity-80 hover:opacity-100 after:absolute after:bottom-0 after:right-0 after:h-0.5 after:w-0 after:bg-sky-500 after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
+       طلباتي
+    </a>
+
+  </div>
+}
   </div>
 
   <div class="flex items-center gap-2"> <button routerLink="/my_notifs" class="relative p-1.5 text-slate-500 hover:bg-sky-50 rounded-xl transition-all group active:scale-90">
@@ -45,17 +66,22 @@
 
     <div class="h-5 w-px bg-slate-200/60 mx-1"></div>
 
-    <div class="relative cursor-pointer group">
+    <div (click)="showDropDowen.set(!showDropDowen())" class="relative cursor-pointer">
       <div class="flex items-center gap-2 bg-slate-50/50 p-1 pl-3 rounded-full border border-transparent hover:border-sky-100 hover:bg-white transition-all duration-300">
+        <!-- <button (click)="logOut()"
+            class="md:hidden flex items-center gap-1.5 py-1 px-3 text-[13px] font-bold text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100/70 rounded-lg transition-all duration-200 cursor-pointer border border-red-100/50">
+       <i class="fas fa-sign-out-alt text-[12px]"></i>
+       <span>خروج</span>
+    </button> -->
         <div class="relative">
-          <img  routerLink="/dashboared/profile" 
+          <img  [routerLink]="role()===Role.Worker_Role? '/dashboared/profile':'/mainLayout/profile'" 
             [src]="user().imgUrl||'/icons8-user-50.png'" 
             alt="Profile" 
             class="h-7.5 w-7.5 rounded-full border border-white object-cover shadow-sm ring-1 ring-sky-100 transition-transform group-hover:scale-105" >
           <span class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border border-white bg-green-500 shadow-sm"></span>
         </div>
-        
-        <div class="hidden md:flex items-center gap-2">
+       
+        <div class="flex items-center gap-2">
           <p class="text-xs font-medium text-slate-700">
             {{user().fullName}}
           </p>
@@ -66,7 +92,8 @@
         </div>
       </div>
 
-      <div class="invisible absolute left-0 top-full mt-1 w-48 translate-y-1 scale-95 rounded-2xl border border-slate-100 bg-white/90 backdrop-blur-xl p-1.5 opacity-0 shadow-[0_15px_35px_rgba(0,0,0,0.08)] transition-all duration-300 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
+     @if(showDropDowen()){
+       <div class="absolute left-0 top-full mt-1 w-48 translate-y-1 scale-95 rounded-2xl border border-slate-100 bg-white backdrop-blur-xl p-1.5  shadow-[0_15px_35px_rgba(0,0,0,0.08)] transition-all duration-300 ">
         <div class="px-3 py-1.5 border-b border-slate-50 mb-1">
           <p class="text-[9px] font-black text-sky-600 uppercase tracking-widest">إدارة الحساب</p>
         </div>
@@ -85,6 +112,7 @@
           <i class="fas fa-sign-out-alt opacity-70"></i> تسجيل الخروج
         </button>
       </div>
+     }
 
     </div> </div>
 </nav>

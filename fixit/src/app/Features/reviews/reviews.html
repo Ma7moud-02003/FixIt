@@ -1,132 +1,119 @@
-<div class="min-h-screen bg-slate-50/50 py-12 px-6 " >
-  <div class="max-w-7xl mx-auto">
+<div class="min-h-screen bg-slate-50/50 py-8 px-4 md:px-6">
+  <div class="max-w-4xl mx-auto">
     
-    <header class="mb-12  text-center">
-      <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-3">تقييمات العملاء</h1>
-      <p class="text-slate-500 text-center  ">
-        الحقيقة: نحن نؤمن بأن الشفافية هي أساس الثقة بين Fixit. هنا نعرض آراء وتجارب مستخدمي العميل والفني.
+    <header class="mb-8 text-center">
+      <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-2">تقييمات العملاء</h1>
+      <p class="text-xs md:text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed">
+        الحقيقة: نحن نؤمن بأن الشفافية هي أساس الثقة في Fixit. هنا نعرض آراء وتجارب مستخدمي العميل والفني.
       </p>
     </header>
 
-    <div class=" items-start">
-      
-     
-
-      <main class="lg:col-span-8 space-y-8 order-1 lg:order-2 lg:w-3/4 mx-auto">
+    <div>
+      <main class="w-full space-y-6 mx-auto">
         
-
-
-  @if (role()===Roles.Clien_Role&&workerData()) {
-    <div class="flex justify-center text-center">
-          <div>
- <div class="w-30 h-30 rounded-full border-4 border-white overflow-hidden">
-<img [src]="workerData().imgUrl" loading="lazy" class="w-full  h-full" alt="worker-image">
-  </div>
-    </div>
-        </div>
-
-        <h2 class="text-4xl text-center font-bold  py-3">تقييمات  الفني : {{workerData().workerName}} 
-          <i class="fas fa-star text-yellow-400 "></i>
-        </h2>
- 
-
-}
-    
-
-        <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-xl shadow-slate-200/40   p-8 flex flex-col md:flex-row items-center gap-10">
-          <div class="text-center md:border-l border-slate-100 md:pl-10 space-y-2">
-            <div class="text-6xl font-black text-slate-900 tracking-tighter">4.8</div>
-            <div class="flex justify-center text-yellow-400 text-sm">
+        @if (role() === Roles.Clien_Role && workerData()) {
+          <div class="flex flex-col items-center text-center gap-3">
+            <div class="w-24 h-24 rounded-full border-4 border-white overflow-hidden shadow-md">
+              <img [src]="workerData().imgUrl" loading="lazy" class="w-full h-full object-cover" alt="worker-image">
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-800">
+              تقييمات الفني: <span class="text-cyan-600">{{workerData().workerName}}</span>
+              <i class="fas fa-star text-yellow-400 text-lg md:text-xl align-middle mr-1"></i>
+            </h2>
+          </div>
+        }
+        
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-6 md:gap-10">
+          <div class="text-center sm:border-l sm:border-slate-100 sm:pl-10 space-y-1 shrink-0">
+            <div class="text-5xl font-black text-slate-900 tracking-tighter">4.8</div>
+            <div class="flex justify-center text-yellow-400 text-xs gap-0.5">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">بناءً على 1,240 تقييم</p>
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">بناءً على 1,240 تقييم</p>
           </div>
 
-          <div class="flex-1 w-full space-y-3">
-            <div class="flex items-center gap-4">
-              <span class="text-[10px] font-black text-slate-400 w-4">5</span>
-              <div class="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden">
-                <div class="h-full bg-sky-400 w-[85%] rounded-full"></div>
+          <div class="flex-1 w-full space-y-2.5">
+            <div class="flex items-center gap-3">
+              <span class="text-[10px] font-bold text-slate-400 w-3">5</span>
+              <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-500 w-[85%] rounded-full"></div>
               </div>
-              <span class="text-[10px] font-black text-slate-400 w-8 text-left">85%</span>
+              <span class="text-[10px] font-bold text-slate-400 w-8 text-left">85%</span>
             </div>
-            <div class="flex items-center gap-4">
-              <span class="text-[10px] font-black text-slate-400 w-4">4</span>
-              <div class="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden">
-                <div class="h-full bg-sky-400 w-[10%] rounded-full"></div>
+            <div class="flex items-center gap-3">
+              <span class="text-[10px] font-bold text-slate-400 w-3">4</span>
+              <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-500 w-[10%] rounded-full"></div>
               </div>
-              <span class="text-[10px] font-black text-slate-400 w-8 text-left">10%</span>
+              <span class="text-[10px] font-bold text-slate-400 w-8 text-left">10%</span>
             </div>
-            <div class="flex items-center gap-4 opacity-40">
-              <span class="text-[10px] font-black text-slate-400 w-4">3</span>
-              <div class="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden"><div class="h-full bg-sky-400 w-[5%]"></div></div>
-              <span class="text-[10px] font-black text-slate-400 w-8 text-left">5%</span>
+            <div class="flex items-center gap-3 opacity-50">
+              <span class="text-[10px] font-bold text-slate-400 w-3">3</span>
+              <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-500 w-[5%] rounded-full"></div>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 w-8 text-left">5%</span>
             </div>
           </div>
         </div>
 
-        
-
-        <div class="flex justify-between items-center bg-slate-100/50 p-2 rounded-2xl">
-          <div class="flex gap-2">
-            <button (click)="getFilter('')" class="px-6 py-2 bg-white text-slate-900 font-black text-xs rounded-xl shadow-sm border border-slate-100">الكل</button>
-            <button (click)="getFilter('rate')" class="px-6 py-2 text-slate-400 font-bold text-xs rounded-xl hover:bg-white transition-all">الأعلى تقييماً</button>
-            <button (click)="getFilter('newest')" class="px-6 py-2 text-slate-400 font-bold text-xs rounded-xl hover:bg-white transition-all">الأحدث</button>
+        <div class="flex flex-wrap justify-between items-center bg-slate-100/60 p-1.5 rounded-2xl gap-2">
+          <div class="flex flex-wrap gap-1">
+            <button (click)="getFilter('')" class="px-4 py-1.5 bg-white text-slate-900 font-black text-xs rounded-xl shadow-sm border border-slate-200/50">الكل</button>
+            <button (click)="getFilter('rate')" class="px-4 py-1.5 text-slate-400 font-bold text-xs rounded-xl hover:bg-white transition-all">الأعلى تقييماً</button>
+            <button (click)="getFilter('newest')" class="px-4 py-1.5 text-slate-400 font-bold text-xs rounded-xl hover:bg-white transition-all">الأحدث</button>
           </div>
-          <button class="px-4 py-2 text-slate-500 font-bold text-xs flex items-center gap-2">
+          <button class="px-3 py-1.5 text-slate-500 font-bold text-xs flex items-center gap-1.5 hover:text-slate-800 transition-colors">
              <i class="fas fa-filter text-[10px]"></i> تصفية
           </button>
         </div>
 
-        <div class="space-y-6">
-        @for (rev of filteredReview(); track rev) {
-            <app-review-card [review]="rev"></app-review-card>
-        }@empty {
-          <h1 class="py-5 font-bold text-3xl text-center"> لا يوجد تقييمات  </h1>
-        }
+        <div class="w-full space-y-4">
+          @for (rev of filteredReview(); track rev) {
+              <app-review-card [review]="rev"></app-review-card>
+          } @empty {
+            <h1 class="py-8 font-bold text-xl text-slate-400 text-center">لا يوجد تقييمات حتى الآن</h1>
+          }
         </div>
 
-        <button class="w-full py-4 border-2 border-slate-100 text-slate-400 font-black text-xs rounded-2xl hover:bg-slate-50 transition-colors">
+        <button class="w-full py-3 border border-slate-200 text-slate-400 font-black text-xs rounded-xl hover:bg-slate-50 transition-colors">
           عرض المزيد من التقييمات
         </button>
-      </main>
 
+        <div class="flex items-center justify-center pt-6 pb-2" dir="rtl">
+          <nav class="inline-flex items-center p-1 bg-white border border-slate-100 rounded-full shadow-sm gap-1">
+            
+            <button
+              (click)="changePage(page() - 1)"
+              [disabled]="page() === 1"
+              class="flex items-center justify-center h-9 px-3 text-xs font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50/50 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed group">
+              <i class="fas fa-chevron-right ml-1 text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
+              السابق
+            </button>
+
+            <div class="flex items-center gap-1 px-1 border-x border-slate-100">
+              <button
+                *ngFor="let p of [1,2,3,4,5]; let i = index"
+                (click)="changePage(i + 1)"
+                class="w-9 h-9 flex items-center justify-center rounded-full text-xs font-black transition-all active:scale-95"
+                [ngClass]="(i + 1) === page()
+                  ? 'bg-cyan-500 text-white shadow-md shadow-cyan-100 scale-105 z-10'
+                  : 'bg-transparent text-slate-500 hover:bg-cyan-50/50 hover:text-cyan-600'">
+                {{ i + 1 }}
+              </button>
+            </div>
+
+            <button
+              (click)="changePage(page() + 1)"
+              class="flex items-center justify-center h-9 px-3 text-xs font-black text-cyan-500 hover:bg-cyan-50/50 rounded-full transition-all group">
+              التالي
+              <i class="fas fa-chevron-left mr-1 text-[9px] group-hover:-translate-x-0.5 transition-transform"></i>
+            </button>
+
+          </nav>
+        </div>
+
+      </main>
     </div>
   </div>
-</div>
-<div class="flex items-center justify-center mt-12 mb-6" dir="rtl">
-  <!-- الحاوية الرئيسية بتصميم ناعم وألوان متناسقة -->
-  <nav class="inline-flex items-center p-1.5 bg-white border border-cyan-50 rounded-[2rem] shadow-[0_10px_30px_-10px_rgba(6,182,212,0.1)] gap-1">
-    
-    <!-- زر السابق -->
-    <button
-      (click)="changePage(page() - 1)"
-      [disabled]="page() === 1"
-      class="flex items-center justify-center h-11 px-5 text-sm font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-[1.5rem] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group">
-      <i class="fas fa-chevron-right ml-2 text-[10px] group-hover:translate-x-1 transition-transform"></i>
-      السابق
-    </button>
-
-    <!-- الأرقام -->
-    <div class="flex items-center gap-1.5 px-2 border-x border-slate-50">
-      <button
-        *ngFor="let p of [1,2,3,4,5]; let i = index"
-        (click)="changePage(i + 1)"
-        class="w-11 h-11 flex items-center justify-center rounded-[1.2rem] text-sm font-black transition-all duration-300 active:scale-95"
-        [ngClass]="(i + 1) === page()
-          ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200 scale-110 z-10'
-          : 'bg-transparent text-slate-500 hover:bg-cyan-50 hover:text-cyan-600'">
-        {{ i + 1 }}
-      </button>
-    </div>
-
-    <!-- زر التالي -->
-    <button
-      (click)="changePage(page() + 1)"
-      class="flex items-center justify-center h-11 px-5 text-sm font-black text-cyan-600 hover:bg-cyan-50 rounded-[1.5rem] transition-all duration-300 group">
-      التالي
-      <i class="fas fa-chevron-left mr-2 text-[10px] group-hover:-translate-x-1 transition-transform"></i>
-    </button>
-
-  </nav>
 </div>

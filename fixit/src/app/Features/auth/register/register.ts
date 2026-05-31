@@ -95,9 +95,8 @@ submitForm(role:HTMLInputElement,agreed:HTMLInputElement)
 
 this.subs.add(this._auth.register(this.regiterForm().value()).subscribe({
   next:(res)=>{
-  this.alert.sucsess('تم تسجيل حسابك بنجاح ');
   this.isLoading.set(false);
-this.router.navigate(['/login'])
+this.router.navigate(['/wait'], { queryParams: { mode: 'register' } });
 console.log(res);
 console.log(typeof(res));
   },error: () => {

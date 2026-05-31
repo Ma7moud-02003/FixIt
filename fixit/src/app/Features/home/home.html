@@ -36,7 +36,7 @@
                 المنصة الأولى للصنايعية في مصر
             </span>
 
-            <h1 class="text-5xl md:text-7xl text-slate-900 font-black leading-[1.15] tracking-tight">
+            <h1  class="text-5xl md:text-7xl text-slate-900 font-black leading-[1.15] tracking-tight">
                 اطلب <span class="text-transparent bg-clip-text bg-gradient-to-l from-cyan-600 to-blue-500">صنايعي محترف</span> <br> في دقائق معدودة
             </h1>
             
@@ -46,12 +46,12 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-5">
-            <button class="h-16 px-10 bg-cyan-400 hover:bg-cyan-500 text-slate-900 rounded-2xl font-black text-lg transition-all shadow-2xl shadow-cyan-200 active:scale-95 flex items-center justify-center gap-3 group" routerLink="/login">
+            <button (click)="routTo()" class="h-16 px-10 bg-cyan-400 hover:bg-cyan-500 text-slate-900 rounded-2xl font-black text-lg transition-all shadow-2xl shadow-cyan-200 active:scale-95 flex items-center justify-center gap-3 group" routerLink="/login">
                 اطلب خدمة الآن
                 <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i>
             </button>
             
-            <button class="h-16 px-10 bg-white border-2 border-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-50 hover:border-slate-200 transition-all active:scale-95 flex items-center justify-center" routerLink="/register">
+            <button routerLink="/register" class="h-16 px-10 bg-white border-2 border-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-50 hover:border-slate-200 transition-all active:scale-95 flex items-center justify-center" routerLink="/register">
                 انضم كفني محترف
             </button>
         </div>

@@ -1,6 +1,8 @@
-import { Component, ElementRef, inject, QueryList, signal, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, QueryList, signal, ViewChildren } from '@angular/core';
 import { Footer } from "../../Shared/Components/footer/footer";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { Auth } from '../../Core/Services/auth';
+import { UserRole } from '../../Shared/enums/role';
 
 
 @Component({
@@ -9,7 +11,7 @@ import { RouterLink } from "@angular/router";
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
+export class Home implements OnInit{
   
 services=signal([
   {
@@ -98,9 +100,21 @@ steps = signal([
   }
 ]);
 
-ngAfterViewInit() {
+auth=inject(Auth);
+private route=inject(Router);
+role=signal<string>('');
 
-  
+ngOnInit(): void {
+  this.role.set(this.auth.getRole()||'')
+}
+
+routTo(){
+if(this.role()==UserRole.Clien_Role)
+this.route.navigate(['/mainLayout/search']);
+
+}
+
+ngAfterViewInit() {
 }
 }
 

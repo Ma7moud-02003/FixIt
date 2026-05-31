@@ -11,6 +11,16 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Features/auth/register/register').then(m => m.Register)
   },
+   {
+    path: 'wait',
+    loadComponent: () =>
+      import('./Features/auth/wait-for-confirm/wait-for-confirm').then(m => m.WaitForConfirm)
+  },
+  {
+    path: 'forgetPass',
+    loadComponent: () =>
+      import('./Features/auth/forget-passwored/forget-passwored').then(m => m.ForgetPasswored)
+  },
   {
     path: 'reports/:userId',
     canActivate: [authGuardGuard],
