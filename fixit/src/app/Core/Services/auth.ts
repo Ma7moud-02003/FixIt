@@ -91,16 +91,15 @@ getUserIdFromToken() {
      }
   }
 
-  verifyAccount(token: string, userId: string) {
-  // 1. وضع التوكن في الهيدر (تأكد من الاسم اللي الباك إند مستنيه، سواء 'token' أو 'Authorization')
-  const headers = new HttpHeaders()
-    .set('token', token); 
-
-  // 2. وضع الـ userId في الـ params لو مستنيه هناك
+ verifyAccount(token: string, userId: string) {
+  // دمج التوكن والـ userId معاً كـ Query Parameters
   const params = new HttpParams()
+    .set('token', token)
     .set('userId', userId);
 
-  return this.http.get(`${environment.apiUrl}/Account/ConfirmEmail`, { headers, params });
+  // الأنجولار تلقائياً هيحول الرابط إلى:
+  // ${environment.apiUrl}/Account/ConfirmEmail?token=XYZ&userId=123
+  return this.http.get(`${environment.apiUrl}/Account/ConfirmEmail`, { params });
 }
 
 // reset forgetten password
