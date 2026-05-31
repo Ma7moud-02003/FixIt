@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { RegisetrModel } from '../../Shared/Models/regiserModel';
 import { LoginModel } from '../../Shared/Models/loginModel';
@@ -88,9 +88,21 @@ getUserIdFromToken() {
   getNavDetails(){
      const{fullName,imgUrl,role} =this.getUser();
      return {fullName,imgUrl,role
-
      }
   }
+
+  verifyAccount(token: string, userId: string) {
+  // 1. وضع التوكن في الهيدر (تأكد من الاسم اللي الباك إند مستنيه، سواء 'token' أو 'Authorization')
+  const headers = new HttpHeaders()
+    .set('token', token); 
+
+  // 2. وضع الـ userId في الـ params لو مستنيه هناك
+  const params = new HttpParams()
+    .set('userId', userId);
+
+  return this.http.get(`${environment.apiUrl}/Account/ConfirmEmail`, { headers, params });
+}
+
 // reset forgetten password
 sendEmail(email:string){
   console.log(email);

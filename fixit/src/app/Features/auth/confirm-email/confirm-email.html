@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4" dir="rtl">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-8 text-center space-y-6">
+
+    @if (status() === 'loading') {
+      <div class="space-y-4 py-4">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-b-cyan-500 mx-auto"></div>
+        <h2 class="text-base font-black text-gray-700">جاري تفعيل حسابك...</h2>
+        <p class="text-xs text-gray-400">لحظات ونقوم بالتحقق من الرابط المرسل إليك</p>
+      </div>
+    }
+
+    @if (status() === 'success') {
+      <div class="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+        <div class="mx-auto bg-emerald-50 w-16 h-16 flex items-center justify-center rounded-full text-emerald-500 text-2xl">
+          <i class="fa-solid fa-circle-check animate-bounce"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold text-gray-800">أهلاً بك في FixIt! 🎉</h1>
+          <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+            تم تفعيل بريدك الإلكتروني بنجاح. حسابك الآن جاهز تماماً للاستخدام، يمكنك الانتقال لتسجيل الدخول والبدء فوراً.
+          </p>
+        </div>
+        
+        <a routerLink="/login" class="block w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-xl text-sm transition duration-200 shadow-md shadow-cyan-100 cursor-pointer">
+          الانتقال إلى صفحة تسجيل الدخول
+        </a>
+      </div>
+    }
+
+    @if (status() === 'error') {
+      <div class="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+        <div class="mx-auto bg-rose-50 w-16 h-16 flex items-center justify-center rounded-full text-rose-500 text-2xl">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold text-gray-800">فشل تفعيل الحساب! ❌</h1>
+          <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+            عذراً، هذا الرابط غير صالح، قد يكون منتهي الصلاحية (انتهت مدة الـ Token) أو تم استخدامه لتفعيل الحساب من قبل.
+          </p>
+        </div>
+        
+        <a routerLink="/register" class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl text-sm transition duration-200 cursor-pointer">
+          العودة لإنشاء حساب جديد
+        </a>
+      </div>
+    }
+
+  </div>
+</div>
