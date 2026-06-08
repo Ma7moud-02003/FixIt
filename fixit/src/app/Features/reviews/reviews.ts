@@ -80,7 +80,8 @@ export class Reviews implements OnInit, OnDestroy {
           const data = res.data || [];
 
           this.workerReviews.set(data);
-
+          console.log(res);
+          
           // cache
           this.cache.set(key, data);
 

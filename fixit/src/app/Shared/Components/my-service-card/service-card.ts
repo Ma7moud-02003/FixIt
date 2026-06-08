@@ -17,6 +17,7 @@ import { UserRole } from '../../enums/role';
 export class ServiceCard implements OnInit {
   Roles=UserRole;
  private _auth=inject(Auth);
+ type=input<string>('requested');
  role=signal<string>('');
  status=ServiceWorker;
 

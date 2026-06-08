@@ -1,234 +1,216 @@
-<div class=" bg-slate-50 flex flex-row-reverse" dir="rtl">
+<div class="bg-slate-50 flex flex-row-reverse min-h-screen" dir="rtl">
 
-  <!-- Mobile Filter Toggle -->
   <button
     (click)="toggleMobileSidebar()"
-    class="lg:hidden fixed bottom-6 left-6 z-50 bg-sky-600 text-white p-3.5 rounded-full shadow-lg active:scale-95 transition-transform">
+    class="lg:hidden fixed bottom-6 left-6 z-50 bg-cyan-500 text-white p-3.5 rounded-full shadow-lg active:scale-95 transition-transform cursor-pointer">
     <i class="fas w-5 h-5" [class.fa-filter]="!isMobileSidebarOpen" [class.fa-times]="isMobileSidebarOpen"></i>
   </button>
 
-  <!-- Sidebar -->
-  <aside
-    [class.translate-x-0]="isMobileSidebarOpen"
-    [class.-translate-x-full]="!isMobileSidebarOpen"
-    class="fixed left-0 top-0 h-screen overflow-y-auto w-64 lg:w-[17%] bg-white border-l border-slate-100 z-40 transition-transform duration-300 lg:translate-x-0 hide-scrollbar">
+ <aside
+  [class.translate-x-0]="isMobileSidebarOpen"
+  [class.-translate-x-full]="!isMobileSidebarOpen"
+  class="fixed left-0 top-0 h-screen overflow-y-auto w-64 lg:w-[17%] bg-white border-l border-slate-100/80 z-40 transition-transform duration-300 lg:translate-x-0 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
 
-    <!-- Sidebar Header -->
-    <div class="sticky top-0 bg-white border-b border-slate-100 px-5 py-4 flex items-center justify-between z-10">
-      <button (click)="resetFilters()" class="text-xs font-medium text-sky-600 hover:text-sky-700 transition-colors">
-        إعادة ضبط
-      </button>
-      <h2 class="text-sm font-semibold text-slate-800">تصفية</h2>
+  <div class="sticky top-0 bg-white border-b border-slate-50 px-5 py-4 flex items-center justify-between z-10 select-none">
+    <button (click)="resetFilters()" class="text-xs font-black text-cyan-500 hover:text-cyan-600 transition-colors cursor-pointer active:scale-95">
+      إعادة ضبط
+    </button>
+    <h2 class="text-xs font-black text-slate-400 uppercase tracking-wider">تصفية النتائج</h2>
+  </div>
+
+  <div class="px-5 py-2 space-y-0 divide-y divide-slate-100/70">
+
+    <div class="py-4">
+      <label class="flex items-center justify-between cursor-pointer group select-none">
+        <div class="relative inline-flex items-center">
+          <input type="checkbox" [checked]="isAvailable()" (change)="getAvailable()" class="sr-only peer">
+          <div class="w-8 h-[18px] bg-slate-200 rounded-full peer peer-checked:bg-cyan-500
+                      after:content-[''] after:absolute after:top-[3px] after:right-[3px]
+                      after:bg-white after:rounded-full after:w-3 after:h-3 after:transition-all
+                      peer-checked:after:-translate-x-[14px] rtl:peer-checked:after:translate-x-0"></div>
+        </div>
+        <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">متاح الآن فقط</span>
+      </label>
     </div>
 
-    <div class="px-5 py-4 space-y-0 divide-y divide-slate-100">
+    <div class="py-4">
+      <button (click)="toggleCategory()" class="flex items-center justify-between w-full mb-3 group cursor-pointer select-none">
+        <svg [class.rotate-180]="isCategoryOpen" class="w-3.5 h-3.5 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التخصص</span>
+      </button>
 
-      <!-- Available Toggle -->
-      <div class="py-4">
-        <label class="flex items-center justify-between cursor-pointer">
-          <div class="relative inline-flex items-center">
-            <input type="checkbox" [checked]="isAvailable()" (change)="getAvailable()" class="sr-only peer">
-            <div class="w-8 h-[18px] bg-slate-200 rounded-full peer peer-checked:bg-sky-500
-                        after:content-[''] after:absolute after:top-[3px] after:right-[3px]
-                        after:bg-white after:rounded-full after:w-3 after:h-3 after:transition-all
-                        peer-checked:after:-translate-x-[14px] rtl:peer-checked:after:translate-x-0"></div>
-          </div>
-          <span class="text-sm font-medium text-slate-700">متاح الآن فقط</span>
-        </label>
-      </div>
-
-      <!-- Category -->
-      <div class="py-4">
-        <button (click)="toggleCategory()" class="flex items-center justify-between w-full mb-3 group">
-          <svg [class.rotate-180]="isCategoryOpen"
-               class="w-3.5 h-3.5 text-slate-400 transition-transform"
-               fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">التخصص</span>
-        </button>
-
-        <div class="overflow-hidden transition-all duration-300" [style.max-height]="isCategoryOpen ? '400px' : '0px'">
-          <div class="space-y-1">
-            @for(catog of categories(); track catog) {
-              <label class="flex items-center justify-between py-1.5 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  [checked]="filterCategory() === catog.name"
-                  (change)="setCatog(catog.name)"
-                  class="w-3.5 h-3.5 rounded border-slate-300 text-sky-500 accent-sky-500">
-                <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
-                  {{catog.name}}
-                </span>
-              </label>
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- City -->
-      <div class="py-4">
-        <button (click)="toggleCity()" class="flex items-center justify-between w-full mb-3 group">
-          <svg [class.rotate-180]="isCityOpen"
-               class="w-3.5 h-3.5 text-slate-400 transition-transform"
-               fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">المدينة</span>
-        </button>
-
-        <div class="overflow-hidden transition-all duration-300" [style.max-height]="isCityOpen ? '800px' : '0px'">
-          <div class="space-y-1">
-            @for(city of (showAllCities ? egyptGovernorates() : egyptGovernorates().slice(0,5)); track city) {
-              <label class="flex items-center justify-between py-1.5 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  [checked]="filterCity() === city.name"
-                  (change)="setCity(city.name)"
-                  class="w-3.5 h-3.5 rounded border-slate-300 text-sky-500 accent-sky-500">
-                <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">
-                  {{city.name}}
-                </span>
-              </label>
-            }
-            <button (click)="toggleCityView()" class="text-xs text-sky-600 font-medium hover:text-sky-700 mt-2 transition-colors">
-              {{ showAllCities ? 'عرض أقل' : 'عرض الكل +' }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rating -->
-      <div class="py-4">
-        <div class="flex items-center justify-between mb-3">
-          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">التقييم</span>
-        </div>
-
+      <div class="overflow-hidden transition-all duration-300" [style.max-height]="isCategoryOpen ? '400px' : '0px'">
         <div class="space-y-1">
-          @for(rateing of [5,4,3]; track rateing) {
-            <label class="flex items-center justify-between py-1.5 cursor-pointer">
+          @for(catog of categories(); track catog.name) {
+            <label class="flex items-center justify-between py-1.5 cursor-pointer group">
               <input
                 type="checkbox"
-                [checked]="rate() === rateing"
-                (change)="setRate(rateing)"
-                class="w-3.5 h-3.5 border-slate-300 text-sky-500 accent-sky-500">
-              <div class="flex items-center gap-1.5">
-                <span class="text-xs text-slate-500">وأكثر</span>
-                <div class="flex gap-0.5 text-amber-400">
-                  @for(star of [1,2,3,4,5].slice(0, rateing); track star) {
-                    <i class="fas fa-star text-[10px]"></i>
-                  }
-                </div>
-              </div>
+                [checked]="filterCategory() === catog.name"
+                (change)="setCatog(catog.name)"
+                class="w-3.5 h-3.5 rounded border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
+              <span class="text-xs md:text-sm text-slate-600 group-hover:text-slate-900 transition-colors" [class.text-cyan-600]="filterCategory() === catog.name" [class.font-bold]="filterCategory() === catog.name">
+                {{catog.name}}
+              </span>
             </label>
           }
         </div>
       </div>
-
     </div>
-  </aside>
 
-  <!-- Mobile Backdrop -->
-  @if(isMobileSidebarOpen) {
-    <div (click)="toggleMobileSidebar()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"></div>
-  }
+    <div class="py-4">
+      <div class="flex items-center justify-between w-full mb-3 select-none">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">المدينة أو المحافظة</span>
+      </div>
 
-  <!-- Main Content -->
-  <main class="w-full lg:w-[83%] ml-auto p-6 lg:p-8 space-y-6">
-
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row-reverse sm:items-end sm:justify-between gap-3">
-      <div class="text-right">
-        <h1 class="text-xl font-semibold text-slate-800">البحث عن فنيين</h1>
-        <p class="text-sm text-slate-500 mt-1">اكتشف أفضل الكفاءات لصيانة منزلك في منطقتك</p>
+      <div class="relative px-0.5">
+        <input 
+          type="text"
+          [ngModel]="filterCity()"
+          (ngModelChange)="onCityChange($event)"
+          placeholder="اكتب اسم المدينة للبحث..." 
+          class="w-full h-9 rounded-xl border border-slate-200/80 bg-slate-50/50 text-xs font-medium text-slate-800 transition-all outline-none focus:border-cyan-500/30 focus:bg-white focus:ring-4 focus:ring-cyan-50 placeholder:text-slate-400"
+        />
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+          <i class="fas fa-map-marker-alt text-[10px]"></i>
+        </div>
+        
+        @if(filterCity()) {
+          <button 
+            (click)="filterCity.set(''); onCityChange('')" 
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer text-xs">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        }
       </div>
     </div>
 
-    <!-- Search Bar -->
+    <div class="py-4">
+      <div class="flex items-center justify-between mb-3 select-none">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التقييم</span>
+      </div>
+
+      <div class="space-y-1">
+        @for(rateing of [5,4,3]; track rateing) {
+          <label class="flex items-center justify-between py-1.5 cursor-pointer group select-none">
+            <input
+              type="checkbox"
+              [checked]="rate() === rateing"
+              (change)="setRate(rateing)"
+              class="w-3.5 h-3.5 border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs text-slate-500 group-hover:text-slate-800 transition-colors">وأكثر</span>
+              <div class="flex gap-0.5 text-amber-400">
+                @for(star of [1,2,3,4,5].slice(0, rateing); track star) {
+                  <i class="fas fa-star text-[9px]"></i>
+                }
+              </div>
+            </div>
+          </label>
+        }
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+  @if(isMobileSidebarOpen) {
+    <div (click)="toggleMobileSidebar()" class="fixed inset-0 bg-black/10 backdrop-blur-xs z-30 lg:hidden"></div>
+  }
+
+  <main class="w-full lg:w-[83%] ml-auto p-6 lg:p-8 space-y-6">
+
+    <div class="flex flex-col sm:flex-row-reverse sm:items-end sm:justify-between gap-3">
+      <div class="text-right">
+        <h1 class="text-xl font-black text-slate-800">البحث عن فنيين</h1>
+        <p class="text-xs md:text-sm text-slate-500 mt-1">اكتشف أفضل الكفاءات لصيانة منزلك في منطقتك</p>
+      </div>
+    </div>
+
     <div class="relative">
       <input
         type="text"
         [ngModel]="searchWord()"
         (ngModelChange)="onSearchChange($event)"
-        placeholder="ابحث الآن..."
-        class="w-full bg-white border border-slate-200 rounded-xl py-3 pr-10 pl-12 text-right text-sm text-slate-700 focus:ring-2 focus:ring-sky-100 focus:border-sky-400 outline-none transition-all placeholder:text-slate-400"
+        placeholder="ابحث بالاسم أو المهارة..."
+        class="w-full bg-white border border-slate-200/70 rounded-xl py-3.5 pr-11 pl-12 text-right text-sm text-slate-700 focus:ring-4 focus:ring-cyan-50 focus:border-cyan-500/30 outline-none transition-all placeholder:text-slate-400 shadow-2xs"
       >
-      <div class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 pointer-events-none">
+      <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 pointer-events-none">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
       </div>
       <div class="absolute inset-y-0 left-0 flex items-center pl-3.5">
-        @if(allWorkers().length > 0) {
-          <button (click)="getAllWorkers()"
-            class="w-7 h-7 bg-sky-500 hover:bg-sky-600 text-white rounded-lg flex items-center justify-center transition-colors">
-            <i class="fas fa-search text-xs"></i>
+        @if(searchWord()) {
+          <button (click)="searchWord.set(''); onSearchChange('')" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors cursor-pointer">
+            <i class="fas fa-times-circle text-sm"></i>
           </button>
         } @else {
-          <button (click)="searchWord.set(''); onSearchChange('')"
-            class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-sky-500 transition-colors">
-            <i class="fas fa-rotate-right text-sm"></i>
+          <button (click)="getAllWorkers()" class="w-7 h-7 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg flex items-center justify-center transition-colors cursor-pointer shadow-sm">
+            <i class="fas fa-search text-xs"></i>
           </button>
         }
       </div>
     </div>
 
-    <!-- Results Count -->
-    <div class="flex items-center justify-between">
-      <span class="text-xs text-slate-400">{{filterdWorkers().length}} نتيجة</span>
-      <span class="text-xs font-medium text-slate-500">الفنيون المتاحون</span>
+    <div class="flex items-center justify-between select-none px-1">
+      <span class="text-xs text-slate-400 font-bold">{{filterdWorkers().length}} نتيجة متوفرة</span>
+      <span class="text-xs font-bold text-slate-500">قائمة الفنيين</span>
     </div>
 
-    <!-- Workers Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      @for(worker of filterdWorkers(); track worker) {
+      @for(worker of filterdWorkers(); track worker.workerId) {
         <app-worker-card [worker]="worker"></app-worker-card>
       }
       @empty {
-        <div class="col-span-full flex flex-col items-center justify-center py-16 text-center gap-3">
-          <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center">
-            <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
+        <div class="col-span-full flex flex-col items-center justify-center py-20 text-center gap-3 bg-white rounded-2xl border border-slate-100">
+          <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+            <i class="fas fa-search-minus text-xl"></i>
           </div>
-          <p class="text-sm text-slate-500 font-medium">لا توجد نتائج مطابقة لبحثك</p>
-          <p class="text-xs text-slate-400">جرب تعديل كلمة البحث أو إزالة بعض الفلاتر</p>
+          <p class="text-sm text-slate-600 font-black">لا توجد نتائج مطابقة لبحثك حالياً</p>
+          <p class="text-xs text-slate-400">تأكد من كتابة الاسم بشكل صحيح أو قم بتغيير الفلاتر المختارة</p>
         </div>
       }
     </div>
 
-    <!-- Pagination -->
-    <div class="flex justify-center pt-4">
-      <div class="flex items-center gap-1.5 bg-white border border-slate-100 rounded-full px-3 py-2 shadow-sm">
-
-        <button (click)="getNextOrPreviousPage(true)"
-          class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-sky-500 rounded-full hover:bg-slate-50 transition-all">
+    @if(totalPages() > 1) {
+      <div class="flex items-center gap-1 bg-white rounded-full p-1 shadow-xs w-fit mx-auto select-none mt-4">
+        <button 
+          (click)="getNextOrPreviousPage(true)" [disabled]="page() === 1"
+          [ngClass]="page() === 1 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-400 hover:text-cyan-500 hover:bg-slate-50 cursor-pointer active:scale-90'"
+          class="w-9 h-9 flex items-center justify-center rounded-full transition-all duration-150">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
 
-        @for(i of [1,2,3,4,5]; track i) {
+        @for(i of getPagesArray(); track i) {
           <button
-            [ngClass]="page() === i ? 'bg-sky-500 text-white' : 'text-slate-500 hover:bg-slate-50'"
             (click)="getPage(i)"
-            class="w-8 h-8 flex items-center justify-center text-xs font-medium rounded-full transition-all">
+            [ngClass]="page() === i ? 'bg-cyan-500 text-white shadow-md shadow-cyan-100 font-black' : 'text-slate-500 hover:bg-slate-50 font-bold'"
+            class="w-9 h-9 flex items-center justify-center text-xs rounded-full transition-all duration-150 cursor-pointer active:scale-95">
             {{i}}
           </button>
         }
 
-        <button (click)="getNextOrPreviousPage(false)"
-          class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-sky-500 rounded-full hover:bg-slate-50 transition-all">
+        <button 
+          (click)="getNextOrPreviousPage(false)" [disabled]="page() === totalPages()"
+          [ngClass]="page() === totalPages() ? 'text-slate-200 cursor-not-allowed' : 'text-slate-400 hover:text-cyan-500 hover:bg-slate-50 cursor-pointer active:scale-90'"
+          class="w-9 h-9 flex items-center justify-center rounded-full transition-all duration-150">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-
       </div>
-    </div>
+    }
 
   </main>
 </div>

@@ -25,41 +25,52 @@ interface City {
   styleUrl: './search.css',
 })
 export class Search implements OnInit, OnDestroy {
+ // ================= Services =================
+  private subs = new Subscription();
+  private user = inject(User);
 
-  ngOnInit(): void {
-    this.getAllWorkers();
-  }
+  // ================= Signals & State =================
+  totalPages = signal<number>(0);
+  page = signal<number>(1);
+  pageSize = signal<number>(8);
   
-  egyptGovernorates=signal<any[]>(goverments);
-  categories=signal<any[]>(categories);
-  // ================= Signals =================
+  allWorkers = signal<WorkersModel[]>([]);
+  showLoading = signal<boolean>(true);
+
+  // البيانات الأساسية
+  egyptGovernorates = signal<any[]>(goverments);
+  categories = signal<any[]>(categories);
+
+  // فلاتر البحث والتصفية
   filterCategory = signal<string | null>(null);
   rate = signal<number>(0);
   isAvailable = signal<boolean>(false);
   filterCity = signal<string | null>(null);
-  searchWord = signal<string>('');
+  searchWord = signal<string>('');        // حقل بحث الاسم (العلوي)
+  citySearchQuery = signal<string>('');   // حقل بحث المحافظات (الداخلي)
 
-  allWorkers = signal<WorkersModel[]>([]);
-  showLoading = signal<boolean>(true);
-
-  // ================= Pagination =================
-  page = signal<number>(1);
-  pageSize = signal<number>(8);
-
-  // ================= UI =================
+  // ================= UI Utilities =================
   isCityOpen = true;
-  isCategoryOpen = true;
+  isCategoryOpen = false;
   isMobileSidebarOpen = false;
   showAllCities = false;
+  protected readonly Array = Array;
+  private searchTimeout: any;
 
-  // ================= Services =================
-  private subs = new Subscription();
-  private user = inject(User);
+  // ================= Cache System =================
+  private workersCache = new Map<string, any>();
 
-  // ================= Cache =================
-  private workersCache = new Map<string, WorkersModel[]>();
+  // ================= Computed Properties =================
+  // تصفية أوتوماتيكية سريعة للمحافظات بناءً على المدخل الداخلي
+  filteredCities = computed(() => {
+    const query = this.citySearchQuery().trim().toLowerCase();
+    if (!query) return this.egyptGovernorates();
+    return this.egyptGovernorates().filter(city => 
+      city.name.toLowerCase().includes(query)
+    );
+  });
 
-  // ================= Computed =================
+  // الفلاتر الفرعية (التي تتم Front-end لتخفيف الضغط على الـ API)
   filterdWorkers = computed(() => {
     let workers = this.allWorkers();
 
@@ -74,71 +85,93 @@ export class Search implements OnInit, OnDestroy {
     return workers;
   });
 
-  // ================= API =================
-getAllWorkers() {
-
-  const page = this.page();
-  const size = this.pageSize();
-
-  // 👇 cache على الصفحات فقط
-  const key = `${page}-${size}`;
-
-  // ===== Check Cache =====
-  if (this.workersCache.has(key)&&!this.searchWord()) {
-    console.log('cashed');
-    
-    this.allWorkers.set(this.workersCache.get(key)!);
-    this.showLoading.set(false);
-    return;
+  // ================= Lifecycle Hooks =================
+  ngOnInit(): void {
+    this.getAllWorkers();
   }
 
-  this.showLoading.set(true);
+  // ================= Core API Function (الموحدة والذكية) =================
+  getAllWorkers() {
+    const page = this.page();
+    const size = this.pageSize();
+    const search = this.searchWord().trim();
+    const city = this.filterCity();
+    const isAvail = this.isAvailable();
 
-  const search = this.searchWord();
-  const city = this.filterCity();
-  const isAvailable = this.isAvailable();
+    // 🔑 مفتاح الكاش الافتراضي للصفحات العادية
+    const cacheKey = `${page}-${size}`;
 
-  this.subs.add(
-    this.user.getWorkers(
-      page,
-      size,
-      search,
-      city || undefined,
-      isAvailable
-    )
-    .pipe(finalize(() => this.showLoading.set(false)))
-    .subscribe({
-      next: (res: any) => {
-console.log(res);
-        // 👇 نخزن حسب الصفحة فقط
-        this.workersCache.set(key, res.data);
+    // 🚨 مؤشر الفلاتر النشطة: لو المستخدم بيبحث بالاسم، أو المحافظة، أو المتاح الآن
+    const hasActiveFilters = !!search || !!city || isAvail;
 
-        this.allWorkers.set(res.data);
-      }
-    })
-  );
-}
-  // ================= Search =================
-  private searchTimeout: any;
+    // 1️⃣ لو البيانات متكشفة ومفيش أي فلاتر نشطة -> اسحب من الكاش فوراً ووفر الـ Request
+    if (!hasActiveFilters && this.workersCache.has(cacheKey)) {
+      console.log('⚡ Loaded from Cache');
+      const cached = this.workersCache.get(cacheKey);
+      this.allWorkers.set(cached.data);
+      this.totalPages.set(cached.totalPages);
+      this.showLoading.set(false);
+      return;
+    }
 
+    this.showLoading.set(true);
+
+    // 2️⃣ ضرب الـ API (لاحظ ترتيب البارامترات: المحافظة تذهب لـ address والبحث يذهب لـ search)
+    this.subs.add(
+      this.user.getWorkers(page, size, city || undefined, search || undefined, isAvail)
+        .pipe(finalize(() => this.showLoading.set(false)))
+        .subscribe({
+          next: (res: any) => {
+            console.log('🌍 Fetched Fresh Data from DB', res);
+            this.allWorkers.set(res.data || []);
+            this.totalPages.set(res.totalPages || 0);
+
+            // حفظ في الكاش فقط إذا كانت الصفحة طبيعية وبدون فلاتر
+            if (!hasActiveFilters) {
+              this.workersCache.set(cacheKey, { data: res.data, totalPages: res.totalPages });
+            }
+          },
+          error: (err) => {
+            console.error('Fixit API Error:', err);
+            this.allWorkers.set([]);
+          }
+        })
+    );
+  }
+
+  // ================= Event Handlers =================
+  
+  // التحكم في حقل البحث العلوي (Debounce لمنع تكرار الطلبات مع كل حرف)
   onSearchChange(value: string) {
     this.searchWord.set(value);
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
       this.page.set(1);
-      this.getAllWorkers();
-    }, 200);
-    
+      this.getAllWorkers(); // استدعاء الدالة الموحدة
+    }, 350);
+  }
+private cityTimeout: any;
+
+onCityChange(value: string) {
+  this.filterCity.set(value);
+  
+  clearTimeout(this.cityTimeout);
+  this.cityTimeout = setTimeout(() => {
+    this.page.set(1);
+    this.getAllWorkers(); // استدعاء السيرفر مباشرة وتخطي الكاش
+  }, 400); // انتظر 400ms بعد توقف المستخدم عن الكتابة ثم ارسل الريكوست
+}
+  // فلتر التخصص
+  setCatog(name: string) {
+    this.filterCategory.set(this.filterCategory() === name ? null : name);
+    this.page.set(1);
+    this.getAllWorkers();
   }
 
-  // ================= Filters =================
-  setCatog(name: string) {
-    this.filterCategory.set(
-      this.filterCategory() === name ? null : name
-    );
-
+  // فلتر متاح الآن
+  getAvailable() {
+    this.isAvailable.update(v => !v);
     this.page.set(1);
-    this.workersCache.clear();
     this.getAllWorkers();
   }
 
@@ -146,24 +179,7 @@ console.log(res);
     this.rate.set(this.rate() === value ? 0 : value);
   }
 
-  setCity(name: string) {
-    this.filterCity.set(
-      this.filterCity() === name ? null : name
-    );
-
-    this.page.set(1);
-    this.workersCache.clear();
-    this.getAllWorkers();
-  }
-
-  getAvailable() {
-    this.isAvailable.update(v => !v);
-    this.page.set(1);
-    this.workersCache.clear();
-    this.getAllWorkers();
-  }
-
-  // ================= Pagination =================
+  // ================= Pagination Actions =================
   getPage(pageNum: number) {
     this.page.set(pageNum);
     this.getAllWorkers();
@@ -174,34 +190,28 @@ console.log(res);
     this.getAllWorkers();
   }
 
-  // ================= UI =================
-  toggleMobileSidebar() {
-    this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
-  }
-
-  toggleCityView() {
-    this.showAllCities = !this.showAllCities;
-  }
-
-  toggleCity() {
-    this.isCityOpen = !this.isCityOpen;
-  }
-
-  toggleCategory() {
-    this.isCategoryOpen = !this.isCategoryOpen;
-  }
+  // ================= UI Toggles =================
+  toggleMobileSidebar() { this.isMobileSidebarOpen = !this.isMobileSidebarOpen; }
+  toggleCityView() { this.showAllCities = !this.showAllCities; }
+  toggleCity() { this.isCityOpen = !this.isCityOpen; }
+  toggleCategory() { this.isCategoryOpen = !this.isCategoryOpen; }
 
   resetFilters() {
     this.filterCategory.set(null);
     this.filterCity.set(null);
     this.searchWord.set('');
+    this.citySearchQuery.set('');
     this.rate.set(0);
     this.isAvailable.set(false);
     this.page.set(1);
-
     this.workersCache.clear();
     this.getAllWorkers();
   }
+
+  getPagesArray(): number[] {
+  const total = this.totalPages(); // أو حسب إذا كانت سجنال أو متغير عادي
+  return Array.from({ length: total }, (_, i) => i + 1);
+}
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
