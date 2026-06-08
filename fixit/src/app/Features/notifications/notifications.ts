@@ -80,15 +80,37 @@ export class Notifications implements OnInit, OnDestroy {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 });
+todayNotifications = computed(() => {
+  const today = new Date();
+  // تصفير الوقت عشان نقارن الأيام فقط
+  today.setHours(0, 0, 0, 0); 
 
-  todayNotifications = computed(() =>
-    this.filteredNotifications().filter(n => new Date(n.createdAt) <= new Date())
-  );
+  return this.filteredNotifications().filter(n => {
+    const notifDate = new Date(n.createdAt);
+    return notifDate >= today; // أي إشعار من بداية اليوم لحد دلوقتي
+  });
+});
 
-  earlierNotifications = computed(() =>
-    this.filteredNotifications().filter(n => new Date(n.createdAt) >= new Date())
-  );
+earlierNotifications = computed(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
+  return this.filteredNotifications().filter(n => {
+    const notifDate = new Date(n.createdAt);
+    return notifDate < today; // أي إشعار قبل النهاردة
+  });
+});
+
+// عدل الـ HTML ليكون كالتالي:
+// (click)="handleNotificationClick(note)"
+
+handleNotificationClick(note: NotificationModel) {
+  // 1. علم عليه كمقروء محلياً وفي السيرفر
+  this.markAsRead(note.notificationId.toString());
+  
+  // 2. وجه المستخدم للصفحة المطلوبة
+  this.routeTo(note.notificationType, note.relatedEntityId);
+}
   // Actions
   markAllAsRead() {
     this.allNotifs.update(prev =>

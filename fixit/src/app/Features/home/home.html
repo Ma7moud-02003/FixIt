@@ -1,4 +1,11 @@
+@if(userToken())
+{
+    <app-top-nav></app-top-nav>
 
+}
+@else {
+    <app-navbefor></app-navbefor>
+}
 <header class="relative  bg-gray-50">
     <div class="absolute w-full h-full inset-0 bg-linear-60 ">
 

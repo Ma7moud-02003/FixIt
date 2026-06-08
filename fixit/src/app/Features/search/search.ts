@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { finalize, Subscription } from 'rxjs';
 import { User } from '../../Core/Services/user';
 import { WorkerCard } from "../../Shared/Components/cards/worker-card/worker-card";
-import { categories } from '../../Shared/Models/categorys';
 import { goverments } from '../../Shared/Models/goverments';
 import { WorkersModel } from '../../Shared/Models/UserProfile';
+import { CateModdel } from '../../Shared/Models/categorys';
 
 interface Catog {
   name: string;
@@ -39,7 +39,7 @@ export class Search implements OnInit, OnDestroy {
 
   // البيانات الأساسية
   egyptGovernorates = signal<any[]>(goverments);
-  categories = signal<any[]>(categories);
+  categories = signal<CateModdel[]>([]);
 
   // فلاتر البحث والتصفية
   filterCategory = signal<string | null>(null);
@@ -88,7 +88,19 @@ export class Search implements OnInit, OnDestroy {
   // ================= Lifecycle Hooks =================
   ngOnInit(): void {
     this.getAllWorkers();
+    this.getCategorise();
   }
+
+getCategorise(){
+  this.subs.add(
+    this.user.getCategorise().subscribe({
+      next:(res:any)=>{
+console.log(res);
+ this.categories.set(res.data)
+      }
+    })
+  )
+}
 
   // ================= Core API Function (الموحدة والذكية) =================
   getAllWorkers() {
@@ -117,26 +129,27 @@ export class Search implements OnInit, OnDestroy {
     this.showLoading.set(true);
 
     // 2️⃣ ضرب الـ API (لاحظ ترتيب البارامترات: المحافظة تذهب لـ address والبحث يذهب لـ search)
-    this.subs.add(
-      this.user.getWorkers(page, size, city || undefined, search || undefined, isAvail)
-        .pipe(finalize(() => this.showLoading.set(false)))
-        .subscribe({
-          next: (res: any) => {
-            console.log('🌍 Fetched Fresh Data from DB', res);
-            this.allWorkers.set(res.data || []);
-            this.totalPages.set(res.totalPages || 0);
+   // داخل دالة getAllWorkers()
+const selectedCategories = this.catogs();
 
-            // حفظ في الكاش فقط إذا كانت الصفحة طبيعية وبدون فلاتر
-            if (!hasActiveFilters) {
-              this.workersCache.set(cacheKey, { data: res.data, totalPages: res.totalPages });
-            }
-          },
-          error: (err) => {
-            console.error('Fixit API Error:', err);
-            this.allWorkers.set([]);
-          }
-        })
-    );
+this.subs.add(
+  this.user.getWorkers(
+    page,
+    size,
+    city || undefined,
+    search || undefined,
+    isAvail,
+    this.rate() || undefined, // إرسال التقييم للسيرفر أيضاً لو متاح
+    selectedCategories.length > 0 ? selectedCategories.join(',') : undefined // تحويل المصفوفة لـ string مفصول بفاصلة (مثال: 1,2,5) إذا كان الـ Backend يتوقعها كـ Query Parameter أو اتركها كمصفوفة حسب حاجة الـ API
+  )
+  .pipe(finalize(() => this.showLoading.set(false)))
+  .subscribe({
+    next: (res: any) => {
+      this.allWorkers.set(res.data || []);
+      this.totalPages.set(res.totalPages || 0);
+    }
+  })
+);
   }
 
   // ================= Event Handlers =================
@@ -161,12 +174,29 @@ onCityChange(value: string) {
     this.getAllWorkers(); // استدعاء السيرفر مباشرة وتخطي الكاش
   }, 400); // انتظر 400ms بعد توقف المستخدم عن الكتابة ثم ارسل الريكوست
 }
-  // فلتر التخصص
-  setCatog(name: string) {
-    this.filterCategory.set(this.filterCategory() === name ? null : name);
-    this.page.set(1);
-    this.getAllWorkers();
-  }
+// 1. تغيير السجنال لتستقبل مصفوفة من الـ IDs (أرقام أو نصوص حسب الـ Backend عندك)
+catogs = signal<number[]>([]); 
+
+// ================= Filters =================
+
+setCatog(id: number) {
+  this.catogs.update(currentIds => {
+    // لو الـ ID موجود مسبقاً احذفه (شيل علامة الصح)، لو مش موجود ضيفه
+    if (currentIds.includes(id)) {
+      return currentIds.filter(item => item !== id);
+    } else {
+      console.log([...currentIds,id]);
+      
+      return [...currentIds, id];
+    }
+  });
+
+  // إعادة الصفحة للأولى عند تغيير الفلاتر
+  this.page.set(1);
+  
+  // استدعاء دالة الجلب
+  this.getAllWorkers();
+}
 
   // فلتر متاح الآن
   getAvailable() {
@@ -177,6 +207,7 @@ onCityChange(value: string) {
 
   setRate(value: number) {
     this.rate.set(this.rate() === value ? 0 : value);
+    this.getAllWorkers();
   }
 
   // ================= Pagination Actions =================

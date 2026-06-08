@@ -5,7 +5,9 @@
       
       <div class="relative shrink-0">
         <div class="w-24 h-24 md:w-32 md:h-32 border-4 border-white shadow-lg overflow-hidden rounded-2xl rotate-2 hover:rotate-0 transition-transform duration-300">
-          <img [src]="viewdWorkerData().imgUrl" loading="lazy" alt="Worker" class="w-full h-full object-cover">
+          <img [src]="viewdWorkerData().imgUrl||'/icons8-user-50.png'" 
+  
+          loading="lazy" alt="Worker" class="w-full h-full object-cover">
         </div>
         <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-4 border-white rounded-full shadow-sm"></span>
       </div>

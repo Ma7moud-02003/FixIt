@@ -26,7 +26,9 @@ export class User {
   pageSize: number,
   address?: string,
   search?: string,
-  IsAvilable?: boolean
+  IsAvilable?: boolean,
+  minRate?:number,
+  catogs?:any
 
 ): Observable<any> {
 
@@ -45,13 +47,34 @@ export class User {
   if (IsAvilable) {
     params = params.set('IsAvilable', IsAvilable.toString());
   }
+   if (minRate) {
+    params = params.set('minRate', minRate.toString());
+  }
+ if (catogs) {
+  // 1️⃣ أولاً: نضمن أن البيانات تحولت لمصفوفة أرقام نظيفة حتى لو كانت مبعوثة كـ String مثل '1,34'
+  const categsArray: number[] = Array.isArray(catogs) 
+    ? catogs.map(id => Number(id)) 
+    : catogs.split(',').map((id: string) => Number(id.trim()));
 
+  console.log('المصفوفة المرسلة للداتابيز:', categsArray); // ستظهر لك في الكونسول: [1, 34]
+
+  // 2️⃣ ثانياً: نقوم بعمل Loop ونضيف كل عنصر باستخدام append وليس set
+  categsArray.forEach(id => {
+    if (!isNaN(id)) { // للتأكد من أن القيمة رقم صحيح وليس NaN
+      params = params.append('categoryIds', id.toString());
+    }
+  });
+}
   return this.http.get(
     `${environment.apiUrl}/Worker/AllWorkers`,
     { params }
   );
 }
 
+getCategorise(){
+    return this.http.get(`${environment.apiUrl}/Category/Allcategories`);
+
+}
 
 
 

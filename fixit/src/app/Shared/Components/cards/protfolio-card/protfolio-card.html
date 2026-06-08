@@ -69,8 +69,8 @@
       </div>
 
       <!-- CTA chip -->
-         @if(role()==Roles.Worker_Role){
-          <div routerLink="/dashboared/myPortfolio" class="flex items-center gap-2 bg-stone-900  text-white
+         @if(role()==Roles.Worker_Role&&isMe()){
+          <div (click)="routForEditing(portfolio())" class="flex items-center gap-2 bg-stone-900  text-white
                   text-xs font-black px-4 py-2 rounded-xl transition-all duration-300">
         <span>عرض التفاصيل</span>
         <i class="fas fa-arrow-left text-xs group-hover:-translate-x-1 transition-transform duration-300"></i>

@@ -11,10 +11,13 @@
     <div>
       <main class="w-full space-y-6 mx-auto">
         
-        @if (role() === Roles.Clien_Role && workerData()) {
+        @if (workerData()) {
+          @if(role()==Roles.Clien_Role){
           <div class="flex flex-col items-center text-center gap-3">
             <div class="w-24 h-24 rounded-full border-4 border-white overflow-hidden shadow-md">
-              <img [src]="workerData().imgUrl" loading="lazy" class="w-full h-full object-cover" alt="worker-image">
+              <img [src]="workerData().imgUrl||'/public/icons8-user-50.png'"
+            
+               loading="lazy" class="w-full h-full object-cover" alt="worker-image">
             </div>
             <h2 class="text-xl md:text-2xl font-bold text-slate-800">
               تقييمات الفني: <span class="text-cyan-600">{{workerData().workerName}}</span>
@@ -23,13 +26,14 @@
           </div>
         }
         
+        
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-6 md:gap-10">
           <div class="text-center sm:border-l sm:border-slate-100 sm:pl-10 space-y-1 shrink-0">
             <div class="text-5xl font-black text-slate-900 tracking-tighter">4.8</div>
             <div class="flex justify-center text-yellow-400 text-xs gap-0.5">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">بناءً على 1,240 تقييم</p>
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">بناءً علي  {{filteredReview().length}}تقييم</p>
           </div>
 
           <div class="flex-1 w-full space-y-2.5">
@@ -56,6 +60,7 @@
             </div>
           </div>
         </div>
+      }
 
         <div class="flex flex-wrap justify-between items-center bg-slate-100/60 p-1.5 rounded-2xl gap-2">
           <div class="flex flex-wrap gap-1">
@@ -80,38 +85,42 @@
           عرض المزيد من التقييمات
         </button>
 
-        <div class="flex items-center justify-center pt-6 pb-2" dir="rtl">
-          <nav class="inline-flex items-center p-1 bg-white border border-slate-100 rounded-full shadow-sm gap-1">
-            
-            <button
-              (click)="changePage(page() - 1)"
-              [disabled]="page() === 1"
-              class="flex items-center justify-center h-9 px-3 text-xs font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50/50 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed group">
-              <i class="fas fa-chevron-right ml-1 text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
-              السابق
-            </button>
+      <div class="flex items-center justify-center pt-6 pb-2" dir="rtl">
+  @if (totalPages() > 1) {
+    <nav class="inline-flex items-center p-1 bg-white border border-slate-100 rounded-full shadow-sm gap-1">
+      
+      <button
+        (click)="changePage(page() - 1)"
+        [disabled]="page() === 1"
+        class="flex items-center justify-center h-9 px-3 text-xs font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50/50 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed group">
+        <i class="fas fa-chevron-right ml-1 text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
+        السابق
+      </button>
 
-            <div class="flex items-center gap-1 px-1 border-x border-slate-100">
-              <button
-                *ngFor="let p of [1,2,3,4,5]; let i = index"
-                (click)="changePage(i + 1)"
-                class="w-9 h-9 flex items-center justify-center rounded-full text-xs font-black transition-all active:scale-95"
-                [ngClass]="(i + 1) === page()
-                  ? 'bg-cyan-500 text-white shadow-md shadow-cyan-100 scale-105 z-10'
-                  : 'bg-transparent text-slate-500 hover:bg-cyan-50/50 hover:text-cyan-600'">
-                {{ i + 1 }}
-              </button>
-            </div>
+      <div class="flex items-center gap-1 px-1 border-x border-slate-100">
+        @for (item of [].constructor(totalPages()); track i; let i = $index) {
+          <button
+            (click)="changePage(i + 1)"
+            class="w-9 h-9 flex items-center justify-center rounded-full text-xs font-black transition-all active:scale-95"
+            [ngClass]="(i + 1) === page()
+              ? 'bg-cyan-500 text-white shadow-md shadow-cyan-100 scale-105 z-10'
+              : 'bg-transparent text-slate-500 hover:bg-cyan-50/50 hover:text-cyan-600'">
+            {{ i + 1 }}
+          </button>
+        }
+      </div>
 
-            <button
-              (click)="changePage(page() + 1)"
-              class="flex items-center justify-center h-9 px-3 text-xs font-black text-cyan-500 hover:bg-cyan-50/50 rounded-full transition-all group">
-              التالي
-              <i class="fas fa-chevron-left mr-1 text-[9px] group-hover:-translate-x-0.5 transition-transform"></i>
-            </button>
+      <button
+        (click)="changePage(page() + 1)"
+        [disabled]="page() === totalPages()"
+        class="flex items-center justify-center h-9 px-3 text-xs font-black text-slate-400 hover:text-cyan-600 hover:bg-cyan-50/50 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed group">
+        التالي
+        <i class="fas fa-chevron-left mr-1 text-[9px] group-hover:-translate-x-0.5 transition-transform"></i>
+      </button>
 
-          </nav>
-        </div>
+    </nav>
+  }
+</div>
 
       </main>
     </div>

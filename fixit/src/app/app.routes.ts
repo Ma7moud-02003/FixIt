@@ -4,7 +4,7 @@ import { roleGuard } from './Core/Guards/role-guard';
 
 export const routes: Routes = [
  
-  { path: '', redirectTo: 'register', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   // ================= AUTH =================
   {
     path: 'register',

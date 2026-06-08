@@ -20,7 +20,7 @@ export class ServiceCard implements OnInit {
  type=input<string>('requested');
  role=signal<string>('');
  status=ServiceWorker;
-
+Role=UserRole;
   ngOnInit(): void {
     console.log(this.service());
     this.role.set(this._auth.getRole()||"");
@@ -40,7 +40,7 @@ export class ServiceCard implements OnInit {
   private rout=inject(Router);
   private alerts=inject(Alerts);
   routeTo(id:string,state:any){
-    if(!id||state==ServiceStatus.PRICE_PROCESS||state==ServiceStatus.PENDING){
+    if(!id||state==ServiceStatus.PRICE_PROCESS||state==ServiceStatus.PENDING||state==ServiceStatus.InProcess||state==ServiceStatus.CPMLETED){
        this.alerts.warn('يمكنك التواصل  مع الطرف الاخر عند قبول كلا منكم الخدمه والسعر');
        return;
     }

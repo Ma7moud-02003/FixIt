@@ -48,6 +48,8 @@ export class Reviews implements OnInit, OnDestroy {
 
   // ===================== INIT =====================
   ngOnInit(): void {
+  
+    this.myId.set(this.auth.getUserId());
     this.role.set(this.auth.getRole() || '');
 
     this.router.paramMap.subscribe({
@@ -55,14 +57,16 @@ export class Reviews implements OnInit, OnDestroy {
         const id = res.get('workerId') || '';
         this.workerId.set(id);
 
-        if (id && this.role() === UserRole.Clien_Role) {
+        if (id) {
           this.loadWorkerReviewsForClient();
-        } else if (this.role() === UserRole.Worker_Role) {
+        } else if ((this.role() === UserRole.Worker_Role&&this.myId()==this.workerId())||(this.role()===UserRole.Worker_Role&&!this.workerId())) {
           this.loadWorkerReviews();
         }
       }
     });
   }
+
+  myId=signal<string>('');
 
   // ===================== WORKER REVIEWS =====================
   loadWorkerReviews() {
@@ -78,7 +82,7 @@ export class Reviews implements OnInit, OnDestroy {
       this._review.getAllRevies(this.page(), this.pageSize()).subscribe({
         next: (res: any) => {
           const data = res.data || [];
-
+this.totalPages.set(res.totalPages)
           this.workerReviews.set(data);
           console.log(res);
           
@@ -91,6 +95,12 @@ export class Reviews implements OnInit, OnDestroy {
       })
     );
   }
+
+totalPages=signal<number>(0)
+   getPagesArray(): number[] {
+  const total = this.totalPages(); // أو حسب إذا كانت سجنال أو متغير عادي
+  return Array.from({ length: total }, (_, i) => i + 1);
+}
 
   // ===================== CLIENT REVIEWS =====================
   loadWorkerReviewsForClient() {
@@ -108,6 +118,7 @@ export class Reviews implements OnInit, OnDestroy {
       this._review.getAllReviewsForUser(id).subscribe({
         next: (res: any) => {
           const data = res.data || [];
+console.log(res);
 
           const workerData: WorkerData = {
             imgUrl: data?.imgUrl,

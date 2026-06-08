@@ -33,7 +33,7 @@
         <div class="space-y-3">
           @for (note of todayNotifications(); track note.notificationId) {
             <div 
-              (click)="markAsRead(note.notificationId.toString()); routeTo(note.notificationType,note.relatedEntityId)"
+              (click)="handleNotificationClick(note)"
               [class.bg-indigo-50/50]="!note.isRead"
               [class.border-indigo-200]="!note.isRead"
               class="group relative flex items-start gap-4 p-5 rounded-2xl border border-transparent hover:border-slate-200 hover:bg-slate-50 transition-all cursor-pointer">

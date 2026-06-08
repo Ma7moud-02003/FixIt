@@ -19,13 +19,13 @@ import { Auth } from '../../../Core/Services/auth';
 import { UserRole } from '../../../Shared/enums/role';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CommonModule } from '@angular/common';
-import { categories } from '../../Models/categorys';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { ReviewCard } from "../cards/review-card/review-card";
 import { Protfolio } from '../../../Core/Services/protfolio';
 import { PortfolioModel } from '../../Models/portfolio';
 import { ProtfolioCard } from '../cards/protfolio-card/protfolio-card';
+import { CateModdel } from '../../Models/categorys';
 interface Catog {
   name: string
   selected: boolean
@@ -108,6 +108,7 @@ this.isUploading.set(true);
       this.getAllWorkerReviews();
       this.getMyPortfolios();
     }
+    this.getCategorise()
   }
 
   showProfilPage = signal<boolean>(false);
@@ -117,7 +118,7 @@ this.isUploading.set(true);
   selectedCatogery = computed(() => {
     return this.profileForm.categoryName().value();
   })
-  catogerys = signal<Catog[]>(categories);
+  // catogerys = signal<Catog[]>(categories);
   changingPasswordModel = signal<NewPasswordModel>({
     currentPassword: '',
     newPassword: '',
@@ -146,6 +147,19 @@ this.isUploading.set(true);
       })
     )
   }
+
+  categories=signal<CateModdel[]>([]);
+private user=inject(User);
+getCategorise(){
+  this.subs.add(
+    this.user.getCategorise().subscribe({
+      next:(res:any)=>{
+console.log(res);
+ this.categories.set(res.data)
+      }
+    })
+  )
+}
 
   getWorkerProfile() {
     this.subs.add(

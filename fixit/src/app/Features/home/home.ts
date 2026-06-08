@@ -3,11 +3,12 @@ import { Footer } from "../../Shared/Components/footer/footer";
 import { Router, RouterLink } from "@angular/router";
 import { Auth } from '../../Core/Services/auth';
 import { UserRole } from '../../Shared/enums/role';
-
+import { TopNav } from '../../Shared/Components/top-nav/top-nav';
+import { Navbefor } from '../../Shared/Components/navbefor/navbefor';
 
 @Component({
   selector: 'app-home',
-  imports: [Footer, RouterLink],
+  imports: [Footer, RouterLink,TopNav,Navbefor],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -103,9 +104,10 @@ steps = signal([
 auth=inject(Auth);
 private route=inject(Router);
 role=signal<string>('');
-
+userToken=signal<string>('')
 ngOnInit(): void {
   this.role.set(this.auth.getRole()||'')
+  this.userToken.set(this.auth.userToken())
 }
 
 routTo(){

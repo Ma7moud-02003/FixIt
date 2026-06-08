@@ -35,18 +35,23 @@ filterdPortfolio=computed(()=>{
 myPortfolio=signal<PortfolioModel[]>([]);
 
 workerData=signal<WorkerData>({} as WorkerData);
+myId=signal<string>('');
 
 
    ngOnInit(): void {
+    this.myId.set(this.auth.getUserId())
    this.role.set(this.auth.getRole()||'')
    this.router.paramMap.subscribe({
      next:(res)=>{
        this.workerId.set(res.get('workerId')||'')
- if(this.workerId()&&this.role()==UserRole.Clien_Role)
+ if(this.workerId())
   this.getWorkerPortfolioForClient();
- else if(this.role()==UserRole.Worker_Role)
+ else if (this.ifMe()) 
    this.getMyPortfolios();
+  else
+    this.myPortfolio.set([]);
      }
+     
    })
 }
 
@@ -64,6 +69,10 @@ this._portfolio.getAllPortfolios().subscribe({
     )
   }
 
+  ifMe():boolean{
+      if ((this.role() === UserRole.Worker_Role&&this.myId()==this.workerId())||(this.role()===UserRole.Worker_Role&&!this.workerId())) return true;
+      else return false;
+  }
    getWorkerPortfolioForClient()
   {
     this.subs.add(
@@ -79,13 +88,7 @@ this._portfolio.getPortfoliosForUser(this.workerId()).subscribe({
 })
     )
   }
-  routForEditing(work:PortfolioModel)
-  {
-if(this.role()==UserRole.Worker_Role)
-    this.rout.navigate(['/dashboared/addPortfolio'],{state:{work}});
-  else 
-    return;
-  }
+
   
   ngOnDestroy(): void {
     this.subs.unsubscribe();

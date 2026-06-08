@@ -149,8 +149,8 @@
                   <div class="space-y-2">
                     <label class="text-xs font-black text-neutral-500 uppercase tracking-widest mr-1">التصنيف</label>
                     <select [formField]="profileForm.categoryName"  class="w-full rounded-2xl border-2 border-neutral-100 bg-neutral-50 px-5 py-4 text-sm font-bold focus:bg-white focus:border-sky-500 outline-none transition-all">
-                      @for(catog of catogerys(); track catog) {
-                        <option [value]="catog.name">{{catog.name}}</option>
+                      @for(catog of categories(); track catog.categoryId) {
+                        <option [value]="catog.categoryName">{{catog.categoryName}}</option>
                       }
                     </select>
                   </div>
