@@ -4,6 +4,7 @@ import { DetailsSer } from '../../../Core/Services/details-ser';
 import { forkJoin, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { FormDatePipe } from '../../../Shared/Pipes/form-date-pipe';
+import { RouterModule } from '@angular/router';
 
 interface ServiceItem {
   clientImgUrl: string;
@@ -39,7 +40,7 @@ interface TotalsData {
 }
 @Component({
   selector: 'app-dashboared-home',
-  imports: [CommonModule,FormsModule,FormDatePipe],
+  imports: [CommonModule,FormsModule,FormDatePipe,RouterModule],
   templateUrl: './dashboared-home.html',
   styleUrl: './dashboared-home.css',
 })

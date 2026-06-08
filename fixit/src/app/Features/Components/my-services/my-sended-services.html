@@ -28,13 +28,18 @@
 
   </div>
 
-  <div class="max-w-6xl mx-auto mb-8 flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
-   @for(status of statuses();track status)
-    {
-    <button [ngClass]="{'bg-sky-500 text-white':status.value==catogery()}" (click)="getFiletr(status.value)" class="px-6 py-2 rounded-full bg-sky-500 text-white text-sm whitespace-nowrap">{{status.name}}</button>
-    }
-    
-  </div>
+<div class="max-w-6xl mx-auto mb-8 flex overflow-x-auto gap-2.5 pb-2 select-none scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
+  @for (status of statuses(); track status.value) {
+    <button 
+      (click)="getFiletr(status.value)" 
+      [ngClass]="status.value === catogery() 
+        ? 'bg-cyan-500 text-white shadow-md shadow-cyan-100 font-black' 
+        : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 font-bold'" 
+      class="px-6 py-2.5 rounded-full text-xs md:text-sm whitespace-nowrap transition-all duration-200 cursor-pointer active:scale-95">
+      {{ status.name }}
+    </button>
+  }
+</div>
 
   <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @if(myServices().length)

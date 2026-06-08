@@ -50,11 +50,19 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Features/notifications/notifications').then(m => m.Notifications)
   },
-  {
-    path: 'chat/:workerId', canActivate: [authGuardGuard],
-    loadComponent: () =>
-      import('./Features/chat/chat').then(m => m.Chat)
-  },
+  // 1. مسار الشات العام (لما تضغط على "الرسائل" ومفيش ID)
+{
+  path: 'chat', 
+  canActivate: [authGuardGuard],
+  loadComponent: () => import('./Features/chat/chat').then(m => m.Chat)
+},
+
+// 2. مسار الشات مع شخص محدد (لما تفتح شات من صفحة عامل معين)
+{
+  path: 'chat/:workerId', 
+  canActivate: [authGuardGuard],
+  loadComponent: () => import('./Features/chat/chat').then(m => m.Chat)
+},
 
 //===================Aamin===================
 
