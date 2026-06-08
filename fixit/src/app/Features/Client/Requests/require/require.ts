@@ -86,8 +86,9 @@ isLoading = signal(false);
   };
   reader.readAsDataURL(file);
 }
-requireService()
+requireService(event:Event)
 {
+  event.preventDefault();
     if (this.addServiceForm().invalid()) return;
     this.isLoading.set(true)
   if (!this.selectedFile) {

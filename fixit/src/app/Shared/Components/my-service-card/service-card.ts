@@ -7,6 +7,7 @@ import { Router, RouterLink } from "@angular/router";
 import { Service } from '../../../Core/Services/service';
 import { Auth } from '../../../Core/Services/auth';
 import { Alerts } from '../../Alerts/alerts';
+import { UserRole } from '../../enums/role';
 @Component({
   selector: 'app-service-card',
   imports: [CommonModule, RouterLink],
@@ -14,6 +15,7 @@ import { Alerts } from '../../Alerts/alerts';
   styleUrl: './service-card.css',
 })
 export class ServiceCard implements OnInit {
+  Roles=UserRole;
  private _auth=inject(Auth);
  role=signal<string>('');
  status=ServiceWorker;
@@ -38,7 +40,7 @@ export class ServiceCard implements OnInit {
   private alerts=inject(Alerts);
   routeTo(id:string,state:any){
     if(!id||state==ServiceStatus.PRICE_PROCESS||state==ServiceStatus.PENDING){
-       this.alerts.sucsess('اطلب خدمه من العميل لكي تتواصل معه');
+       this.alerts.warn('يمكنك التواصل  مع الطرف الاخر عند قبول كلا منكم الخدمه والسعر');
        return;
     }
 this.rout.navigate(['/chat',id])

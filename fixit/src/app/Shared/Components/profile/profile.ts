@@ -23,6 +23,9 @@ import { categories } from '../../Models/categorys';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { ReviewCard } from "../cards/review-card/review-card";
+import { Protfolio } from '../../../Core/Services/protfolio';
+import { PortfolioModel } from '../../Models/portfolio';
+import { ProtfolioCard } from '../cards/protfolio-card/protfolio-card';
 interface Catog {
   name: string
   selected: boolean
@@ -36,7 +39,7 @@ interface ReviewModel {
   selector: 'app-profile',
   imports: [FormField, Skeleton, SkeletonModule,
     RouterLink, ServiceCard,
-    ToggleSwitchModule, CommonModule, SelectModule, FormsModule, ReviewCard],
+    ToggleSwitchModule, CommonModule, SelectModule, FormsModule, ReviewCard,ProtfolioCard],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -74,16 +77,19 @@ export class Profile implements OnInit, OnDestroy {
     };
     reader.readAsDataURL(file);
   }
+  isUploading=signal<boolean>(false);
 
   uploadProfileImage() {
-
+if(this.isUploading()) return;
+this.isUploading.set(true);
     const formData = new FormData();
     formData.append('imgUrl', this.selectedFile);
 
     this.subs.add(this._user.editeUserImageProfile(formData, this.role())?.subscribe({
       next: () => {
-        this.alerts.sucsess('تم تحديث الصوره بنجاح 👍')
-      }
+        this.alerts.sucsess('تم تحديث الصوره بنجاح 👍');
+        this.isUploading.set(false);
+      },error:()=>(this.isUploading.set(false))
     }))
   }
 
@@ -100,6 +106,7 @@ export class Profile implements OnInit, OnDestroy {
       this.getMyServicesAsWorker();
       this.getWorkerProfile();
       this.getAllWorkerReviews();
+      this.getMyPortfolios();
     }
   }
 
@@ -311,8 +318,22 @@ export class Profile implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-
-
+private _portfolio=inject(Protfolio);
+  myPortfolio=signal<PortfolioModel[]>([]);
+  getMyPortfolios()
+  {
+    this.subs.add(
+this._portfolio.getAllPortfolios().subscribe({
+  next:(res)=>{
+    const data=res.data;
+   const portfolios=data.slice(0,1)
+ this.myPortfolio.set(portfolios);
+ console.log(this.myPortfolio());
+ 
+  }
+})
+    )
+  }
 
   getMyServicesAsClient() {
     this.subs.add(

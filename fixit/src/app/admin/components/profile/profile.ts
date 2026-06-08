@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReviewService } from '../../services/-review';
 import { ActiveSection, AdminProfile, Toast } from '../../Model/adminProfile';
 import { ProfileService } from '../../services/-profile';
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,FormsModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -266,10 +266,11 @@ export class Profile {
   }
  
   // ── Helpers ────────────────────────────────────────────────────────────────
-  hasError(form: FormGroup, field: string, error: string): boolean {
-    const ctrl = form.get(field);
-    return !!(ctrl?.hasError(error) && ctrl?.touched);
-  }
+ hasError(form: FormGroup, controlName: string, errorName: string): boolean {
+  const control = form.get(controlName);
+  // يظهر الخطأ فقط إذا كان الحقل يحتوي على الخطأ وقام المستخدم بلمسه أو تعديله
+  return !!(control && control.hasError(errorName) && (control.touched || control.dirty));
+}
  
   formatDate(dateStr: string | undefined): string {
     if (!dateStr) return '—';
@@ -283,4 +284,5 @@ export class Profile {
   trackByToastId(_: number, t: Toast): number {
     return t.id;
   }
+  
 }

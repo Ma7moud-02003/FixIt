@@ -64,9 +64,15 @@
             </div>
           </div>
 
+          @if(isUploading()){
+               <button (click)="uploadProfileImage()" class="w-full mt-6 py-3.5 bg-neutral-900 hover:bg-black text-white rounded-2xl text-sm font-bold shadow-lg shadow-neutral-200 transition-all active:scale-[0.98]">
+            جار التحديث  <i class="fas fa-spinner"></i>
+          </button>
+          }@else{
           <button (click)="uploadProfileImage()" class="w-full mt-6 py-3.5 bg-neutral-900 hover:bg-black text-white rounded-2xl text-sm font-bold shadow-lg shadow-neutral-200 transition-all active:scale-[0.98]">
             تحديث صورة الملف
           </button>
+        }
         </div>
 
         <div class="rounded-3xl bg-white p-3 shadow-sm border border-neutral-200/60">
@@ -202,8 +208,8 @@
  
 
 @if(role() === 'worker') {
-   <section id="myReviews" class="space-y-6 lg:w-full mx-auto w-full mt-10 px-20 py-5">
-  <div class="flex items-center justify-between px-4">
+   <section id="myReviews" class=" w-full mx-auto  mt-10 lg:px-20 py-5">
+  <div class="flex w-full items-center  justify-between px-4">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100">
         <i class="fas fa-star text-lg"></i>
@@ -216,9 +222,11 @@
     <button [routerLink]="['/dashboared/reviews','']" class="text-sky-600 font-bold text-sm bg-sky-50 px-4 py-2 rounded-xl hover:bg-sky-100 transition-colors">عرض الكل</button>
   </div>
 
-  <div class="bg-white w-full rounded-4xl border border-neutral-200/60 shadow-sm divide-y divide-neutral-100 overflow-hidden">
+ 
+</section>
+ <div class="rounded-4xl border border-neutral-200/60 shadow-sm divide-y divide-neutral-100 overflow-hidden">
     @for(rev of workerReviews(); track rev) {
-      <div class="p-2 hover:bg-neutral-50/50 transition-colors">
+      <div class="p-2  w-full hover:bg-neutral-50/50 transition-colors">
         <app-review-card [review]="rev"></app-review-card>
       </div>
     } @empty {
@@ -230,7 +238,6 @@
       </div>
     }
   </div>
-</section>
 <section id="myPortfolio" class="pt-4  lg:w-3/4 mx-auto w-full mt-10 p-5">
   <div class="flex items-center justify-between mb-6 px-4">
     <div class="flex items-center gap-3">
@@ -244,31 +251,22 @@
     </button>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <div class="aspect-square rounded-2xl bg-neutral-100 border border-neutral-200 overflow-hidden group relative cursor-pointer">
-      <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=300" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-        <i class="fas fa-expand text-white text-xl"></i>
-      </div>
-    </div>
-    <div class="aspect-square rounded-2xl bg-neutral-100 border border-neutral-200 overflow-hidden group relative cursor-pointer">
-      <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=300" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-      <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-        <i class="fas fa-expand text-white text-xl"></i>
-      </div>
-    </div>
-    <div class="aspect-square rounded-2xl border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center gap-2 hover:border-sky-400 hover:bg-sky-50 transition-all cursor-pointer group">
-      <div routerLink="/dashboared/addPortfolio" class="w-12 h-12 rounded-full bg-neutral-50 flex items-center justify-center group-hover:bg-white transition-colors">
-        <i class="fas fa-plus text-neutral-400 group-hover:text-sky-500"></i>
-      </div>
-      <span class="text-xs font-bold text-neutral-400 group-hover:text-sky-600">أضف عمل جديد</span>
-    </div>
-  </div>
+        @for(work of myPortfolio(); track work.createdAt) {
+          <div
+           
+            class="cursor-pointer"
+          >
+            <app-protfolio-card
+              [portfolio]="work"
+              class="block w-full"
+            ></app-protfolio-card>
+          </div>
+        }
 </section>
 }
 </div>
 }
-    <section id="mySettings" class="lg:w-3/4 mt-5 mx-auto w-full px-5 rounded-3xl bg-white shadow-sm border border-neutral-200/60 overflow-hidden">
+    <section id="mySettings" class="lg:mx-20 mt-5 mx-auto  px-5 rounded-3xl bg-white shadow-sm border border-neutral-200/60 overflow-hidden">
           <div class="px-8 py-6 border-b border-neutral-100 bg-neutral-50/50 flex items-center justify-between">
             <h2 class="text-lg font-black text-neutral-900">الأمان وإعدادات الحساب</h2>
             <i class="fas fa-shield-alt text-neutral-400 text-xl"></i>
@@ -299,7 +297,7 @@
             </div>
 
          @if(showChangePassForm()) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-all duration-300 animate-fade-in"
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4   transition-all duration-300 animate-fade-in"
        (click)="showChangePassForm.set(false)">
     
     <div class="bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden w-full max-w-lg transform transition-all duration-300 scale-in mx-auto flex flex-col"

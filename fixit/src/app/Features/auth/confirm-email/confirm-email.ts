@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Auth } from '../../../Core/Services/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-confirm-email',
-  imports: [],
+  imports: [RouterModule,CommonModule],
   templateUrl: './confirm-email.html',
   styleUrl: './confirm-email.css',
 })

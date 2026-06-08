@@ -62,7 +62,7 @@ export class AddPortfolio implements OnInit ,OnDestroy{
     if (!input.files || input.files.length === 0) return;
     const file = input.files[0];
     if (!file.type.startsWith('image/')) {
-      this.alerts.error('الرجاء اختيار صوره')
+      this.alerts.error('الرجاء اختيار صورة');
       return;
     }
     this.selectedFile = file;
@@ -73,65 +73,95 @@ export class AddPortfolio implements OnInit ,OnDestroy{
     reader.readAsDataURL(file);
   }
 
-  implementFormData(): any {
-    if (!this.selectedFile) {
+  // قمنا بإضافة بارامتر لمعرفة هل العملية إضافة أم تعديل
+  implementFormData(mode: 'add' | 'edit'): FormData | null {
+    // الصورة إجبارية فقط في حالة الإضافة
+    if (mode === 'add' && !this.selectedFile) {
       this.alerts.error('اختار صورة الأول');
-      return;
+      return null;
     }
+
     const formData = new FormData();
-    formData.append('ImgUrl', this.selectedFile)
+    
+    // نرسل الصورة فقط إذا كان المستخدم قد اختار ملفاً بالفعل
+    if (this.selectedFile) {
+      formData.append('ImgUrl', this.selectedFile);
+    }
+    
     formData.append('Title', this.portfolioForm.Title().value());
     formData.append('Description', this.portfolioForm.Describtion().value());
+    
     formData.forEach((value, key) => {
       console.log(key, value);
     });
+    
     return formData;
   }
 
+  isSubmitting = signal(false);
+
   addPortFolio() {
+    const formData = this.implementFormData('add');
+    if (!formData) return; // إيقاف العملية إذا لم يتم تكوين الـ FormData بنجاح
+
+    this.isSubmitting.set(true);
     this.subs.add(
-      this._portfolio.addPortfoio(this.implementFormData()).subscribe({
+      this._portfolio.addPortfoio(formData).subscribe({
         next: () => {
           this.alerts.sucsess('تم اضافة العمل بنجاح');
           this.rout.navigate(['/dashboared/myPortfolio']);
+          this.isSubmitting.set(false);
+        },
+        error: () => {
+          this.isSubmitting.set(false); // إلغاء اللودينج في حال حدوث خطأ بالسيرفر
         }
       })
-    )
+    );
   }
 
   editePortFolio() {
-    if (!this.selectedFile) {
-      this.alerts.error('اختار صورة الأول');
-      return;
-    }
+    const formData = this.implementFormData('edit');
+    if (!formData) return;
+
+    this.isSubmitting.set(true); // تفعيل اللودينج عند التعديل
     this.subs.add(
-      this._portfolio.editePortfolio(this.implementFormData(),this.portfolioId()).subscribe({
+      this._portfolio.editePortfolio(formData, this.portfolioId()).subscribe({
         next: () => {
-          this.alerts.sucsess('تم تعديل العمل بنجاح  قم باضافة الكثير من الاعمال لجلب عملاء اكثر 👍');
+          this.alerts.sucsess('تم تعديل العمل بنجاح قم باضافة الكثير من الاعمال لجلب عملاء اكثر 👍');
           this.rout.navigate(['/dashboared/myPortfolio']);
+          this.isSubmitting.set(false);
+        },
+        error: () => {
+          this.isSubmitting.set(false); // إلغاء اللودينج في حال حدوث خطأ بالسيرفر
         }
       })
-    )
+    );
   }
 
+  isDeleting = signal<boolean>(false);
+
   deletePortfolio() {
- this.alerts.confirmDelete('هل انت متأكد من حذف هذا العمل ؟').then((res)=>{
-  if(res.isConfirmed)
-  {
-    this.subs.add(
-      this._portfolio.deletePortfolio(this.portfolioId()).subscribe({
-        next: () => {
-          this.alerts.sucsess('تم حذف العمل بنجاح');
-          this.rout.navigate(['/dashboared/myPortfolio']);
-        }
-      })
-    )
+    this.alerts.confirmDelete('هل انت متأكد من حذف هذا العمل ؟').then((res) => {
+      if (res.isConfirmed) {
+        this.isDeleting.set(true); // يبدأ التحميل فقط بعد موافقة المستخدم على الحذف
+        this.subs.add(
+          this._portfolio.deletePortfolio(this.portfolioId()).subscribe({
+            next: () => {
+              this.alerts.sucsess('تم حذف العمل بنجاح');
+              this.rout.navigate(['/dashboared/myPortfolio']);
+              this.isDeleting.set(false);
+            },
+            error: () => {
+              this.isDeleting.set(false); // إلغاء اللودينج في حال فشل الحذف
+            }
+          })
+        );
+      }
+    });
   }
- }) 
-}
+
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
-
 
 }

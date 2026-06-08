@@ -308,27 +308,7 @@
           </div>
         }
 
-        <!-- ===== REVIEWED STATE ===== -->
-        @else if(serviceDetails().state == statuses.Reviewed) {
-          <div class="relative bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
-            <div class="absolute top-0 right-0 bottom-0 w-1 bg-emerald-500 rounded-r-2xl"></div>
-            <div class="p-5 pr-6">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clip-rule="evenodd"/>
-                  </svg>
-                  تمت المراجعة
-                </div>
-                <span class="text-[10px] text-slate-400 font-semibold">{{serviceDetails().completeDate | date:'short'}}</span>
-              </div>
-            
-
-          </div>
-        </div>
-      }
+    
 
       <!-- ===== REVIEWED STATE ===== -->
       @else if(serviceDetails().state == statuses.Reviewed) {
@@ -386,16 +366,7 @@
     </div>
   </div>
 
-  <!-- التذييل -->
-  <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-[10px]">
-    <div class="flex items-center gap-2">
-      <span class="text-slate-400">رقم الخدمة:</span>
-      <span class="text-slate-500 font-mono">{{ serviceDetails().serviceId.substring(0,8) }}...</span>
-    </div>
-    <span class="text-emerald-600 font-semibold italic">
-        {{ serviceDetails().completeDate ? (serviceDetails().completeDate | date:'short') : 'بانتظار التحديث' }}
-    </span>
-  </div>
+
 </div>
       }
 

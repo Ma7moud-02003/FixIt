@@ -1,9 +1,13 @@
-<div class="min-h-screen bg-gray-50 p-4 md:p-8">
-  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div class="lg:col-span-7">
-      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+<div class="min-h-screen bg-gray-50 p-4 md:p-8 flex flex-col justify-between" dir="rtl">
+  
+  <!-- الحاوية الرئيسية للنموذج -->
+  <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+    
+    <!-- القسم الأيمن: تفاصيل العمل -->
+    <div class="lg:col-span-7">
+      <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm h-full">
         <h2 class="text-xl font-bold text-gray-800 mb-1">تفاصيل العمل</h2>
-        <p class="text-sm text-gray-400 mb-8">املأ البيانات الأساسية عن المشروع الذي قمت بإنجازه</p>
+        <p class="text-sm text-gray-400 mb-6">املأ البيانات الأساسية عن المشروع الذي قمت بإنجازه</p>
         
         <form class="space-y-6">
           <div>
@@ -12,79 +16,121 @@
                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all">
           </div>
 
-        
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">وصف العمل</label>
             <textarea [formField]="portfolioForm.Describtion" rows="6" placeholder="اشرح باختصار المهام التي قمت بها، المواد المستخدمة، والنتائج النهائية" 
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none resize-none"></textarea>
+                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none resize-none transition-all"></textarea>
           </div>
-
-        
         </form>
       </div>
     </div>
-    <div class="lg:col-span-5 space-y-6 ">
-      <div class="bg-white p-6 rounded-2xl  border border-gray-100 shadow-sm">
+
+    <!-- القسم الأيسر: الصور والنصائح -->
+    <div class="lg:col-span-5 space-y-6 flex flex-col justify-between">
+      <!-- صندوق الصور -->
+      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex-1">
         <h2 class="text-xl font-bold text-gray-800 mb-1">صور المشروع</h2>
         <p class="text-sm text-gray-400 mb-6">ارفع صوراً واضحة تظهر جودة عملك (بحد أقصى 6 صور)</p>
         
-     @if(!imagePreview())
-{
-      <label for="portfolioImg" class="border-2 border-dashed border-cyan-100 bg-cyan-50/30 w-full rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-cyan-50 transition-colors">
-          <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
-            <svg class="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        @if(!imagePreview()) {
+          <label for="portfolioImg" class="border-2 border-dashed border-cyan-200 bg-cyan-50/20 w-full rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-cyan-50/50 transition-colors group">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 group-hover:scale-105 transition-transform">
+              <svg class="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+              </svg>
+            </div>
+            <p class="font-bold text-gray-700 text-sm">اضغط لرفع الصور</p>
+          </label>
+          <input type="file" id="portfolioImg" class="hidden" (change)="onFileSelected($event)">
+        } @else {
+          <div class="relative rounded-xl overflow-hidden border border-gray-100 shadow-inner bg-gray-50">
+            <img [src]="imagePreview()" loading="lazy" alt="service-image" class="w-full h-[220px] object-cover">
+            <button [disabled]="!imagePreview() || portfolioForm().invalid" (click)="imagePreview.set('')" 
+                    class="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white h-9 w-9 rounded-full flex items-center justify-center shadow transition-colors" title="حذف الصورة">
+              <i class="fas fa-trash text-sm"></i>
+            </button>
           </div>
-          <p class="font-bold text-gray-700">    اضغط للرفع</p>
-        </label>
-        <input type="file"  name="" id="portfolioImg" (change)="onFileSelected($event)">
-}@else {
-  <div class="relative">
-  <img [src]="imagePreview()" loading="lazy" alt="service-image" class="w-full h-[30vh]">
-  <button [disabled]="!imagePreview()||!portfolioForm().invalid" (click)="imagePreview.set('')" class="absolute top-3 right-3 bg-red-600 text-white h-10 w-10 rounded-full flex items-center justify-center">
-    <i class="fas fa-trash"></i>
-  </button>
-  </div>
-}
-
-       
+        }
       </div>
 
-      <div class="bg-cyan-50/50 p-6 rounded-2xl border border-cyan-100 flex items-start gap-4">
-        <div class="bg-cyan-100 p-2 rounded-lg text-cyan-600">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      <!-- صندوق النصيحة الذهبية -->
+      <div class="bg-cyan-50/60 p-5 rounded-2xl border border-cyan-100 flex items-start gap-4">
+        <div class="bg-cyan-500 p-2 rounded-xl text-white shadow-sm shrink-0">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
         </div>
         <div>
-          <h3 class="font-bold text-cyan-800">نصيحة ذهبية</h3>
-          <p class="text-sm text-cyan-700 leading-relaxed mt-1">الصناعية الذين يرفعون أكثر من 4 صور واضحة لمشاريعهم يحصلون على طلبات أكثر بنسبة 40%. تأكد من التصوير في إضاءة جيدة.</p>
+          <h3 class="font-bold text-cyan-900 text-sm">نصيحة ذهبية</h3>
+          <p class="text-xs text-cyan-700 leading-relaxed mt-1">المحترفون الذين يرفعون أكثر من 4 صور واضحة لمشاريعهم يحصلون على طلبات أكثر بنسبة 40%. تأكد من التصوير في إضاءة جيدة.</p>
         </div>
       </div>
     </div>
   </div>
-    <div class="flex flex-col-reverse md:flex-row gap-4 pt-4">
-            <button routerLink="../" type="button" class="flex-1 px-6 py-3 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors">إلغاء</button>
-             @if(isEditeMode())
-             {
-                     
-             <button (click)="deletePortfolio()" type="button" class="flex-2 px-6 py-3 bg-red-400 hover:bg-red-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-              <span>حذف العمل</span>
-            <i class="fas fa-trash"></i>
-            </button>
-             <button (click)="editePortFolio()" type="button" class="flex-2 px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-              <span>تعديل العمل</span>
-              <i class="fas fa-pen-alt mx-2"></i>
-            </button>
-             }
-            @else {
-                <button (click)="addPortFolio()" type="button" class="flex-2 px-6 py-3 bg-cyan-400 hover:bg-cyan-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-              <span>إضافة العمل</span>
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            </button>
-            }
-       
-          </div>
 
+  <!-- قسم الأزرار السفلي (متناسق ومحاذي تماماً للمحتوى) -->
+  <div class="max-w-6xl w-full mx-auto border-t border-gray-100 pt-6 flex flex-col-reverse sm:flex-row gap-3">
+    <!-- زر إلغاء يأخذ مساحة ثابتة ومناسبة -->
+    <button routerLink="../" type="button" 
+            class="sm:w-32 px-6 py-3 border border-gray-200 text-gray-500 rounded-xl font-bold hover:bg-gray-100 transition-colors text-center">
+      إلغاء
+    </button>
+    
+    <div class="flex-1 flex gap-3">
+      @if(isEditeMode()) {
+        <!-- زر حذف العمل في مود التعديل -->
+        <button (click)="deletePortfolio()" [disabled]="isDeleting()" type="button" 
+                class="flex-1 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50">
+          @if(isDeleting()) {
+            <svg class="animate-spin h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>جاري الحذف...</span>
+          } @else {
+            <span>حذف العمل</span>
+            <i class="fas fa-trash text-sm"></i>
+          }
+        </button>
 
-  <footer class="max-w-6xl mx-auto mt-12 text-center text-gray-400 text-sm">
+        <!-- زر تعديل العمل -->
+        <button (click)="editePortFolio()" [disabled]="isSubmitting()" type="button" 
+                class="flex-[2] px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-sm shadow-cyan-100 disabled:opacity-75">
+          @if(isSubmitting()) {
+            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>جاري الحفظ...</span>
+          } @else {
+            <span>حفظ التعديلات</span>
+            <i class="fas fa-pen text-sm"></i>
+          }
+        </button>
+      } @else {
+        <!-- زر إضافة العمل (الوضع الافتراضي) -->
+        <button (click)="addPortFolio()" [disabled]="isSubmitting()" type="button" 
+                class="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-sm shadow-cyan-100 disabled:opacity-75">
+          @if(isSubmitting()) {
+            <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>جاري إضافة العمل...</span>
+          } @else {
+            <span>إضافة العمل</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- الفوتر -->
+  <footer class="max-w-6xl w-full mx-auto mt-12 text-center text-gray-400 text-xs">
     <p>© 2026 Fixit جميع الحقوق محفوظة.</p>
   </footer>
+
 </div>

@@ -42,6 +42,10 @@
   
      @for (service of filterdServices(); track service;let i= $index) {
        <app-service-card [service]="service"></app-service-card>
+     }@empty{
+      <div>
+        <h1 class="text-4xl text-center ">لا يوجد خدمات </h1>
+      </div>
      }
 
   

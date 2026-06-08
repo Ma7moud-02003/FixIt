@@ -19,6 +19,16 @@ private subs=new Subscription();
 });
   }
 
+
+    warn(message:string)
+  {
+    Swal.fire({
+  title: message,
+  icon: "warning",
+  draggable: true
+});
+  }
+
   error(message:string)
   {
     Swal.fire({
