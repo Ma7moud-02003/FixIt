@@ -129,7 +129,9 @@
             <app-worker-inprocess
               [clientName]="serviceDetails().clientName"
               [serviceId]="serviceDetails().serviceId"
-              (submitted)="getRecivedServiveDetails()">
+              (submitted)="getRecivedServiveDetails()"
+              [clientId]="serviceDetails().clientId"
+              >
             </app-worker-inprocess>
           }
            @else if(serviceDetails().state == statuses.DISPUTED) {
@@ -298,7 +300,7 @@
                       <i class="fas fa-star text-yellow-400 text-sm"></i>
                       إرسال التقييم الآن
                     </button>
-                    <button class="w-full h-10 text-slate-400 text-xs font-semibold hover:text-slate-600 transition-colors">
+                    <button routerLink="/home" class="w-full h-10 text-slate-400 text-xs font-semibold hover:text-slate-600 transition-colors">
                       تخطي والعودة للرئيسية
                     </button>
                   </div>
@@ -480,10 +482,7 @@
                     <span class="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">عميل موثق</span>
                   </div>
                 </div>
-                <button [routerLink]="[role()=='client'?'mainLayout/profile':'/chat']"
-                  class="text-[11px] font-bold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-sky-600 hover:text-white hover:border-sky-600 transition-all shadow-sm">
-                  عرض الملف
-                </button>
+              
               </div>
             </div>
 
@@ -500,10 +499,7 @@
                     <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">فني متخصص</span>
                   </div>
                 </div>
-                <button [routerLink]="role()=='client' ? ['/mainLayout/workerProfile', serviceDetails().workerId] : ['/mainLayout/profile']"
-                  class="text-[11px] font-bold px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-lg hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm">
-                  عرض الملف
-                </button>
+                
               </div>
             </div>
 

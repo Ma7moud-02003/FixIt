@@ -55,6 +55,11 @@ export class WorkerPriceprocess implements OnDestroy{
         }
       })
     }
+ suggesionsPtice=signal<number[]>([250,500,1000,1500]);
+    bottelSuggest(price:number){
+this.totalPrice.set(price)
+    }
+
     ngOnDestroy(): void {
       this.subs.unsubscribe();
     }

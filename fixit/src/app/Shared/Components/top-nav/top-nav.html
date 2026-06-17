@@ -107,9 +107,14 @@
           </a>
         }
         
+        <button [routerLink]="[role()=='worker'?'/dashboared/myWallet':'/mainLayout/myWallet']"  class="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-blue-600 hover:bg-blue-50 transition-all mt-0.5">
+  <i class="fas fa-wallet opacity-70"></i> المحفظة
+</button>
+        
         <button (click)="logOut()" class="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition-all mt-0.5">
           <i class="fas fa-sign-out-alt opacity-70"></i> تسجيل الخروج
         </button>
+
       </div>
      }
 

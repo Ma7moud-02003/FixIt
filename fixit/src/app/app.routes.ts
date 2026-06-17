@@ -132,6 +132,12 @@ export const routes: Routes = [
           import('./Features/Components/dashboared-home/dashboared-home')
             .then(m => m.DashboaredHome)
       },
+      {
+        path: 'myWallet',
+        loadComponent: () =>
+          import('./Features/wallet/wallet')
+            .then(m => m.Wallet)
+      },
 
       {
         path: 'myServices',
@@ -205,7 +211,12 @@ export const routes: Routes = [
           import('./Features/Components/my-services/my-services')
             .then(m => m.MyServices)
       },
-
+ {
+        path: 'myWallet',
+        loadComponent: () =>
+          import('./Features/wallet/wallet')
+            .then(m => m.Wallet)
+      },
       {
         path: 'home',
         loadComponent: () =>
@@ -217,6 +228,11 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./Shared/Components/profile/profile').then(m => m.Profile)
+      },
+        {
+        path: 'profile',
+        loadComponent: () =>
+          import('./Features/wallet/wallet').then(m => m.Wallet)
       },
 
       {

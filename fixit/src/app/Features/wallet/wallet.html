@@ -1,0 +1,180 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto space-y-8">
+    
+    <div class="flex items-center justify-between border-b border-gray-200 pb-5">
+      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">إدارة المحفظة الرقمية</h1>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium bg-emerald-100 text-emerald-800 rounded-full">
+        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+        آمن ومُشفر
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-6 text-white relative overflow-hidden">
+        <div class="absolute right-0 top-0 opacity-10 transform translate-x-12 -translate-y-12">
+          <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <p class="text-indigo-100 text-sm font-medium tracking-wide">الرصيد الحالي المتوفر</p>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-5xl font-extrabold tracking-tight">{{ walletBalance() }}</span>
+          <span class="text-xl font-medium text-indigo-200">جنية مصري</span>
+        </div>
+        <p class="mt-4 text-xs text-indigo-200 flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          يتم تحديث الرصيد تلقائياً عند نجاح أي عملية عمل أو شحن.
+        </p>
+      </div>
+
+      @if (isLoading()) {
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center justify-center space-y-3">
+          <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-sm text-gray-500 font-medium">جاري تحديث البيانات...</p>
+        </div>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all hover:shadow-md">
+  <div class="flex items-center gap-3 mb-4">
+    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    </div>
+    <div>
+      <h2 class="text-lg font-bold text-gray-900">شحن الرصيد (خاص بالعميل)</h2>
+      <p class="text-xs text-gray-500">اشحن محفظتك لتتمكن من طلب الخدمات فوراً</p>
+    </div>
+  </div>
+  
+  <div class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1.5">المبلغ المراد شحنه</label>
+      <div class="relative rounded-xl shadow-sm">
+        <input #chargeAmount type="number" min="10" placeholder="0.00" 
+               class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none text-left font-semibold text-lg">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-medium text-sm">
+          ج.م
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1.5">طريقة الدفع</label>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-credit-card text-gray-500"></i>
+            <span class="text-sm font-medium text-gray-700">بطاقة (Card)</span>
+          </div>
+          <input type="radio" name="method" value="card" checked #methodCard class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+        </label>
+
+        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-wallet text-gray-500"></i>
+            <span class="text-sm font-medium text-gray-700">محفظة (Wallet)</span>
+          </div>
+          <input type="radio" name="method" value="wallet" #methodWallet class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+        </label>
+      </div>
+    </div>
+
+    <button (click)="onCharge(+chargeAmount.value, methodCard.checked ? 'card' : 'wallet')" 
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm">
+      <span>الانتقال لبوابة الدفع الآمن</span>
+      <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+    </button>
+  </div>
+</div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all hover:shadow-md">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">سحب الأرباح (خاص بالفني)</h2>
+            <p class="text-xs text-gray-500">قم بتقديم طلب لسحب أموالك المتوفرة في المحفظة</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">مبلغ السحب</label>
+            <div class="relative rounded-xl shadow-sm">
+              <input #withdrawAmount type="number" min="50" placeholder="0.00" 
+                     class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:bg-white transition-all outline-none text-left font-semibold text-lg">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-medium text-sm">
+                ج.م
+              </div>
+            </div>
+          </div>
+          <button (click)="onWithdraw(+withdrawAmount.value)" 
+                  class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm">
+            <span>تقديم طلب سحب كاش</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200 bg-gray-50/50 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">سجل حركات المحفظة</h3>
+          <p class="text-xs text-gray-500 mt-0.5">تفاصيل جميع عمليات الشحن والدفع والسحب السابقة</p>
+        </div>
+      </div>
+
+      @if (transactions().length > 0) {
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-100/70 text-gray-600 text-xs font-semibold uppercase tracking-wider border-b border-gray-200">
+                <th class="px-6 py-3.5">معرف العملية</th>
+                <th class="px-6 py-3.5">النوع</th>
+                <th class="px-6 py-3.5">المبلغ</th>
+                <th class="px-6 py-3.5">التاريخ</th>
+                <th class="px-6 py-3.5">الحالة</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+              @for (item of transactions(); track item.id) {
+                <tr class="hover:bg-gray-50/80 transition-colors">
+                  <td class="px-6 py-4 font-mono text-xs text-gray-500">#{{ item.id }}</td>
+                  <td class="px-6 py-4">
+                    <span class="font-medium text-gray-900">{{ item.type }}</span>
+                  </td>
+                  <td class="px-6 py-4 font-semibold" [ngClass]="item.isDeposit ? 'text-emerald-600' : 'text-rose-600'">
+                    {{ item.isDeposit ? '+' : '-' }}{{ item.amount }} ج.م
+                  </td>
+                  <td class="px-6 py-4 text-gray-500 text-xs">
+                    {{ item.date }}
+                  </td>
+                  <td class="px-6 py-4">
+                    <span [ngClass]="{
+                      'bg-emerald-50 text-emerald-700 border-emerald-200': item.status === 'Completed' || item.status === 'Approved',
+                      'bg-amber-50 text-amber-700 border-amber-200': item.status === 'Pending',
+                      'bg-rose-50 text-rose-700 border-rose-200': item.status === 'Failed'
+                    }" class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border">
+                      {{ item.statusText || item.status }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
+          <div class="p-4 bg-gray-100 rounded-full text-gray-400 mb-3">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          </div>
+          <h4 class="text-sm font-bold text-gray-900">لا توجد عمليات مسجلة</h4>
+          <p class="text-xs text-gray-500 mt-1 max-w-xs">لم تقم بإجراء أي عمليات شحن أو سحب على حسابك حتى الآن.</p>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

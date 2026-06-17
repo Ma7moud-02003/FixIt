@@ -3,10 +3,11 @@ import { Alerts } from '../../../../Alerts/alerts';
 import { Subscription } from 'rxjs';
 import { Service } from '../../../../../Core/Services/service';
 import Swal from 'sweetalert2';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-worker-inprocess',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './worker-inprocess.html',
   styleUrl: './worker-inprocess.css',
 })
@@ -16,6 +17,7 @@ export class WorkerInprocess implements OnDestroy{
   private service=inject(Service);
 
   clientName=input<string>('');
+  clientId=input<string>('');
   serviceId=input<string>('');
   @Output() submitted=new EventEmitter<void>();
 

@@ -100,7 +100,7 @@
         تم التسليم
       </button>
 
-      <button class="h-14 flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-95">
+      <button [routerLink]="['/chat',clientId()]" class="h-14 flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-95">
         <i class="fas fa-comment-dots text-slate-400"></i>
         المراسلة
       </button>

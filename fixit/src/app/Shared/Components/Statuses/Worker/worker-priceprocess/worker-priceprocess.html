@@ -34,10 +34,11 @@
     <!-- Price suggestion chips -->
     <div class="flex gap-2 mt-3 flex-wrap">
       <span class="text-[10px] text-slate-400 font-semibold self-center">اقتراحات:</span>
-      <button type="button" class="text-[11px] font-bold px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">٢٥٠</button>
-      <button type="button" class="text-[11px] font-bold px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">٥٠٠</button>
-      <button type="button" class="text-[11px] font-bold px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">٧٥٠</button>
-      <button type="button" class="text-[11px] font-bold px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">١٠٠٠</button>
+      @for(sugg of suggesionsPtice();track sugg){
+      <button (click)="bottelSuggest(sugg)"  type="button" class="text-[11px] font-bold px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">{{sugg}}</button>
+
+      }
+
     </div>
   </div>
 

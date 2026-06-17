@@ -79,7 +79,6 @@ pass.type='password'
 isLoading = signal(false);
 submitForm(role:HTMLInputElement,agreed:HTMLInputElement)
 {
-
   if(this.isLoading()) return;
   if(!agreed.checked)
 {
@@ -99,7 +98,9 @@ this.subs.add(this._auth.register(this.regiterForm().value()).subscribe({
 this.router.navigate(['/wait'], { queryParams: { mode: 'register' } });
 console.log(res);
 console.log(typeof(res));
-  },error: () => {
+  },error: (err) => {
+    console.log(err);
+    
         // حبل الأمان: لو السيرفر رجع 400 أو 500 أو أي إيرور، اللودر هيقفل فوراً هنا
         this.isLoading.set(false);
   }
