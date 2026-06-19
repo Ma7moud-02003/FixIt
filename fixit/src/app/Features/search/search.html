@@ -1,133 +1,129 @@
 <div class="bg-slate-50 flex flex-row-reverse min-h-screen" dir="rtl">
 
-  <button
-    (click)="toggleMobileSidebar()"
-    class="lg:hidden fixed bottom-6 left-6 z-50 bg-cyan-500 text-white p-3.5 rounded-full shadow-lg active:scale-95 transition-transform cursor-pointer">
-    <i class="fas w-5 h-5" [class.fa-filter]="!isMobileSidebarOpen" [class.fa-times]="isMobileSidebarOpen"></i>
-  </button>
+ <button
+  (click)="toggleMobileSidebar()"
+  class="lg:hidden fixed bottom-20 right-6 z-50 bg-cyan-500 text-white p-3.5 rounded-full shadow-lg active:scale-95 transition-transform cursor-pointer">
+  <i class="fas w-5 h-5" [class.fa-filter]="!isMobileSidebarOpen()" [class.fa-times]="isMobileSidebarOpen()"></i>
+</button>
 
- <aside
-  [class.translate-x-0]="isMobileSidebarOpen"
-  [class.-translate-x-full]="!isMobileSidebarOpen"
-  class="fixed left-0 top-0 h-screen overflow-y-auto w-64 lg:w-[17%] bg-white border-l border-slate-100/80 z-40 transition-transform duration-300 lg:translate-x-0 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
+  <aside
+  [class.translate-x-0]="isMobileSidebarOpen()"
+  [class.translate-x-full]="!isMobileSidebarOpen()"
+  class="fixed right-0 top-0 h-screen overflow-y-auto w-64 lg:w-[17%] bg-white border-r lg:border-l border-slate-100/80 z-40 transition-transform duration-300 lg:static lg:translate-x-0 lg:h-auto scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none]">
 
-  <div class="sticky top-0 bg-white border-b border-slate-50 px-5 py-4 flex items-center justify-between z-10 select-none">
-    <button (click)="resetFilters()" class="text-xs font-black text-cyan-500 hover:text-cyan-600 transition-colors cursor-pointer active:scale-95">
-      إعادة ضبط
-    </button>
-    <h2 class="text-xs font-black text-slate-400 uppercase tracking-wider">تصفية النتائج</h2>
-  </div>
-
-  <div class="px-5 py-2 space-y-0 divide-y divide-slate-100/70">
-
-    <div class="py-4">
-      <label class="flex items-center justify-between cursor-pointer group select-none">
-        <div class="relative inline-flex items-center">
-          <input type="checkbox" [checked]="isAvailable()" (change)="getAvailable()" class="sr-only peer">
-          <div class="w-8 h-[18px] bg-slate-200 rounded-full peer peer-checked:bg-cyan-500
-                      after:content-[''] after:absolute after:top-[3px] after:right-[3px]
-                      after:bg-white after:rounded-full after:w-3 after:h-3 after:transition-all
-                      peer-checked:after:-translate-x-[14px] rtl:peer-checked:after:translate-x-0"></div>
-        </div>
-        <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">متاح الآن فقط</span>
-      </label>
+    <div class="sticky top-0 bg-white border-b border-slate-50 px-5 py-4 flex items-center justify-between z-10 select-none">
+      <button (click)="resetFilters()" class="text-xs font-black text-cyan-500 hover:text-cyan-600 transition-colors cursor-pointer active:scale-95">
+        إعادة ضبط
+      </button>
+      <h2 class="text-xs font-black text-slate-400 uppercase tracking-wider">تصفية النتائج</h2>
     </div>
 
-    <div class="py-4">
-      <button (click)="toggleCategory()" class="flex items-center justify-between w-full mb-3 group cursor-pointer select-none">
-        <svg [class.rotate-180]="isCategoryOpen" class="w-3.5 h-3.5 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
-        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التخصص</span>
-      </button>
+    <div class="px-5 py-2 space-y-0 divide-y divide-slate-100/70">
 
-      <div class="overflow-hidden transition-all duration-300" [style.max-height]="isCategoryOpen ? '400px' : '0px'">
+      <div class="py-4">
+        <label class="flex items-center justify-between cursor-pointer group select-none">
+          <div class="relative inline-flex items-center">
+            <input type="checkbox" [checked]="isAvailable()" (change)="getAvailable()" class="sr-only peer">
+            <div class="w-8 h-[18px] bg-slate-200 rounded-full peer peer-checked:bg-cyan-500
+                        after:content-[''] after:absolute after:top-[3px] after:right-[3px]
+                        after:bg-white after:rounded-full after:w-3 after:h-3 after:transition-all
+                        peer-checked:after:-translate-x-[14px] rtl:peer-checked:after:translate-x-0"></div>
+          </div>
+          <span class="text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors">متاح الآن فقط</span>
+        </label>
+      </div>
+
+      <div class="py-4">
+        <button (click)="toggleCategory()" class="flex items-center justify-between w-full mb-3 group cursor-pointer select-none">
+          <svg [class.rotate-180]="isCategoryOpen" class="w-3.5 h-3.5 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التخصص</span>
+        </button>
+
+        <div class="overflow-hidden transition-all duration-300" [style.max-height]="isCategoryOpen ? '400px' : '0px'">
+          <div class="space-y-1">
+            @for(catog of categories(); track catog.categoryId) {
+              <label class="flex items-center justify-between py-1.5 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  [checked]="filterCategory() === catog.categoryName"
+                  (change)="setCatog(catog.categoryId)"
+                  class="w-3.5 h-3.5 rounded border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
+                <span class="text-xs md:text-sm text-slate-600 group-hover:text-slate-900 transition-colors" [class.text-cyan-600]="filterCategory() === catog.categoryName" [class.font-bold]="filterCategory() === catog.categoryName">
+                  {{catog.categoryName}}
+                </span>
+              </label>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="py-4">
+        <div class="flex items-center justify-between w-full mb-3 select-none">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="text-xs font-black text-slate-500 uppercase tracking-wider">المدينة أو المحافظة</span>
+        </div>
+
+        <div class="relative px-0.5">
+          <input 
+            type="text"
+            [ngModel]="filterCity()"
+            (ngModelChange)="onCityChange($event)"
+            placeholder="اكتب اسم المدينة للبحث..." 
+            class="w-full h-9 rounded-xl border border-slate-200/80 bg-slate-50/50 text-xs font-medium text-slate-800 transition-all outline-none focus:border-cyan-500/30 focus:bg-white focus:ring-4 focus:ring-cyan-50 placeholder:text-slate-400"
+          />
+          @if(filterCity()) {
+            <button 
+              (click)="filterCity.set(''); onCityChange('')" 
+              class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer text-xs">
+              <i class="fas fa-times-circle"></i>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="py-4">
+        <div class="flex items-center justify-between mb-3 select-none">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التقييم</span>
+        </div>
+
         <div class="space-y-1">
-          @for(catog of categories(); track catog.categoryId) {
-            <label class="flex items-center justify-between py-1.5 cursor-pointer group">
+          @for(rateing of [5,4,3]; track rateing) {
+            <label class="flex items-center justify-between py-1.5 cursor-pointer group select-none">
               <input
                 type="checkbox"
-                [checked]="filterCategory() === catog.categoryName"
-                (change)="setCatog(catog.categoryId)"
-                class="w-3.5 h-3.5 rounded border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
-              <span class="text-xs md:text-sm text-slate-600 group-hover:text-slate-900 transition-colors" [class.text-cyan-600]="filterCategory() === catog.categoryName" [class.font-bold]="filterCategory() === catog.categoryName">
-                {{catog.categoryName}}
-              </span>
+                [checked]="rate() === rateing"
+                (change)="setRate(rateing)"
+                class="w-3.5 h-3.5 border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs text-slate-500 group-hover:text-slate-800 transition-colors">وأكثر</span>
+                <div class="flex gap-0.5 text-amber-400">
+                  @for(star of [1,2,3,4,5].slice(0, rateing); track star) {
+                    <i class="fas fa-star text-[9px]"></i>
+                  }
+                </div>
+              </div>
             </label>
           }
         </div>
       </div>
+
     </div>
+  </aside>
 
-    <div class="py-4">
-      <div class="flex items-center justify-between w-full mb-3 select-none">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-        </svg>
-        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">المدينة أو المحافظة</span>
-      </div>
-
-      <div class="relative px-0.5">
-        <input 
-          type="text"
-          [ngModel]="filterCity()"
-          (ngModelChange)="onCityChange($event)"
-          placeholder="اكتب اسم المدينة للبحث..." 
-          class="w-full h-9 rounded-xl border border-slate-200/80 bg-slate-50/50 text-xs font-medium text-slate-800 transition-all outline-none focus:border-cyan-500/30 focus:bg-white focus:ring-4 focus:ring-cyan-50 placeholder:text-slate-400"
-        />
-        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-        
-        </div>
-        
-        @if(filterCity()) {
-          <button 
-            (click)="filterCity.set(''); onCityChange('')" 
-            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer text-xs">
-            <i class="fas fa-times-circle"></i>
-          </button>
-        }
-      </div>
-    </div>
-
-    <div class="py-4">
-      <div class="flex items-center justify-between mb-3 select-none">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
-        <span class="text-xs font-black text-slate-500 uppercase tracking-wider">التقييم</span>
-      </div>
-
-      <div class="space-y-1">
-        @for(rateing of [5,4,3]; track rateing) {
-          <label class="flex items-center justify-between py-1.5 cursor-pointer group select-none">
-            <input
-              type="checkbox"
-              [checked]="rate() === rateing"
-              (change)="setRate(rateing)"
-              class="w-3.5 h-3.5 border-slate-300 text-cyan-500 accent-cyan-500 cursor-pointer">
-            <div class="flex items-center gap-1.5">
-              <span class="text-xs text-slate-500 group-hover:text-slate-800 transition-colors">وأكثر</span>
-              <div class="flex gap-0.5 text-amber-400">
-                @for(star of [1,2,3,4,5].slice(0, rateing); track star) {
-                  <i class="fas fa-star text-[9px]"></i>
-                }
-              </div>
-            </div>
-          </label>
-        }
-      </div>
-    </div>
-
-  </div>
-</aside>
-
-  @if(isMobileSidebarOpen) {
-    <div (click)="toggleMobileSidebar()" class="fixed inset-0 bg-black/10 backdrop-blur-xs z-30 lg:hidden"></div>
+  @if(isMobileSidebarOpen()) {
+    <div (click)="toggleMobileSidebar()" class="fixed inset-0 bg-black/20 backdrop-blur-xs z-30 lg:hidden"></div>
   }
 
-  <main class="w-full lg:w-[83%] ml-auto p-6 lg:p-8 space-y-6">
-
+  <main class="w-full lg:w-[83%] mr-auto p-6 lg:p-8 space-y-6">
+    
     <div class="flex flex-col sm:flex-row-reverse sm:items-end sm:justify-between gap-3">
       <div class="text-right">
         <h1 class="text-xl font-black text-slate-800">البحث عن فنيين</h1>

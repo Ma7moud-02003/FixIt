@@ -3,6 +3,7 @@ import { PayMentService } from '../../Core/Services/wallet';
 import { Alerts } from '../../Shared/Alerts/alerts';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Auth } from '../../Core/Services/auth';
 
 @Component({
   selector: 'app-wallet',
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './wallet.css',
 })
 export class Wallet {
+  role=signal<string>('');
   private paymentService = inject(PayMentService);
   private alerts = inject(Alerts);
 // تأكد أنها مكتوبة كدا بالظبط وليس signal<any[]>(undefined)
@@ -18,9 +20,10 @@ export class Wallet {
   walletBalance = signal<number>(0);
   transactions = signal<any[]>([]);
   isLoading = signal<boolean>(false);
-
+  private auth=inject(Auth);
   ngOnInit(): void {
     this.loadWalletData();
+    this.role.set(this.auth.getRole()||'');
   }
 
   // 1. تحميل بيانات المحفظة أول ما الشاشة تفتح
@@ -44,10 +47,12 @@ onCharge(amount: number, method: 'card' | 'wallet') {
   if (amount <= 0) return;
 
   this.paymentService.chargeWallet(amount, method).subscribe({
-    next: (res) => {
-      // إعادة توجيه المستخدم لصفحة الدفع الخارجية
-      if (res.paymentUrl) {
-        window.location.href = res.paymentUrl; 
+    next: (res:any) => {
+      console.log(res);
+      
+     // إعادة توجيه المستخدم لصفحة الدفع الخارجية
+      if (res.redirectUrl) {
+        window.location.href = res.redirectUrl; 
       }
     },
     error: (err) => {
@@ -59,11 +64,13 @@ onCharge(amount: number, method: 'card' | 'wallet') {
 }
 
   // 3. عند ضغط الوركر على "طلب سحب"
-  onWithdraw(amount: number) {
-    const requestData = { amount, paymentMethod: 'Vodafone Cash', accountDetails: '010xxxxxxx' };
+  onWithdraw(amount: number,method:'card'|'wallet') {
     
-    this.paymentService.withdrawRequest(requestData).subscribe({
+    
+    this.paymentService.withdrawRequest(amount,method).subscribe({
       next: (res) => {
+        console.log(res);
+        
         this.alerts.sucsess('تم تقديم طلب السحب بنجاح وفي انتظار موافقة الإدارة');
         this.loadWalletData(); // تحديث البيانات
       }

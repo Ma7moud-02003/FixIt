@@ -52,7 +52,7 @@ export class Search implements OnInit, OnDestroy {
   // ================= UI Utilities =================
   isCityOpen = true;
   isCategoryOpen = false;
-  isMobileSidebarOpen = false;
+  isMobileSidebarOpen =signal<boolean>(false);
   showAllCities = false;
   protected readonly Array = Array;
   private searchTimeout: any;
@@ -222,7 +222,7 @@ setCatog(id: number) {
   }
 
   // ================= UI Toggles =================
-  toggleMobileSidebar() { this.isMobileSidebarOpen = !this.isMobileSidebarOpen; }
+  toggleMobileSidebar() { this.isMobileSidebarOpen.set(!this.isMobileSidebarOpen()); }
   toggleCityView() { this.showAllCities = !this.showAllCities; }
   toggleCity() { this.isCityOpen = !this.isCityOpen; }
   toggleCategory() { this.isCategoryOpen = !this.isCategoryOpen; }

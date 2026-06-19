@@ -1,3 +1,11 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+/* لما يكون السايد بار مفتوح في الفون، اجبره يظهر في الشاشة */
+@media (max-width: 1023px) {
+  aside.active-sidebar {
+    transform: translateX(0) !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+}

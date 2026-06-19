@@ -48,8 +48,15 @@ chargeWallet(amount: number, method: 'card' | 'wallet'): Observable<{ paymentUrl
    * 3. طلب سحب الأرباح (خاص بالـ Worker)
    * @param request بيانات طلب السحب (المبلغ، الطريقة، تفاصيل الحساب)
    */
-  withdrawRequest(request: WithdrawRequest): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/withdraw-request`, request);
+  withdrawRequest(amount: number,method:'card'|'wallet'): Observable<any> {
+    console.log(amount,method);
+    
+      const params = new HttpParams()
+    .set('amount', amount.toString())
+    .set('method', method);
+  return this.http.post<{ paymentUrl: string }>(`${this.apiUrl}/withdraw-request`, {}, { params });
+
+
   }
 
   /**

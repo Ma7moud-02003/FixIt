@@ -16,6 +16,8 @@ export class Review {
 return this.http.post(`${environment.apiUrl}/${this.endPoint()}/AddReview/${serviceId}`,review);
   }
 
+  
+
   getAllRevies(pageNum:number=1,pageSize:number=5)
   {
 return this.http.get(`${environment.apiUrl}/${this.endPoint()}/AllReviews?PageNum=${pageNum}&PageSize=${pageSize}`);

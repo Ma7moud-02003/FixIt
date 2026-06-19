@@ -84,6 +84,7 @@ export class Reviews implements OnInit, OnDestroy {
           const data = res.data || [];
 this.totalPages.set(res.totalPages)
           this.workerReviews.set(data);
+          this.ratingAverage.set(data[0].ratingAverage)
           console.log(res);
           
           // cache
@@ -103,6 +104,9 @@ totalPages=signal<number>(0)
 }
 
   // ===================== CLIENT REVIEWS =====================
+  
+ratingAverage=signal<string>('');
+
   loadWorkerReviewsForClient() {
     const id = this.workerId();
     const key = `client-${id}`;
@@ -119,6 +123,9 @@ totalPages=signal<number>(0)
         next: (res: any) => {
           const data = res.data || [];
 console.log(res);
+console.log(data[0]);
+
+this.ratingAverage.set(data[0].ratingAverage)
 
           const workerData: WorkerData = {
             imgUrl: data?.imgUrl,
