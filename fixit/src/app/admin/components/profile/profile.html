@@ -160,14 +160,7 @@
               <p class="text-xs text-slate-400 font-medium mb-1">تاريخ الإنشاء</p>
               <p class="font-bold text-slate-700 text-sm">{{ formatDate(admin.createdAt) }}</p>
             </div>
-            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-colors duration-200">
-              <p class="text-xs text-slate-400 font-medium mb-1">الحالة</p>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full shrink-0"
-                      [ngClass]="admin.isActive ? 'bg-emerald-500' : 'bg-red-400'"></span>
-                <p class="font-bold text-slate-700">{{ admin.isActive ? 'فعّال' : 'معطّل' }}</p>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>

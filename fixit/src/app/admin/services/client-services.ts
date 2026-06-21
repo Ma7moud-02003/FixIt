@@ -14,8 +14,8 @@ export class ClientServices {
        return this._http.get(`${environment.apiUrl}/Admin/AllClients?PageNum=${pageNum}&PageSize=${pageSize}`)
   }
 
-  deletUser(){
-    return this._http.delete(`${environment.apiUrl}/Admin/Client/Delet`)
+  deletUser(userId:string){
+    return this._http.delete(`${environment.apiUrl}/Admin/DeleteUser/${userId}`)
   }
   blockUser(userId:string){
     return this._http.put(`${environment.apiUrl}/Admin/BlockUser/${userId}`,{});

@@ -10,7 +10,7 @@ import { Router, RouterLink, RouterModule } from "@angular/router";
 })
 export class Sidebar {
     navItems = [
-    { label: 'الرئيسية',        icon: 'grid',     rout:'/admin'   },
+    
     { label: 'المستخدمين',      icon: 'users',  active: false, rout:'/admin/users' },
     { label: 'العمال',           icon: 'briefcase',  rout:'/admin/workers' },
     { label: 'التصنيفات',        icon: 'table' , active:false , rout:'/admin/catogs'   },

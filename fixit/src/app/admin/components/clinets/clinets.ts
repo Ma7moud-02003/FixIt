@@ -162,7 +162,7 @@ this.getAllUsers();
   deleteUser(id: string) {
 this.alerts.confirmDelete('هل انت متاكد').then((res)=>{
   if(res.isConfirmed)
-    this.subs.add(this._clients.deletUser().subscribe({
+    this.subs.add(this._clients.deletUser(id).subscribe({
   next:()=>{
       this.allUsers.update(users => users.filter(u => u.userId !== id));
   }}))

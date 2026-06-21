@@ -73,7 +73,7 @@ export const routes: Routes = [
   loadComponent:()=>import('./admin/admin-layout/admin-layout').then(m=>m.AdminLayout),
   children:[
 {
-  path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
+  path:'',redirectTo:'users',pathMatch:'full'
 
 },
 {
@@ -106,9 +106,6 @@ export const routes: Routes = [
 },
 {
   path:'chatDetails/:roomId',loadComponent:()=>import('./admin/components/chat-details/chat-details').then(m=>m.ChatDetails)
-},
-{
-  path:'',loadComponent:()=>import('./admin/components/dashboard/dashboard').then(m=>m.Dashboard)
 },
 
 

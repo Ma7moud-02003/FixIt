@@ -85,6 +85,8 @@ export class Workers implements OnDestroy{
       .getWorkers(this.currentPage(), this.pageSize())
       .subscribe({
         next: (res: any) => {
+        console.log(res);
+        
           // Adapt to your actual API response shape
           const list = res?.data ?? res?.workers ?? res ?? [];
           const count: number = res?.totalCount ?? res?.total ?? list.length;

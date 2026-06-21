@@ -1,199 +1,243 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-slate-50/70 py-8 px-4 sm:px-6 lg:px-8 font-sans" dir="rtl">
   <div class="max-w-5xl mx-auto space-y-8">
     
     <div class="flex items-center justify-between border-b border-gray-200 pb-5">
-      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">إدارة المحفظة الرقمية</h1>
-      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium bg-emerald-100 text-emerald-800 rounded-full">
+      <div>
+        <h1 class="text-2xl font-black text-gray-900 tracking-tight sm:text-3xl">إدارة المحفظة الرقمية</h1>
+        <p class="text-xs text-gray-500 mt-1">تحكم برصيدك، عمليات الشحن، وسحب الأرباح بأمان</p>
+      </div>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-        آمن ومُشفر
+        اتصال آمن ومُشفر
       </span>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="md:col-span-2 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-6 text-white relative overflow-hidden">
-        <div class="absolute right-0 top-0 opacity-10 transform translate-x-12 -translate-y-12">
-          <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      <div class="md:col-span-2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 rounded-3xl shadow-lg shadow-indigo-100 p-6 text-white relative overflow-hidden transition-all duration-300 hover:shadow-indigo-200">
+        <div class="absolute right-0 top-0 opacity-10 transform translate-x-12 -translate-y-12 select-none">
+          <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2-.9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         </div>
         <p class="text-indigo-100 text-sm font-medium tracking-wide">الرصيد الحالي المتوفر</p>
         <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-5xl font-extrabold tracking-tight">{{ walletBalance() }}</span>
-          <span class="text-xl font-medium text-indigo-200">جنية مصري</span>
+          <span class="text-4xl font-black tracking-tight sm:text-5xl">{{ walletBalance() }}</span>
+          <span class="text-lg font-medium text-indigo-200">جنيه مصري</span>
         </div>
-        <p class="mt-4 text-xs text-indigo-200 flex items-center gap-1">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          يتم تحديث الرصيد تلقائياً عند نجاح أي عملية عمل أو شحن.
+        <p class="mt-5 text-[11px] text-indigo-200/90 flex items-center gap-1.5 bg-white/10 w-max px-3 py-1 rounded-full backdrop-blur-xs">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          يتم تحديث الأرقام فورياً عند نجاح أي عملية جديدة.
         </p>
       </div>
 
       @if (isLoading()) {
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center justify-center space-y-3">
-          <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-sm text-gray-500 font-medium">جاري تحديث البيانات...</p>
+        <div class="bg-white rounded-3xl shadow-xs border border-gray-100 p-6 flex flex-col items-center justify-center space-y-3">
+          <div class="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-xs text-gray-500 font-bold">جاري مزامنة البيانات...</p>
         </div>
       }
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       
-     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all hover:shadow-md">
-  <div class="flex items-center gap-3 mb-4">
-    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-    </div>
-    <div>
-      <h2 class="text-lg font-bold text-gray-900">شحن الرصيد (خاص بالعميل)</h2>
-      <p class="text-xs text-gray-500">اشحن محفظتك لتتمكن من طلب الخدمات فوراً</p>
-    </div>
-  </div>
-  
-  <div class="space-y-4">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1.5">المبلغ المراد شحنه</label>
-      <div class="relative rounded-xl shadow-sm">
-        <input #chargeAmount type="number" min="10" placeholder="0.00" 
-               class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none text-left font-semibold text-lg">
-        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-medium text-sm">
-          ج.م
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1.5">طريقة الدفع</label>
-      <div class="grid grid-cols-2 gap-3">
-        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-credit-card text-gray-500"></i>
-            <span class="text-sm font-medium text-gray-700">بطاقة (Card)</span>
-          </div>
-          <input type="radio" name="method" value="card" checked #methodCard class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-        </label>
-
-        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-wallet text-gray-500"></i>
-            <span class="text-sm font-medium text-gray-700">محفظة (Wallet)</span>
-          </div>
-          <input type="radio" name="method" value="wallet" #methodWallet class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-        </label>
-      </div>
-    </div>
-
-    <button (click)="onCharge(+chargeAmount.value, methodCard.checked ? 'card' : 'wallet')" 
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm">
-      <span>الانتقال لبوابة الدفع الآمن</span>
-      <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-    </button>
-  </div>
-</div>
-
-      @if(role()=='worker'){
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all hover:shadow-md">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          </div>
-          <div>
-            <h2 class="text-lg font-bold text-gray-900">سحب الأرباح (خاص بالفني)</h2>
-            <p class="text-xs text-gray-500">قم بتقديم طلب لسحب أموالك المتوفرة في المحفظة</p>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">مبلغ السحب</label>
-            <div class="relative rounded-xl shadow-sm">
-              <input #withdrawAmount type="number" min="50" placeholder="0.00" 
-                     class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:bg-white transition-all outline-none text-left font-semibold text-lg">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-medium text-sm">
-                ج.م
+      <div class="bg-white rounded-3xl shadow-xs border border-gray-200/80 p-5 transition-all duration-300 hover:shadow-md flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 bg-blue-50 text-blue-600 rounded-2xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+              </div>
+              <div>
+                <h2 class="text-base font-bold text-gray-950">شحن الرصيد</h2>
+                <p class="text-[11px] text-gray-400">اشحن محفظتك لطلب خدمات جديدة</p>
               </div>
             </div>
+            
+            <button (click)="toggleCharge()" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition-all duration-200">
+              {{ isChargeOpen() ? 'إلغاء الأمر' : 'ابدأ الشحن' }}
+            </button>
           </div>
-          <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1.5">طريقة الدفع</label>
-      <div class="grid grid-cols-2 gap-3">
-        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-credit-card text-gray-500"></i>
-            <span class="text-sm font-medium text-gray-700">بطاقة (Card)</span>
-          </div>
-          <input type="radio" name="methodWithdraw" value="card" checked #methodWithdrawCard class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-        </label>
 
-        <label class="flex items-center justify-between p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-wallet text-gray-500"></i>
-            <span class="text-sm font-medium text-gray-700">محفظة (Wallet)</span>
+          <div [ngClass]="isChargeOpen() ? 'max-h-[400px] opacity-100 mt-4' : 'max-h-0 opacity-0 overflow-hidden'" class="transition-all duration-300 ease-in-out space-y-4">
+            <div class="border-t border-gray-100 pt-4">
+              <label class="block text-xs font-bold text-gray-600 mb-1.5">المبلغ المراد شحنه</label>
+              <div class="relative rounded-xl shadow-2xs">
+                <input #chargeAmount type="number" min="10" placeholder="0.00" 
+                       class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none text-left font-bold text-base">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-bold text-xs">
+                  ج.م
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1.5">اختر وسيلة الدفع</label>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="flex items-center justify-between p-3 border border-gray-100 bg-gray-50 rounded-xl cursor-pointer hover:bg-white hover:border-blue-500 transition-all group">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    <span class="text-xs font-bold text-gray-700">بطاقة كارد</span>
+                  </div>
+                  <input type="radio" name="method" value="card" checked #methodCard class="w-3.5 h-3.5 text-blue-600 focus:ring-blue-500">
+                </label>
+
+                <label class="flex items-center justify-between p-3 border border-gray-100 bg-gray-50 rounded-xl cursor-pointer hover:bg-white hover:border-blue-500 transition-all group">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    <span class="text-xs font-bold text-gray-700">محفظة إلكترونية</span>
+                  </div>
+                  <input type="radio" name="method" value="wallet" #methodWallet class="w-3.5 h-3.5 text-blue-600 focus:ring-blue-500">
+                </label>
+              </div>
+            </div>
+
+            <button (click)="onCharge(+chargeAmount.value, methodCard.checked ? 'card' : 'wallet')" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-xs transition-all duration-200 flex items-center justify-center gap-2 text-xs">
+              <span>تأكيد والانتقال للدفع</span>
+              <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
           </div>
-          <input type="radio" name="methodWithdraw" value="wallet" #methodWithdrawWallet class="w-4 h-4 text-blue-600 focus:ring-blue-500">
-        </label>
-      </div>
-    </div>
-          <button (click)="onWithdraw(+withdrawAmount.value, methodWithdrawCard.checked ? 'card' : 'wallet')" 
-                  class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm">
-            <span>تقديم طلب سحب كاش</span>
-          </button>
         </div>
       </div>
 
+      @if(role() == 'worker'){
+        <div class="bg-white rounded-3xl shadow-xs border border-gray-200/80 p-5 transition-all duration-300 hover:shadow-md flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-amber-50 text-amber-600 rounded-2xl">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <div>
+                  <h2 class="text-base font-bold text-gray-950">سحب الأرباح بالكاش</h2>
+                  <p class="text-[11px] text-gray-400">سحب الأموال المتوفرة بالمحفظة لخارج الحساب</p>
+                </div>
+              </div>
+              
+              <button (click)="toggleWithdraw()" class="text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl transition-all duration-200">
+                {{ isWithdrawOpen() ? 'إلغاء الأمر' : 'طلب سحب' }}
+              </button>
+            </div>
+
+            <div [ngClass]="isWithdrawOpen() ? 'max-h-[400px] opacity-100 mt-4' : 'max-h-0 opacity-0 overflow-hidden'" class="transition-all duration-300 ease-in-out space-y-4">
+              <div class="border-t border-gray-100 pt-4">
+                <label class="block text-xs font-bold text-gray-600 mb-1.5">مبلغ السحب المالي</label>
+                <div class="relative rounded-xl shadow-2xs">
+                  <input #withdrawAmount type="number" min="50" placeholder="0.00" 
+                         class="w-full pl-12 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:bg-white transition-all outline-none text-left font-bold text-base">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-bold text-xs">
+                    ج.م
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1.5">استلام عبر</label>
+                <div class="grid grid-cols-2 gap-3">
+                  <label class="flex items-center justify-between p-3 border border-gray-100 bg-gray-50 rounded-xl cursor-pointer hover:bg-white hover:border-amber-500 transition-all group">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-gray-400 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                      <span class="text-xs font-bold text-gray-700">حساب بنكي</span>
+                    </div>
+                    <input type="radio" name="methodWithdraw" value="card" checked #methodWithdrawCard class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
+                  </label>
+
+                  <label class="flex items-center justify-between p-3 border border-gray-100 bg-gray-50 rounded-xl cursor-pointer hover:bg-white hover:border-amber-500 transition-all group">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-gray-400 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                      <span class="text-xs font-bold text-gray-700">محفظة كاش</span>
+                    </div>
+                    <input type="radio" name="methodWithdraw" value="wallet" #methodWithdrawWallet class="w-3.5 h-3.5 text-amber-600 focus:ring-amber-500">
+                  </label>
+                </div>
+              </div>
+
+              <button (click)="onWithdraw(+withdrawAmount.value, methodWithdrawCard.checked ? 'card' : 'wallet')" 
+                      class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-xs transition-all duration-200 flex items-center justify-center gap-2 text-xs">
+                <span>تأكيد وإرسال طلب السحب</span>
+              </button>
+            </div>
+          </div>
+        </div>
       }
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-      <div class="px-6 py-5 border-b border-gray-200 bg-gray-50/50 flex items-center justify-between">
+    <div class="bg-white rounded-3xl shadow-xs border border-gray-200 overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
         <div>
-          <h3 class="text-lg font-bold text-gray-900">سجل حركات المحفظة</h3>
-          <p class="text-xs text-gray-500 mt-0.5">تفاصيل جميع عمليات الشحن والدفع والسحب السابقة</p>
+          <h3 class="text-base font-black text-gray-900">سجل حركات المحفظة</h3>
+          <p class="text-[11px] text-gray-400 mt-0.5">مراقبة تفصيلية لجميع حركات الإيداع والسحبيات السابقة</p>
         </div>
+        <span class="text-xs font-bold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+          إجمالي العمليات: {{ transactions().length }}
+        </span>
       </div>
 
       @if (transactions().length > 0) {
         <div class="overflow-x-auto">
-          <table class="w-full text-right border-collapse">
+          <table class="w-full text-right border-collapse min-w-[700px]">
             <thead>
-              <tr class="bg-gray-100/70 text-gray-600 text-xs font-semibold uppercase tracking-wider border-b border-gray-200">
+              <tr class="bg-gray-50/70 text-gray-500 text-xs font-bold border-b border-gray-100">
+                <th class="px-6 py-3.5">نوع العملية</th>
                 <th class="px-6 py-3.5">معرف العملية</th>
-                <th class="px-6 py-3.5">النوع</th>
+                <th class="px-6 py-3.5">بوابة الدفع</th>
+                <th class="px-6 py-3.5">التاريخ والوقت</th>
                 <th class="px-6 py-3.5">المبلغ</th>
-                <th class="px-6 py-3.5">التاريخ</th>
-                <th class="px-6 py-3.5">الحالة</th>
+                <th class="px-6 py-3.5 text-center">الحالة</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+            <tbody class="divide-y divide-gray-100 text-xs text-gray-700">
               @for (item of transactions(); track item.id) {
-                <tr class="hover:bg-gray-50/80 transition-colors">
-                  <td class="px-6 py-4 font-mono text-xs text-gray-500">#{{ item.id }}</td>
+                <tr class="hover:bg-slate-50/70 transition-colors duration-150">
+                  
                   <td class="px-6 py-4">
-                    <span class="font-medium text-gray-900">{{ item.type }}</span>
+                    <div class="flex items-center gap-3">
+                      <div [ngClass]="item.isDeposit ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'" 
+                           class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0">
+                        @if (item.isDeposit) {
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 4.5l-15 15m0 0h11.25m-11.25 0V8.25"></path></svg>
+                        } @else {
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path></svg>
+                        }
+                      </div>
+                      <span class="font-bold text-gray-900">{{ item.typeText }}</span>
+                    </div>
                   </td>
-                  <td class="px-6 py-4 font-semibold" [ngClass]="item.isDeposit ? 'text-emerald-600' : 'text-rose-600'">
-                    {{ item.isDeposit ? '+' : '-' }}{{ item.amount }} ج.م
+
+                  <td class="px-6 py-4 font-mono text-[11px] text-gray-400 font-medium">
+                    #{{ item.id }}
                   </td>
-                  <td class="px-6 py-4 text-gray-500 text-xs">
-                    {{ item.date }}
-                  </td>
+
                   <td class="px-6 py-4">
-                    <span [ngClass]="{
-                      'bg-emerald-50 text-emerald-700 border-emerald-200': item.status === 'Completed' || item.status === 'Approved',
-                      'bg-amber-50 text-amber-700 border-amber-200': item.status === 'Pending',
-                      'bg-rose-50 text-rose-700 border-rose-200': item.status === 'Failed'
-                    }" class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border">
-                      {{ item.statusText || item.status }}
+                    <span class="inline-flex items-center text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md">
+                      {{ item.gateway }}
                     </span>
                   </td>
+
+                  <td class="px-6 py-4 text-gray-400 font-medium">
+                    {{ item.dateText }}
+                  </td>
+
+                  <td class="px-6 py-4 font-black text-sm" [ngClass]="item.isDeposit ? 'text-emerald-600' : 'text-rose-600'">
+                    {{ item.amountText }}
+                  </td>
+
+                  <td class="px-6 py-4 text-center">
+                    <span [ngClass]="item.statusClass" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border">
+                      {{ item.statusText }}
+                    </span>
+                  </td>
+
                 </tr>
               }
             </tbody>
           </table>
         </div>
       } @else {
-        <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
-          <div class="p-4 bg-gray-100 rounded-full text-gray-400 mb-3">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+        <div class="flex flex-col items-center justify-center py-16 px-4 text-center">
+          <div class="p-4 bg-gray-50 rounded-2xl text-gray-300 mb-3 border border-gray-100">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
           </div>
-          <h4 class="text-sm font-bold text-gray-900">لا توجد عمليات مسجلة</h4>
-          <p class="text-xs text-gray-500 mt-1 max-w-xs">لم تقم بإجراء أي عمليات شحن أو سحب على حسابك حتى الآن.</p>
+          <h4 class="text-xs font-bold text-gray-900">سجل المعاملات فارغ تماماً</h4>
+          <p class="text-[11px] text-gray-400 mt-1 max-w-xs leading-relaxed">لم تقم بإجراء أي عمليات شحن أو سحب مالي على حسابك حتى الآن.</p>
         </div>
       }
     </div>

@@ -29,25 +29,19 @@ export class PayMentService {
   }
 
 
-/**
- * شحن المحفظة عبر تمرير المبلغ والطريقة كـ Query Parameters
- * @param amount المبلغ المراد شحنه
- * @param method طريقة الدفع المحددة (wallet أو card)
- */
+ 
 chargeWallet(amount: number, method: 'card' | 'wallet'): Observable<{ paymentUrl: string }> {
   // تكوين الـ Query Parameters
+  console.log(amount,method);
+  
   const params = new HttpParams()
     .set('amount', amount.toString())
     .set('paymentMethod', method);
 
-  // نرسل الـ params، ونترك الـ Body فارغاً {} لأنها دالة POST
   return this.http.post<{ paymentUrl: string }>(`${this.apiUrl}/charge-wallet`, {}, { params });
 }
 
-  /**
-   * 3. طلب سحب الأرباح (خاص بالـ Worker)
-   * @param request بيانات طلب السحب (المبلغ، الطريقة، تفاصيل الحساب)
-   */
+ 
   withdrawRequest(amount: number,method:'card'|'wallet'): Observable<any> {
     console.log(amount,method);
     
@@ -59,11 +53,12 @@ chargeWallet(amount: number, method: 'card' | 'wallet'): Observable<{ paymentUrl
 
   }
 
-  /**
-   * 4. الـ Callback الخاص بالدفع (عند العودة للموقع)
-   * في الغالب الباك إند بيحتاجه، لو هتحتاج تنادي عليه من الـ Front-end لتأكيد حالة العملية
-   */
+ 
   checkPaymentCallback(queryParams: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/callback`, { params: queryParams });
+    return this.http.get<any>(`${this.apiUrl}/Payment/callback`, { params: queryParams });
+  }
+
+  getMyTransaction():Observable<any>{
+    return this.http.get(`${this.apiUrl}/AllPaymentsForUser`);
   }
 }
