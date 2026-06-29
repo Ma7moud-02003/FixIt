@@ -105,7 +105,6 @@ onCharge(amount: number, method: 'card' | 'wallet') {
   // 3. عند ضغط الوركر على "طلب سحب"
   onWithdraw(amount: number,method:'card'|'wallet') {
     
-    
    this.subs.add( this.paymentService.withdrawRequest(amount,method).subscribe({
       next: (res) => {
         console.log(res);
@@ -125,6 +124,7 @@ onCharge(amount: number, method: 'card' | 'wallet') {
             this.transactions.set([]);
             return;
           }
+console.log(res);
 
           // تحويل الداتا الخام إلى شكل منسق وجاهز للـ UI مباشرة
           const formattedData: TransactionUI[] = res.data.map((item:any, index:number) => {
@@ -139,7 +139,7 @@ onCharge(amount: number, method: 'card' | 'wallet') {
               gateway: item.gateway,
               typeText: isDeposit ? 'شحن رصيد المحفظة' : 'سحب من المحفظة',
               // تنسيق الـ Badges للحالة
-              statusText: item.status === 'Failed' ? 'فشلت' : 'ناجحة',
+              statusText: item.status === 'pending' ? 'معلقه' : 'ناجحة',
               statusClass: item.status === 'Failed' 
                 ? 'bg-rose-50 text-rose-700 border-rose-200' 
                 : 'bg-emerald-50 text-emerald-700 border-emerald-200'

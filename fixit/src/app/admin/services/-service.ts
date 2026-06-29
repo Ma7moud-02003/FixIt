@@ -17,8 +17,8 @@ export class ServiceService {
   {
   return this._http.get(`${environment.apiUrl}/Service/Details/${id}`);
   }
-  resolveService(id:string)
+  resolveService(id:string,state:string)
   {
-    return this._http.put(`${environment.apiUrl}/Service/Admin/${id}/resolve`,{});
+    return this._http.put(`${environment.apiUrl}/Service/Admin/${id}/resolve?state=${state}`,{});
   }
 }

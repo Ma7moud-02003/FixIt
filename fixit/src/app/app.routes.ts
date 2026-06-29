@@ -108,6 +108,10 @@ export const routes: Routes = [
   path:'chatDetails/:roomId',loadComponent:()=>import('./admin/components/chat-details/chat-details').then(m=>m.ChatDetails)
 },
 
+{
+  path:'reports',loadComponent:()=>import('./admin/components/reports/reports').then(m=>m.Reports)
+}
+
 
   ]
 

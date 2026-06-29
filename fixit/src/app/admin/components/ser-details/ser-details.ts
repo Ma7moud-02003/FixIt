@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ServiceService } from '../../services/-service';
 import { ServiceStatus } from '../../../Shared/enums/status';
+import { Alerts } from '../../../Shared/Alerts/alerts';
 export type ServiceState =
   | 'priceprocess' | 'pending' | 'completed' | 'cancelled' | 'inprocess'|'rejected'|'reviewed'|'disputed';
 
@@ -168,17 +169,18 @@ this._ser.getSerDetails(this.serviceId()).subscribe({
     this.lightboxOpen.set(false);
     this.selectedImage.set(null);
   }
-   onAction(action: string) {
-    console.log(`Action: ${action}`);
-    // Wire API calls here
-  }
-  resolve()
+ private alerts=inject(Alerts);
+ showOperations=signal<boolean>(true);
+  resolve(state:string)
   {
       if(this.service()?.serviceId){
     this.subs.add(        
-      this._ser.resolveService(this.service()?.serviceId||'').subscribe({
+      this._ser.resolveService(this.service()?.serviceId||'',state).subscribe({
         next:(res)=>{
+
+        this.alerts.sucsess('تم  تنفيد الاجراء بنجاح ')
        console.log(res);
+       this.showOperations.set(false);
         }
       })
     )}

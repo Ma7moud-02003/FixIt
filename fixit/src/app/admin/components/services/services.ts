@@ -94,27 +94,37 @@ export class Services implements OnInit,OnDestroy{
     this.searchQuery.set(value);
   }
 
-  getStatusStyles(state: string) {
-    const themes: Record<string, string> = {
-      priceprocess: 'bg-amber-100 text-amber-700 border-amber-200',
-      completed: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-      pending: 'bg-blue-100 text-blue-700 border-blue-200',
-      cancelled: 'bg-rose-100 text-rose-700 border-rose-200',
-      inprogress: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-    };
-    return themes[state] || 'bg-gray-100 text-gray-700';
-  }
+getStatusStyles(state: string) {
+  const themes: Record<string, string> = {
+    'priceprocess': 'bg-amber-100 text-amber-700 border-amber-200',      // PRICE_PROCESS
+    'pending':      'bg-blue-100 text-blue-700 border-blue-200',        // PENDING
+    'completed':    'bg-emerald-100 text-emerald-700 border-emerald-200',  // CPMLETED
+    'canceled':     'bg-rose-100 text-rose-700 border-rose-200',        // CANSELED
+    'disputed':     'bg-purple-100 text-purple-700 border-purple-200',    // DISPUTED
+    'submitted':    'bg-cyan-100 text-cyan-700 border-cyan-200',        // Submited
+    'inprocess':    'bg-indigo-100 text-indigo-700 border-indigo-200',    // InProcess
+    'rejected':     'bg-red-100 text-red-700 border-red-200',          // Rejected
+    'reviewed':     'bg-teal-100 text-teal-700 border-teal-200'          // Reviewed
+  };
+  
+  return themes[state] || 'bg-gray-100 text-gray-700 border-gray-200';
+}
 
-  getStatusLabel(state: string): string {
-    const labels: Record<string, string> = {
-      priceprocess: 'تحديد السعر',
-      completed: 'مكتملة',
-      pending: 'قيد الانتظار',
-      cancelled: 'ملغاة',
-      inprogress: 'قيد التنفيذ',
-    };
-    return labels[state] || state;
-  }
+getStatusLabel(state: string): string {
+  const labels: Record<string, string> = {
+    'priceprocess': 'تحديد السعر',
+    'pending':      'قيد الانتظار',
+    'completed':    'مكتملة',
+    'canceled':     'ملغاة',
+    'disputed':     'متنازع عليها',
+    'submitted':    'تم تقديمها',
+    'inprocess':    'قيد التنفيذ',
+    'rejected':     'مرفوضة',
+    'reviewed':     'تمت مراجعتها'
+  };
+  
+  return labels[state] || state;
+}
 
   
   ngOnDestroy(): void {

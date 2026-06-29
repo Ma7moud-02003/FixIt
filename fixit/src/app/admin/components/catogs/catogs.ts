@@ -134,6 +134,8 @@ export class Catogs implements OnInit,OnDestroy{
  
     if (this.isEditMode() && this.selectedCategory()) {
       const id = String(this.selectedCategory()!.categoryId);
+      console.log(id,payload);
+      
       this.subs.add(
         this._catogs.editeCategory(id, payload).subscribe({
           next: () => {
@@ -147,7 +149,8 @@ export class Catogs implements OnInit,OnDestroy{
             this.closeModal();
             this.showToast('تم تعديل القسم بنجاح ✓', 'success');
           },
-          error: () => {
+          error: (err) => {
+            console.log(err);
             this.isSubmitting.set(false);
             this.showToast('فشل في تعديل القسم.', 'error');
           },
@@ -157,8 +160,8 @@ export class Catogs implements OnInit,OnDestroy{
       this.subs.add(
         this._catogs.addCatog(payload).subscribe({
           next: (res: any) => {
-            const newCat: Category = res?.data ?? { ...payload, categoryId: Date.now() };
-            this.categories.update(list => [newCat, ...list]);
+         
+            this.categories.update(list => [payload, ...list]);
             this.closeModal();
             this.showToast('تم إضافة القسم بنجاح ✓', 'success');
           },
@@ -174,6 +177,7 @@ export class Catogs implements OnInit,OnDestroy{
   confirmDelete(): void {
     const cat = this.selectedCategory();
     if (!cat) return;
+ console.log(cat);
  
     this.isSubmitting.set(true);
     this.subs.add(

@@ -25,7 +25,7 @@ addCatog(catog:any)
 
 deleteCatog(id:string)
 {
-  return this._http.delete(`${environment.apiUrl}/DeleteCategory/${id}`);
+  return this._http.delete(`${environment.apiUrl}/Category/DeleteCategory/${id}`);
 }
 
 }

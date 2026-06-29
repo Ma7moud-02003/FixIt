@@ -1,0 +1,482 @@
+<div dir="rtl" class="min-h-screen bg-slate-50 font-arabic">
+
+  <!-- ══════════════════════════════════════════════
+       PAGE HEADER
+  ══════════════════════════════════════════════ -->
+  <div class="bg-white border-b border-slate-200 px-6 py-5 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Shield icon -->
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-800 leading-tight">إدارة البلاغات</h1>
+          <p class="text-sm text-slate-500">مراجعة ومعالجة جميع البلاغات الواردة</p>
+        </div>
+      </div>
+
+      <!-- Refresh button -->
+      <button (click)="getAllReports()"
+        class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50 hover:border-blue-300 hover:text-blue-600 transition-all duration-200">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        تحديث
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 py-6 space-y-6">
+
+    <!-- ══════════════════════════════════════════════
+         STATS CARDS
+    ══════════════════════════════════════════════ -->
+    @if (!isLoading() && !hasError()) {
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Total -->
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold text-slate-800">{{ stats().total }}</p>
+          <p class="text-xs text-slate-500 mt-0.5">إجمالي البلاغات</p>
+        </div>
+
+        <!-- Pending -->
+        <div class="bg-white rounded-2xl p-4 border border-amber-100 shadow-sm cursor-pointer hover:border-amber-300 transition-colors"
+          (click)="setFilter(0)">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold text-amber-600">{{ stats().pending }}</p>
+          <p class="text-xs text-slate-500 mt-0.5">قيد الانتظار</p>
+        </div>
+
+        <!-- Resolved -->
+        <div class="bg-white rounded-2xl p-4 border border-green-100 shadow-sm cursor-pointer hover:border-green-300 transition-colors"
+          (click)="setFilter(1)">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold text-green-600">{{ stats().resolved }}</p>
+          <p class="text-xs text-slate-500 mt-0.5">تم الحل</p>
+        </div>
+
+        <!-- Rejected -->
+        <div class="bg-white rounded-2xl p-4 border border-red-100 shadow-sm cursor-pointer hover:border-red-300 transition-colors"
+          (click)="setFilter(2)">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold text-red-500">{{ stats().rejected }}</p>
+          <p class="text-xs text-slate-500 mt-0.5">مرفوض</p>
+        </div>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════
+         FILTERS & SEARCH BAR
+    ══════════════════════════════════════════════ -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm px-5 py-4">
+      <div class="flex flex-col sm:flex-row gap-4">
+
+        <!-- Search -->
+        <div class="relative flex-1">
+          <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text"
+            [value]="searchQuery()"
+            (input)="onSearch($event)"
+            placeholder="البحث بالاسم أو السبب..."
+            class="w-full pr-9 pl-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+          <button (click)="setFilter('all')"
+            [class.active-filter]="activeFilter() === 'all'"
+            class="filter-tab px-3 py-1.5 text-sm font-medium rounded-lg transition-all">
+            الكل
+          </button>
+          <button (click)="setFilter(0)"
+            [class.active-filter]="activeFilter() === 0"
+            class="filter-tab px-3 py-1.5 text-sm font-medium rounded-lg transition-all">
+            انتظار
+          </button>
+          <button (click)="setFilter(1)"
+            [class.active-filter]="activeFilter() === 1"
+            class="filter-tab px-3 py-1.5 text-sm font-medium rounded-lg transition-all">
+            محلول
+          </button>
+          <button (click)="setFilter(2)"
+            [class.active-filter]="activeFilter() === 2"
+            class="filter-tab px-3 py-1.5 text-sm font-medium rounded-lg transition-all">
+            مرفوض
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         LOADING STATE
+    ══════════════════════════════════════════════ -->
+    @if (isLoading()) {
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 flex flex-col items-center gap-4">
+        <div class="w-12 h-12 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
+        <p class="text-slate-500 text-sm">جاري تحميل البلاغات...</p>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════
+         ERROR STATE
+    ══════════════════════════════════════════════ -->
+    @if (hasError() && !isLoading()) {
+      <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-12 flex flex-col items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+          <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </div>
+        <div class="text-center">
+          <p class="text-slate-700 font-semibold">تعذّر تحميل البلاغات</p>
+          <p class="text-slate-400 text-sm mt-1">تحقق من الاتصال وحاول مرة أخرى</p>
+        </div>
+        <button (click)="getAllReports()"
+          class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+          إعادة المحاولة
+        </button>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════
+         EMPTY STATE
+    ══════════════════════════════════════════════ -->
+    @if (!isLoading() && !hasError() && filteredReports().length === 0) {
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 flex flex-col items-center gap-3">
+        <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
+          <svg class="w-7 h-7 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <p class="text-slate-600 font-medium">لا توجد بلاغات</p>
+        <p class="text-slate-400 text-sm">لا توجد نتائج تطابق معايير البحث الحالية</p>
+      </div>
+    }
+
+    <!-- ══════════════════════════════════════════════
+         REPORTS TABLE
+    ══════════════════════════════════════════════ -->
+    @if (!isLoading() && !hasError() && filteredReports().length > 0) {
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+        <!-- Table header info -->
+        <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+          <p class="text-sm text-slate-500">
+            عرض <span class="font-semibold text-slate-700">{{ filteredReports().length }}</span> بلاغ
+          </p>
+        </div>
+
+        <!-- Responsive table wrapper -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
+                <th class="text-right px-5 py-3 font-medium">المُبلِّغ</th>
+                <th class="text-right px-5 py-3 font-medium">الجهة المُبلَّغ عنها</th>
+                <th class="text-right px-5 py-3 font-medium hidden md:table-cell">النوع</th>
+                <th class="text-right px-5 py-3 font-medium hidden lg:table-cell">السبب</th>
+                <th class="text-right px-5 py-3 font-medium hidden md:table-cell">التاريخ</th>
+                <th class="text-right px-5 py-3 font-medium">الحالة</th>
+                <th class="text-center px-5 py-3 font-medium">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+           @for (report of filteredReports(); track report.reportId) {
+  <tr class="hover:bg-blue-50/30 transition-colors group">
+    <td class="px-5 py-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-sm shrink-0">
+          {{ report.reporterUserName?.charAt(0) }}
+        </div>
+        <span class="font-medium text-slate-700 whitespace-nowrap">{{ report.reporterUserName }}</span>
+      </div>
+    </td>
+
+    <td class="px-5 py-4">
+      <span class="text-slate-600">{{ report.reportedUserName }}</span>
+    </td>
+
+    <td class="px-5 py-4 hidden md:table-cell">
+      <span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium">
+        {{ report.title || report.reportType }}
+      </span>
+    </td>
+
+    <td class="px-5 py-4 hidden lg:table-cell max-w-xs">
+      <p class="text-slate-500 truncate" title="{{ report.description }}">{{ report.description }}</p>
+    </td>
+
+    <td class="px-5 py-4 hidden md:table-cell whitespace-nowrap">
+      <span class="text-slate-400 text-xs">{{ formatDate(report.createdAt) }}</span>
+    </td>
+
+    <td class="px-5 py-4">
+      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
+        [ngClass]="getStatusClasses(report.status)">
+        {{ getStatusLabel(report.status) }}
+      </span>
+    </td>
+
+    <td class="px-5 py-4">
+      <div class="flex items-center justify-center gap-2">
+        <button (click)="openDetail(report)"
+          title="عرض التفاصيل"
+          class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 text-slate-500 flex items-center justify-center transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+        </button>
+
+        @if (report.status === 0) {
+          <button (click)="openResolveModal(report)"
+            title="معالجة البلاغ"
+            class="w-8 h-8 rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-all shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+        }
+      </div>
+    </td>
+  </tr>
+}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+  </div><!-- end max-w-7xl -->
+</div><!-- end page wrapper -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DETAIL MODAL
+══════════════════════════════════════════════════════════════════ -->
+@if (isModalOpen() && selectedReport()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" dir="rtl">
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" (click)="closeModal()"></div>
+
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-modal-in">
+
+      <div class="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <h2 class="font-bold text-slate-800">تفاصيل البلاغ ({{ selectedReport()!.title }})</h2>
+        </div>
+        <button (click)="closeModal()"
+          class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="px-6 py-5 space-y-5">
+
+        <div class="flex items-center justify-between p-3 rounded-xl"
+          [ngClass]="{
+            'bg-amber-50 border border-amber-100': selectedReport()!.status === 0,
+            'bg-green-50 border border-green-100': selectedReport()!.status === 1,
+            'bg-red-50 border border-red-100': selectedReport()!.status === 2
+          }">
+          <span class="text-sm font-medium text-slate-600">حالة البلاغ</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold"
+            [ngClass]="getStatusClasses(selectedReport()!.status)">
+            {{ getStatusLabel(selectedReport()!.status) }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <p class="text-xs text-slate-400 font-medium">المُبلِّغ</p>
+            <p class="text-sm text-slate-700 font-semibold">{{ selectedReport()!.reporterUserName }}</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs text-slate-400 font-medium">الجهة المُبلَّغ عنها</p>
+            <p class="text-sm text-slate-700 font-semibold">{{ selectedReport()!.reportedUserName }}</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs text-slate-400 font-medium">نوع البلاغ</p>
+            <p class="text-sm text-blue-600 font-medium">نوع رقم ({{ selectedReport()!.reportType }})</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs text-slate-400 font-medium">تاريخ الإنشاء</p>
+            <p class="text-sm text-slate-700">{{ formatDate(selectedReport()!.createdAt) }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-xs text-slate-400 font-medium">سبب البلاغ</p>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+            <p class="text-sm text-slate-700 leading-relaxed">{{ selectedReport()!.description }}</p>
+          </div>
+        </div>
+
+        @if (selectedReport()!.adminNotes) {
+          <div class="space-y-2">
+            <p class="text-xs text-slate-400 font-medium">ملاحظات الإدارة</p>
+            <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+              <p class="text-sm text-blue-700 leading-relaxed">{{ selectedReport()!.adminNotes }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="px-6 pb-6 flex gap-3">
+        @if (selectedReport()!.status === 1) {
+          <button (click)="openResolveModal(selectedReport()!)"
+            class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">
+            معالجة البلاغ
+          </button>
+        }
+        <button (click)="closeModal()"
+          class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl transition-colors">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     RESOLVE MODAL
+══════════════════════════════════════════════════════════════════ -->
+@if (isResolveModalOpen() && selectedReport()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" dir="rtl">
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" (click)="closeResolveModal()"></div>
+
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md animate-modal-in">
+
+      <div class="border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </div>
+          <h2 class="font-bold text-slate-800">معالجة البلاغ ({{ selectedReport()!.title }})</h2>
+        </div>
+        <button (click)="closeResolveModal()"
+          class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="px-6 py-5 space-y-5">
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 text-sm">
+          <p class="text-slate-500">البلاغ المقدَّم من <span class="font-semibold text-slate-700">{{ selectedReport()!.reporterUserName }}</span>
+            ضد <span class="font-semibold text-slate-700">{{ selectedReport()!.reportedUserName }}</span></p>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs text-slate-500 font-medium block">القرار</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button (click)="updateResolveStatus(1)"
+              [class]="resolveForm().status === 1
+                ? 'border-2 border-green-500 bg-green-50 text-green-700'
+                : 'border-2 border-slate-200 bg-white text-slate-500 hover:border-green-300'"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              قبول وحل
+            </button>
+            <button (click)="updateResolveStatus(2)"
+              [class]="resolveForm().status === 2
+                ? 'border-2 border-red-500 bg-red-50 text-red-600'
+                : 'border-2 border-slate-200 bg-white text-slate-500 hover:border-red-300'"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+              رفض
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs text-slate-500 font-medium block">
+            ملاحظات الإدارة <span class="text-slate-400">(اختياري)</span>
+          </label>
+          <textarea
+            [value]="resolveForm().adminNotes || ''"
+            (input)="updateAdminNotes($event)"
+            rows="4"
+            placeholder="أضف ملاحظاتك حول قرار المعالجة..."
+            class="w-full px-4 py-3 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="px-6 pb-6 flex gap-3">
+        <button (click)="submitResolve()"
+          [disabled]="isSubmitting()"
+          class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+          @if (isSubmitting()) {
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            جاري الحفظ...
+          } @else {
+            تأكيد القرار
+          }
+        </button>
+        <button (click)="closeResolveModal()"
+          [disabled]="isSubmitting()"
+          class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-600 text-sm font-semibold rounded-xl transition-colors">
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+}

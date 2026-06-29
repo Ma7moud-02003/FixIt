@@ -75,29 +75,53 @@ export class Review implements OnInit,OnDestroy{
     }));
   }
 
-  // Helper Methods للـ UI
-  getStars(rate: number):any {
   
-  }
 
   getInitials(name: string): string {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   }
   private alerts=inject(Alerts);
-  deleteRev(id:number)
-  {
-    this.subs.add(
-      this._rev.deleteRev(id).subscribe({
-        next:(res)=>{
-console.log(res);
-this.alerts.sucsess('تم حذف التقييم')
-        },error:(err)=>{
-          console.log(err);
-          this.alerts.error('فشل حذف التقييم')
-        }
-      })
-    )
-  }
+deleteRev(id: number, index: number) {
+  this.subs.add(
+    this._rev.deleteRev(id).subscribe({
+      next: (res) => {
+        console.log(res);
+
+        this.reviewsData.update((currentReviews: any) => {
+          // 1. لو هي مصفوفة عادية مباشر
+          if (Array.isArray(currentReviews)) {
+            const updated = [...currentReviews]; // بناخد نسخة عشان ما نعدلش في السيجنال مباشرة
+            updated.splice(index, 1);            // بنحذف بالـ index اللي معاك
+            return updated;
+          } 
+          
+          // 2. لو السيجنال جواها أوبجكت وجواها مصفوفة (مثلاً اسمها data أو reviews)
+          else if (currentReviews && typeof currentReviews === 'object') {
+            // بنور على المفتاح اللي جواه المصفوفة تلقائياً
+            const arrayKey = Object.keys(currentReviews).find(key => Array.isArray(currentReviews[key]));
+            
+            if (arrayKey) {
+              const updatedArray = [...currentReviews[arrayKey]];
+              updatedArray.splice(index, 1); // بنحذف من المصفوفة اللي جوة الأوبجكت
+              return {
+                ...currentReviews,
+                [arrayKey]: updatedArray
+              };
+            }
+          }
+
+          return currentReviews; // لو معرفش يوصل لحاجة بيرجعها زي ما هي
+        });
+
+        this.alerts.sucsess('تم حذف التقييم');
+      },
+      error: (err) => {
+        console.log(err);
+        this.alerts.error('فشل حذف التقييم');
+      }
+    })
+  );
+}
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
