@@ -110,7 +110,11 @@ export const routes: Routes = [
 
 {
   path:'reports',loadComponent:()=>import('./admin/components/reports/reports').then(m=>m.Reports)
+},
+{
+  path:'payments',loadComponent:()=>import('./admin/components/wallets/wallets').then(m=>m.Wallets)
 }
+
 
 
   ]

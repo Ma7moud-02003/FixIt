@@ -164,6 +164,7 @@ this.alerts.confirmDelete('هل انت متاكد').then((res)=>{
   if(res.isConfirmed)
     this.subs.add(this._clients.deletUser(id).subscribe({
   next:()=>{
+    this.alerts.sucsess('تم حذف المستخدم')
       this.allUsers.update(users => users.filter(u => u.userId !== id));
   }}))
 

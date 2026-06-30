@@ -2,7 +2,7 @@ import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular
 import { Subscription } from 'rxjs';
 import { ReportsService } from '../../services/reports';
 import { CommonModule } from '@angular/common';
-export type ReportStatus = 0 | 1 | 2; // 0=Pending, 1=Resolved, 2=Rejected
+export type ReportStatus = 0 | 1 | 2| 3 |4 |5; // 0=Pending, 1=Resolved, 2=Rejected
 export interface Report {
   id: string;
 reportId: any;          // معرف البلاغ
@@ -200,7 +200,7 @@ console.log(form);
  
   // ── Helpers ────────────────────────────────────────────────────────────────
   getStatusLabel(status: number): string {
-    return { 1: 'قيد الانتظار', 2: 'تم الحل', 0: 'مرفوض' }[status] ?? '—';
+    return { 1: 'قيد الانتظار', 2: 'تحت المراجعه ', 3: 'تم الحل',4:'مرفوض/بلاغ كيدي',5:'تم التصعيد' }[status] ?? '—';
   }
  
   getStatusClasses(status: number): string {

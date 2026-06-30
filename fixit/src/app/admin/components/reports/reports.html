@@ -390,7 +390,7 @@
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4" dir="rtl">
     <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" (click)="closeResolveModal()"></div>
 
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md animate-modal-in">
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md animate-modal-in overflow-hidden">
 
       <div class="border-b border-slate-100 px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -410,35 +410,69 @@
         </button>
       </div>
 
-      <div class="px-6 py-5 space-y-5">
+      <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
 
-        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 text-sm">
-          <p class="text-slate-500">البلاغ المقدَّم من <span class="font-semibold text-slate-700">{{ selectedReport()!.reporterUserName }}</span>
-            ضد <span class="font-semibold text-slate-700">{{ selectedReport()!.reportedUserName }}</span></p>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 text-sm flex flex-col gap-1">
+          <p class="text-slate-500">البلاغ المقدَّم من: <span class="font-semibold text-slate-700">{{ selectedReport()!.reporterUserName }}</span></p>
+          <p class="text-slate-500">ضد المشكو في حقه: <span class="font-semibold text-slate-700">{{ selectedReport()!.reportedUserName }}</span></p>
+          <div class="mt-2 pt-2 border-t border-slate-200/60 flex justify-between items-center text-xs">
+            <span class="text-slate-400">الحالة الحالية للبلاغ:</span>
+            <span class="px-2.5 py-1 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-100">
+              {{ getStatusLabel(selectedReport()!.status) }}
+            </span>
+          </div>
         </div>
 
         <div class="space-y-2">
-          <label class="text-xs text-slate-500 font-medium block">القرار</label>
+          <label class="text-xs text-slate-500 font-medium block">القرار الأساسي</label>
           <div class="grid grid-cols-2 gap-3">
-            <button (click)="updateResolveStatus(1)"
-              [class]="resolveForm().status === 1
+            <button (click)="updateResolveStatus(3)"
+              [class]="resolveForm().status === 3
                 ? 'border-2 border-green-500 bg-green-50 text-green-700'
-                : 'border-2 border-slate-200 bg-white text-slate-500 hover:border-green-300'"
-              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all">
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-green-300'"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all shadow-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
               قبول وحل
             </button>
-            <button (click)="updateResolveStatus(2)"
-              [class]="resolveForm().status === 2
+            
+            <button (click)="updateResolveStatus(4)"
+              [class]="resolveForm().status === 4
                 ? 'border-2 border-red-500 bg-red-50 text-red-600'
-                : 'border-2 border-slate-200 bg-white text-slate-500 hover:border-red-300'"
-              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all">
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-red-300'"
+              class="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all shadow-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
-              رفض
+              رفض / كيدي
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs text-slate-500 font-medium block">إجراءات إدارية أخرى</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button (click)="updateResolveStatus(2)"
+              [class]="resolveForm().status === 2
+                ? 'border-2 border-blue-500 bg-blue-50 text-blue-700'
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-blue-200'"
+              class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              تحت المراجعة
+            </button>
+
+            <button (click)="updateResolveStatus(5)"
+              [class]="resolveForm().status === 5
+                ? 'border-2 border-purple-500 bg-purple-50 text-purple-700'
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-purple-200'"
+              class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+              تصعيد البلاغ
             </button>
           </div>
         </div>
@@ -450,17 +484,17 @@
           <textarea
             [value]="resolveForm().adminNotes || ''"
             (input)="updateAdminNotes($event)"
-            rows="4"
+            rows="3"
             placeholder="أضف ملاحظاتك حول قرار المعالجة..."
             class="w-full px-4 py-3 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none">
           </textarea>
         </div>
       </div>
 
-      <div class="px-6 pb-6 flex gap-3">
+      <div class="px-6 pb-6 pt-2 bg-slate-50/50 border-t border-slate-100 flex gap-3">
         <button (click)="submitResolve()"
-          [disabled]="isSubmitting()"
-          class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+          [disabled]="isSubmitting() || !resolveForm().status"
+          class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
           @if (isSubmitting()) {
             <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -473,7 +507,7 @@
         </button>
         <button (click)="closeResolveModal()"
           [disabled]="isSubmitting()"
-          class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-600 text-sm font-semibold rounded-xl transition-colors">
+          class="flex-1 py-2.5 bg-slate-200 hover:bg-slate-300 disabled:opacity-50 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
           إلغاء
         </button>
       </div>

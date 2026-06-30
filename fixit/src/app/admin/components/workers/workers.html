@@ -121,7 +121,7 @@
                 <div class="flex items-start gap-4">
                   <div class="relative flex-shrink-0">
                     @if (worker.imgUrl) {
-                      <img [src]="worker.imgUrl" [alt]="worker.fullName"
+                      <img [src]="worker.imgUrl||'/icons8-user-50.png'" [alt]="worker.fullName"
                            class="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-50 group-hover:ring-[#6F4E37]/20 transition-all duration-300" />
                     } @else {
                       <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center ring-2 ring-gray-50">
@@ -185,7 +185,7 @@
                 <tr class="group hover:bg-gray-50/30 transition-colors">
                   <td class="py-4 px-6">
                     <div class="flex items-center gap-3">
-                      <img [src]="worker.imgUrl || 'assets/default-avatar.png'" class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow-sm" />
+                      <img [src]="worker.imgUrl || '/icons8-user-50.png'" class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow-sm" />
                       <div>
                         <p class="font-bold text-sm text-gray-900">{{ worker.fullName }}</p>
                         <p class="text-[11px] text-gray-400">{{ worker.email }}</p>
@@ -194,7 +194,7 @@
                   </td>
                   <td class="py-4 px-4">
                     <span class="px-3 py-1 rounded-lg bg-[#F5F5DC] text-[#6F4E37] text-[11px] font-bold border border-[#6F4E37]/10">
-                      {{ worker.categoryName }}
+                      {{ worker.categoryName || 'غير محدد بعد'}}
                     </span>
                   </td>
                   <td class="py-4 px-4 text-sm text-gray-500 font-medium">
@@ -228,11 +228,11 @@
           </p>
 
           <div class="flex items-center gap-1 flex-row-reverse">
-            <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1"
+            
+   <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
                     class="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-30">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
-
             @for (page of visiblePages(); track page) {
               @if (page === -1) {
                 <span class="px-2 text-gray-300">...</span>
@@ -244,9 +244,10 @@
               }
             }
 
-            <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
+         
+            <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1"
                     class="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-30">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>

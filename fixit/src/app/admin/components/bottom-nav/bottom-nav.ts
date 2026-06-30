@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 export interface NavItem {
   label: string;
   icon: string;
@@ -8,17 +9,19 @@ export interface NavItem {
  
 @Component({
   selector: 'app-bottom-nav',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './bottom-nav.html',
   styleUrl: './bottom-nav.css',
 })
 export class BottomNav {
    navItems = input<NavItem[]>([
-    { label: 'الرئيسية',  icon: 'grid',       route: '/admin/grid',       active: true  },
+    { label: 'الرئيسية',  icon: 'grid',       route: '/admin/users',       active: true  },
     { label: 'المستخدمين', icon: 'users',      route: '/admin/users',      active: false },
     { label: 'العمال',    icon: 'briefcase',   route: '/admin/workers',    active: false },
     { label: 'الخدمات',   icon: 'clipboard',   route: '/admin/services',   active: false },
-    { label: 'الدردشة',   icon: 'message',     route: '/admin/chat',       active: false },
+    { label: 'الدردشة',   icon: 'message',     route: '/admin/chats',       active: false },
+    { label: 'التقارير',   icon: 'report',     route: '/admin/reports',       active: false },
+
   ]);
  
   /**

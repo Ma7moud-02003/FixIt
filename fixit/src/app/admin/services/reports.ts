@@ -11,6 +11,8 @@ export class ReportsService {
     return this.http.get(`${environment.apiUrl}/Report/All Reports`);
    }
    resolve(id:string,resolve:any){
+    console.log(resolve);
+    
     return this.http.put(`${environment.apiUrl}/Report/Resolve/${id}`,resolve);
 
    }

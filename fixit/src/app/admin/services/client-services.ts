@@ -11,7 +11,7 @@ export class ClientServices {
   
   getUsers(pageNum:number=1,pageSize:number=10):Observable<any>
   {
-       return this._http.get(`${environment.apiUrl}/Admin/AllClients?PageNum=${pageNum}&PageSize=${pageSize}`)
+       return this._http.get(`${environment.apiUrl}/Admin/AllUsers?PageNum=${pageNum}&PageSize=${pageSize}`)
   }
 
   deletUser(userId:string){
