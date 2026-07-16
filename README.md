@@ -12,7 +12,7 @@ Fixit helps users easily find and hire trusted technicians, while providing a sm
 
 ## 🚀 Live Demo
 
-* 🌐 Frontend: https://precious-kulfi-fe25f2.netlify.app/register
+* 🌐 Frontend:https://fix-it-bay.vercel.app/home
 * 📡 API (Swagger): https://fixitapi.runasp.net/swagger/index.html
 
 ---
