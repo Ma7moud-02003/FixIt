@@ -26,7 +26,7 @@ async startConnection(): Promise<void> {
   }
 
   this.hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl('https://fixitapi.runasp.net/chat', {
+    .withUrl(environment.chatHubUrl, {
       accessTokenFactory: () =>
         this.authService.getUserToken().replace(/"/g, '')
     })
